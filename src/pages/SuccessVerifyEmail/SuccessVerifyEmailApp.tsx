@@ -1,9 +1,10 @@
 import SuccessVerifyEmailPage from "./SuccessVerifyEmailPage";
+import BackgroundImage from "../../commons/components/BackgroundImage/BackgroundImage";
 
 export default function SuccessVerifyEmailApp() {
   return (
-    <div>
+    <BackgroundImage>
       <SuccessVerifyEmailPage />
-    </div>
+    </BackgroundImage>
   );
 }
