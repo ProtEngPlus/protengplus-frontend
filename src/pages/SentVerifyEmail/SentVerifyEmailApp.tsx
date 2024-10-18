@@ -1,9 +1,10 @@
 import SentVerifyEmailPage from "./SentVerifyEmailPage";
+import BackgroundImage from "../../commons/components/BackgroundImage/BackgroundImage";
 
 export default function SentVerifyEmailApp() {
   return (
-    <div>
+    <BackgroundImage>
       <SentVerifyEmailPage />
-    </div>
+    </BackgroundImage>
   );
 }
