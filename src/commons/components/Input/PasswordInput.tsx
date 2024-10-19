@@ -36,8 +36,8 @@ const PasswordInput: React.FC<InputProps> = ({
             },
             className
           )}
-          required
           {...register(id, { ...additionalValidation })}
+          autoComplete="off"
         />
         <button
           type="button"
