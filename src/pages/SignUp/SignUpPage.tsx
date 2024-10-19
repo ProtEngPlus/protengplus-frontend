@@ -74,7 +74,6 @@ export default function SignUpPage() {
               <TextInput
                 id="email"
                 placeholder="Email*"
-                className="w-[400px]"
                 additionalValidation={{
                   required: { value: true },
                   pattern: {
@@ -92,7 +91,6 @@ export default function SignUpPage() {
               <PasswordInput
                 id="password"
                 placeholder="Password*"
-                className="w-[400px]"
                 additionalValidation={{
                   required: { value: true },
                   validate: (value: string) => value === watch("rePassword"),
@@ -110,7 +108,7 @@ export default function SignUpPage() {
                 additionalValidation={{
                   required: { value: true },
                   validate: (value: string) =>
-                    value === watch("password") || "Passwords do not match!",
+                    value === watch("password") || "Password do not match!",
                 }}
               />
             </div>
