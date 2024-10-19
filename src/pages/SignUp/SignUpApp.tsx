@@ -1,9 +1,10 @@
 import SignUpPage from "./SignUpPage";
+import BackgroundImage from "../../commons/components/BackgroundImage/BackgroundImage";
 
 export default function SignUpApp() {
   return (
-    <div>
+    <BackgroundImage>
       <SignUpPage />
-    </div>
+    </BackgroundImage>
   );
 }

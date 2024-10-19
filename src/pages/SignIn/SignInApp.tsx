@@ -1,9 +1,10 @@
 import SignInPage from "./SignInPage";
+import BackgroundImage from "../../commons/components/BackgroundImage/BackgroundImage";
 
 export default function SignInApp() {
   return (
-    <div>
+    <BackgroundImage>
       <SignInPage />
-    </div>
+    </BackgroundImage>
   );
 }
