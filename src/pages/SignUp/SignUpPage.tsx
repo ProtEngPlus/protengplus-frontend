@@ -1,7 +1,172 @@
+import logo from "../../assets/images/SignUp/Logo.png";
+import TextInput from "../../commons/components/Input/TextInput";
+import PasswordInput from "../../commons/components/Input/PasswordInput";
+import PersonalField from "./components/SignUpForm/PersonalTextfield";
+import Button from "../../commons/components/Button/Button";
+import { useNavigate } from "react-router-dom";
+import { FormProvider, useForm } from "react-hook-form";
+import { Icon } from "@iconify/react/dist/iconify.js";
+
+type FormValues = {
+  email: string;
+  password: string;
+  rePassword: string;
+  firstName: string;
+  lastName: string;
+  userRole: string;
+};
+
 export default function SignUpPage() {
+  const form = useForm<FormValues>();
+  const { handleSubmit, setError, watch } = form;
+  const navigate = useNavigate();
+
+  const onSubmit = handleSubmit(async (data) => {
+    const userData = {
+      email: data.email,
+      password: data.password,
+      rePassword: data.rePassword,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      userRole: data.userRole,
+      role: ["user"],
+    };
+
+    try {
+      // await signUp(userData);
+      navigate("/sent-verification-email");
+    } catch (error: unknown) {
+      console.error(error);
+      setError("email", {
+        type: "manual",
+        message: "Email is already registered.",
+      });
+    }
+  });
+
   return (
-    <div>
-      <h1>Sign Up Page</h1>
+    <div className="flex h-screen items-center justify-center">
+      <div className="w-[75%] min-w-fit h-[85%] min-h-fit mt-[15%] bg-white rounded-t-xl py-6 px-10 shadow-dropShadow">
+        {/* Logo */}
+        <div className="relative flex justify-end mx-2">
+          <img src={logo} alt="Logo" className="absolute h-36" />
+        </div>
+
+        {/* Form Section */}
+        <FormProvider {...form}>
+          <form
+            onSubmit={onSubmit}
+            className="w-[84%] min-w-fit flex flex-col gap-y-[3.125rem] mx-auto mt-[11%]"
+            noValidate
+          >
+            <h1 className="text-[40px]">Sign Up</h1>
+
+            {/* Email & Password Fields */}
+            <div className="grid grid-cols-[9.375rem_25rem] gap-5">
+              {/* Email Field */}
+              <div className="flex flex-row gap-x-3 items-center">
+                <Icon
+                  icon="ion:mail-outline"
+                  className="text-gray-400 size-6"
+                />
+                <label className="font-light">Email:</label>
+              </div>
+              <TextInput
+                id="email"
+                placeholder="Email*"
+                className="w-[400px]"
+                additionalValidation={{
+                  required: { value: true },
+                  pattern: {
+                    value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                    message: "Incorrect email format.",
+                  },
+                }}
+              />
+
+              {/* Password Field */}
+              <div className="flex flex-row gap-x-3 items-center">
+                <Icon icon="ph:key" className="text-gray-400 size-6" />
+                <label className="font-light">Password:</label>
+              </div>
+              <PasswordInput
+                id="password"
+                placeholder="Password*"
+                className="w-[400px]"
+                additionalValidation={{
+                  required: { value: true },
+                  validate: (value: string) => value === watch("rePassword"),
+                }}
+              />
+
+              {/* Re-Password Field */}
+              <div className="flex flex-row gap-x-3 items-center">
+                <Icon icon="ph:key" className="text-gray-400 size-6" />
+                <label className="font-light">Re-Password:</label>
+              </div>
+              <PasswordInput
+                id="rePassword"
+                placeholder="Re-Password*"
+                additionalValidation={{
+                  required: { value: true },
+                  validate: (value: string) =>
+                    value === watch("password") || "Passwords do not match!",
+                }}
+              />
+            </div>
+
+            {/* Personal Information Section */}
+            <div>
+              <div className="flex flex-row gap-x-7 items-center mb-[1.875rem]">
+                <Icon
+                  icon="ph:user"
+                  className="text-gray-400 size-[1.875rem]"
+                />
+                <h1 className="text-[24px]">Personal Information</h1>
+              </div>
+              <div className="grid grid-cols-2 gap-x-7 gap-y-[1.875rem]">
+                <PersonalField
+                  type="text"
+                  label="First name"
+                  id="firstName"
+                  placeholder="First name*"
+                />
+                <PersonalField
+                  type="text"
+                  label="Last name"
+                  id="lastName"
+                  placeholder="Last name*"
+                />
+                <PersonalField
+                  type="select"
+                  label="Role"
+                  id="userRole"
+                  placeholder="Role*"
+                />
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="grid grid-flow-col justify-end space-x-2.5 py-[3.875rem]">
+              <Button
+                id="cancel-sign-up"
+                buttonType="cancel"
+                text="Cancel"
+                className="w-[11.875rem] px-7 py-3.5"
+                onClick={() => navigate("/sign-in")}
+              />
+
+              <Button
+                id="submit-sign-up"
+                buttonType="submit"
+                type="submit"
+                text="Create Account"
+                className="w-[11.875rem] px-7 py-3.5"
+              />
+            </div>
+          </form>
+        </FormProvider>
+      </div>
     </div>
   );
 }

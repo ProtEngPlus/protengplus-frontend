@@ -39,7 +39,7 @@ export default function SignInPage() {
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <div className="w-[436px] h-auto py-6 px-4 m-auto bg-white rounded-xl">
+      <div className="w-[436px] h-auto py-6 px-4 m-auto bg-white rounded-xl shadow-dropShadow">
         <img src={logoWithText} alt="logo-with-text" className="mb-6 mx-auto" />
         <FormProvider {...form}>
           <form

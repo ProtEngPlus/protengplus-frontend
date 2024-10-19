@@ -27,8 +27,8 @@ const TextInput: React.FC<InputProps> = ({
           },
           className
         )}
-        required
         {...register(id, { ...additionalValidation })}
+        autoComplete="off"
       />
       {errors[id]?.message && (
         <span className="font-light text-error text-xs">
