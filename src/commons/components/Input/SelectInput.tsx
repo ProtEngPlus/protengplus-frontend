@@ -14,13 +14,14 @@ const SelectInput: React.FC<InputProps> = ({
   id,
   placeholder,
   className,
+  disabled = false,
   additionalValidation,
 }) => {
   const {
     register,
     setValue,
     getValues,
-    clearErrors, // Add clearErrors to clear errors on change
+    clearErrors,
     formState: { errors },
   } = useFormContext();
 
@@ -52,15 +53,17 @@ const SelectInput: React.FC<InputProps> = ({
     <div className="relative w-full custom-select">
       <div
         className={clsx(
-          "flex flex-row bg-white border font-light rounded-md py-3 px-4 cursor-pointer gap-1 ",
+          "flex flex-row bg-white border font-light rounded-md py-3 px-4 cursor-pointer gap-1",
           {
             "border-error": !!errors[id], // Apply red border if there's an error
             "border-[#DFE4EA]": !errors[id], // Default border color
             "border-selected": isOpen,
+            "cursor-not-allowed bg-[#F3F4F6] border-[#F3F4F6] text-label":
+              disabled,
           },
           className
         )}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => !disabled && setIsOpen((prev) => !prev)} // Prevent toggle when disabled
       >
         <div
           className={`grow ${
@@ -74,11 +77,13 @@ const SelectInput: React.FC<InputProps> = ({
         </div>
         <Icon
           icon="quill:chevron-down"
-          className="text-[#637381] size-4 my-auto"
+          className={`text-[#637381] size-4 my-auto ${
+            disabled ? "text-gray-400" : "text-[#637381]"
+          }`} // Change icon color when disabled
         />
       </div>
 
-      {isOpen && (
+      {isOpen && !disabled && (
         <ul className="mt-2 absolute w-full bg-white rounded-md shadow-dropShadow z-10 py-2">
           {options.map((option) => (
             <li

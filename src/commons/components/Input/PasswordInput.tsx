@@ -8,6 +8,7 @@ const PasswordInput: React.FC<InputProps> = ({
   id,
   placeholder,
   className,
+  disabled,
   additionalValidation,
 }) => {
   const {
@@ -29,13 +30,14 @@ const PasswordInput: React.FC<InputProps> = ({
           placeholder={placeholder}
           type={isPasswordVisible ? "text" : "password"}
           className={clsx(
-            "h-[50px] w-full p-3 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-selected focus:outline-none",
+            "h-[50px] w-full p-3 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-selected focus:outline-none disabled:cursor-not-allowed disabled:bg-[#F3F4F6] disabled:border-[#F3F4F6] disabled:text-label",
             {
               "border-error": !!errors[id], // Apply red border if there's an error
               "border-[#DFE4EA]": !errors[id], // Default border color
             },
             className
           )}
+          disabled={disabled}
           {...register(id, { ...additionalValidation })}
           autoComplete="off"
         />

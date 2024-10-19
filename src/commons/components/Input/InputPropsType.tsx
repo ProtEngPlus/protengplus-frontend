@@ -1,3 +1,4 @@
+import { InputHTMLAttributes } from "react";
 type ValidationProps =
   | {
       value: string | number | RegExp | boolean;
@@ -9,6 +10,7 @@ type InputProps = {
   id: string;
   placeholder: string;
   className?: string;
+  disabled?: boolean;
   additionalValidation?: Record<string, ValidationProps>;
 };
 
