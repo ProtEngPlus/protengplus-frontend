@@ -123,6 +123,7 @@ export default function PersonalInformation() {
             </div>
             <TextInput id="email" placeholder="Email*" disabled />
 
+            {/*Change Password button*/}
             <div className="flex flex-row gap-x-3 items-center">
               <Icon icon="ph:key" className="text-gray-400 size-6" />
               <label className="font-light">Password:</label>
