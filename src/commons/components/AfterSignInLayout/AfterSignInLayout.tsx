@@ -74,7 +74,7 @@ export default function RootLayout({
                 icon="mingcute:exit-door-fill"
                 className="text-[#2578D3] size-[45px] hover:cursor-pointer"
                 onClick={() => {
-                  navigate("/login");
+                  navigate("/sign-in");
                 }}
               />
             </div>
