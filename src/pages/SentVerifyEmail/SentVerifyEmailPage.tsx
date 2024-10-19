@@ -11,7 +11,7 @@ export default function SentVerificationPage() {
     }
   };
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex h-screen min-h-fit items-end justify-center">
       <div className="w-[75%] min-w-fit h-[85%] min-h-fit mt-[15%] bg-white rounded-t-xl py-6 px-4 shadow-dropShadow text-center">
         <div className="m-auto text-center space-y-12">
           <img src={sentVerify} className="mx-auto mt-[76px]" />
