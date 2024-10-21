@@ -35,7 +35,7 @@ export default function Breadcrumb() {
     .filter((pathInfo): pathInfo is PathInfo => pathInfo !== null);
 
   return (
-    <nav className="w-full  text-black">
+    <nav className="w-full  text-black whitespace-nowrap">
       <ol className="list-reset flex space-x-2 text-2xl">
         {mappedPathArray.map((pathInfo, index) => {
           if (!pathInfo) return null;
