@@ -4,6 +4,7 @@ import PasswordInput from "../../commons/components/Input/PasswordInput";
 import Button from "../../commons/components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
+import { useAuth } from "../../commons/hooks/useAuth";
 
 type FormValues = {
   email: string;
@@ -12,17 +13,14 @@ type FormValues = {
 
 export default function SignInPage() {
   const form = useForm<FormValues>();
+  const { login } = useAuth();
   const { handleSubmit, setError } = form;
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
-    const userData = {
-      email: data.email,
-      password: data.password,
-      role: ["user"],
-    };
     try {
-      // await login(signInData);
+      console.log(data.email, data.password, "user");
+      await login(data.email, data.password, "user");
       navigate("/dashboard");
     } catch (error: unknown) {
       console.error(error);
