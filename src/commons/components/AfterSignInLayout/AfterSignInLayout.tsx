@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logoWithText from "../../../assets/images/LogoWithText/logoWithText.svg";
 import { Icon } from "@iconify/react";
 import Breadcrumb from "./Breadcrumb";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 type MenuItem = {
   icon: string;
@@ -16,6 +16,10 @@ export default function RootLayout({
   children?: React.ReactNode;
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const locationPath = "/" + location.pathname.split("/")[1];
+
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   // Menu Item for side bar
@@ -90,12 +94,18 @@ export default function RootLayout({
         aria-label="Sidebar"
       >
         <div className="h-full w-[299px] overflow-y-auto bg-gray-50 py-14 px-4">
-          <ul className="space-y-9">
+          <ul className="space-y-9 w-fit">
             {menuItems.map(({ icon, name, path }) => (
               <Link
                 key={name}
                 to={path}
-                className="flex items-center p-2 space-x-2.5 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className={`flex items-center py-2 px-4 space-x-2.5 rounded-[999px] 
+                ${
+                  locationPath === path
+                    ? "bg-selected text-white"
+                    : "text-black"
+                } 
+                  group`}
               >
                 <Icon icon={icon} className="size-6" />
                 <span className="ms-3">{name}</span>
