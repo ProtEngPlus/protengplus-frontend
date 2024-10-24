@@ -123,7 +123,8 @@ export const sendVerification = async (email: string) => {
 };
 
 export const successVerification = async (token: string) => {
-  const path = BACKEND_BASE_URL + `/users/verify-email/${token}`;
+  const path =
+    BACKEND_BASE_URL + `/proteng-user-mgmt/auth/verifyemail/${token}`;
   const axios_response = await axios.post(path, {});
   const res = axios_response.data as ApiResponse<UserLogin>;
 

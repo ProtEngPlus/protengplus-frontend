@@ -12,9 +12,10 @@ const PUBLIC_ROUTES = [
   "/",
   "/sign-in",
   "/sign-up",
-  "/forgot-password",
+  "/forget-password",
   "/reset-password",
   "/sent-verification-email",
+  "/success-verified",
 ];
 
 type AuthContextType = {
