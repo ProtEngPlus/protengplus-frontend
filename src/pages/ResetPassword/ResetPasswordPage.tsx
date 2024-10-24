@@ -1,12 +1,13 @@
 import logoWithText from "../../assets/images/LogoWithText/logoWithText.svg";
 import PasswordInput from "../../commons/components/Input/PasswordInput";
 import Button from "../../commons/components/Button/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
+import { resetPassword } from "../../commons/api/auth";
 
 type FormValues = {
-  newPassword: string;
-  confirmNewPassword: string;
+  new_password: string;
+  confirm_new_password: string;
 };
 
 export default function ResetPasswordPage() {
@@ -14,13 +15,13 @@ export default function ResetPasswordPage() {
   const { handleSubmit, setError, watch } = form;
   const navigate = useNavigate();
 
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+
   const onSubmit = handleSubmit(async (data) => {
-    const userData = {
-      password: data.newPassword,
-      role: ["user"],
-    };
+    data.new_password;
     try {
-      // await resetPassword(userData);
+      await resetPassword(data.new_password, token!);
       navigate("/sign-in");
     } catch (error: unknown) {
       console.error(error);
@@ -45,23 +46,23 @@ export default function ResetPasswordPage() {
           >
             {/* New-Password Field */}
             <PasswordInput
-              id="newPassword"
+              id="new_password"
               placeholder="New Password"
               additionalValidation={{
                 required: { value: true },
                 validate: (value: string) =>
-                  value === watch("confirmNewPassword"),
+                  value === watch("confirm_new_password"),
               }}
             />
 
             {/* Confirm-New-Password Field */}
             <PasswordInput
-              id="confirmNewPassword"
+              id="confirm_new_password"
               placeholder="Confirm New Password"
               additionalValidation={{
                 required: { value: true },
                 validate: (value: string) =>
-                  value === watch("newPassword") || "Password do not match!",
+                  value === watch("new_password") || "Password do not match!",
               }}
             />
             <Button
@@ -70,6 +71,7 @@ export default function ResetPasswordPage() {
               buttonType="submit"
               text="Reset Password"
               className="w-full"
+              onClick={onSubmit}
             />
           </form>
         </FormProvider>

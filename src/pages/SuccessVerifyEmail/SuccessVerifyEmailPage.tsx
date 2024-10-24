@@ -1,10 +1,36 @@
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../commons/components/Button/Button";
 import successVerified from "../../assets/images/SucessVerified/successVerified.svg";
-import { useNavigate } from "react-router-dom";
+import { successVerification } from "../../commons/api/auth";
 
 export default function SuccessVerifyEmailPage() {
-  const name = "John D.";
   const navigate = useNavigate();
+  const { token } = useParams();
+  const [loading, setLoading] = useState(true);
+
+  const [name, setName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const verifyEmail = async () => {
+      if (!token) {
+        return navigate("/sign-in");
+      }
+      try {
+        const res = await successVerification(token!);
+        const data = res?.data;
+        const name = `${data?.name ?? ""} ${data?.surname?.[0] ?? ""}.`;
+        setName(name);
+      } catch (error) {
+        console.error("Error verifying email:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyEmail();
+  }, [token]);
+
   return (
     <div className="flex h-screen min-h-fit items-end justify-center">
       <div className="w-[75%] min-w-fit h-[85%] min-h-fit mt-[15%] bg-white rounded-t-xl py-6 px-4 shadow-dropShadow text-center">
@@ -14,19 +40,20 @@ export default function SuccessVerifyEmailPage() {
             <div className="space-y-3">
               <h1 className="text-4xl">Verified</h1>
               <p className="font-light text-[#8899A8] text-2xl leading-loose">
-                Your account has successfully created.
+                Your account has successfully been created.
               </p>
               <hr className="w-[50%] mx-auto" />
             </div>
             <div>
               <p className="font-light text-[#8899A8] text-2xl mt-12 leading-loose">
-                Welcome, {name}
+                {/* Conditionally render the name or a loading message */}
+                {loading ? "Welcome" : `Welcome, ${name}`}
               </p>
               <Button
                 id="to-sign-in"
                 text="Continue"
                 buttonType="submit"
-                onClick={() => navigate("/sign-in")}
+                onClick={() => navigate("/dashboard")}
               />
             </div>
           </div>

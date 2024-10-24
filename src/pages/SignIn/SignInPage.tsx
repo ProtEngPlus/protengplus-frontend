@@ -4,6 +4,9 @@ import PasswordInput from "../../commons/components/Input/PasswordInput";
 import Button from "../../commons/components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
+import { useAuth } from "../../commons/hooks/useAuth";
+import { sendVerification } from "../../commons/api/auth";
+import axios from "axios";
 
 type FormValues = {
   email: string;
@@ -12,28 +15,37 @@ type FormValues = {
 
 export default function SignInPage() {
   const form = useForm<FormValues>();
+  const { login } = useAuth();
   const { handleSubmit, setError } = form;
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
-    const userData = {
-      email: data.email,
-      password: data.password,
-      role: ["user"],
-    };
     try {
-      // await login(signInData);
+      await login(data.email, data.password, "user");
       navigate("/dashboard");
     } catch (error: unknown) {
-      console.error(error);
+      if (axios.isAxiosError(error) && error.response) {
+        const { message } = error.response.data;
 
-      setError("email", {
-        type: "manual",
-      });
-      setError("password", {
-        type: "manual",
-        message: "The email or password is incorrect",
-      });
+        if (message === "error: email not verified") {
+          await sendVerification(data.email);
+          navigate("/sent-verification-email", {
+            state: { email: data.email },
+          });
+        } else if (message === "error: invalid email or password") {
+          setError("email", {
+            type: "manual",
+          });
+          setError("password", {
+            type: "manual",
+            message: "The email or password is incorrect",
+          });
+        } else {
+          console.error(message);
+        }
+      } else {
+        console.error(error);
+      }
     }
   });
 

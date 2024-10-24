@@ -2,7 +2,6 @@ import { useFormContext } from "react-hook-form";
 import TextInput from "../../../../commons/components/Input/TextInput";
 import SelectInput from "../../../../commons/components/Input/SelectInput";
 import { userRoleMapper } from "../../../../commons/interfaces/User.interface";
-
 interface PersonalProps {
   label: string;
   id: string;
@@ -22,7 +21,6 @@ const PersonalField: React.FC<PersonalProps> = ({
   type,
 }) => {
   const {
-    register,
     formState: { errors },
   } = useFormContext();
 

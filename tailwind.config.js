@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/flowbite/**/*.js",
+  ],
+
   theme: {
     extend: {
       fontFamily: {
@@ -16,7 +20,10 @@ export default {
       boxShadow: {
         dropShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
       },
+      screens: {
+        inputField: "900px",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("flowbite/plugin")],
 };

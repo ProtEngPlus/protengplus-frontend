@@ -15,6 +15,7 @@ export default function Button({
   text,
   className,
   onClick,
+  children,
   ...props
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const baseStyles = "w-48 h-[3.125rem] rounded-md px-7 py-3";
@@ -32,6 +33,7 @@ export default function Button({
       onClick={onClick}
       {...props}
     >
+      {children}
       {text}
     </button>
   );

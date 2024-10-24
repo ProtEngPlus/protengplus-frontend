@@ -4,6 +4,7 @@ import Button from "../../commons/components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { forgotPassword } from "../../commons/api/auth";
 
 type FormValues = {
   email: string;
@@ -11,16 +12,13 @@ type FormValues = {
 
 export default function ForgetPasswordPage() {
   const form = useForm<FormValues>();
-  const { handleSubmit, setError, watch } = form;
+  const { handleSubmit } = form;
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
-    const userData = {
-      email: data.email,
-      role: ["user"],
-    };
     try {
-      // await forgetPassword(userData);
+      await forgotPassword(data.email);
+      console.log(`send to ${data.email}`);
       navigate("/sign-in");
     } catch (error: unknown) {
       console.error(error);
