@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 import Breadcrumb from "./Breadcrumb";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { userRoleMapper } from "../../interfaces/User.interface";
 
 type MenuItem = {
   icon: string;
@@ -22,7 +23,8 @@ export default function RootLayout({
   //get name and user_role
   const { user } = useAuth();
   const name = `${user?.name ?? ""} ${user?.surname?.[0] ?? ""}.`;
-  const user_role = user?.user_role;
+  const user_role =
+    user && user.user_role ? userRoleMapper[user.user_role] : "";
 
   const locationPath = "/" + location.pathname.split("/")[1];
 
