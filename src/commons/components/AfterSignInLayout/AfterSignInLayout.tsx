@@ -41,14 +41,17 @@ export default function RootLayout({
   };
 
   return (
-    <div className="w-screen h-screen">
+    <div className="h-screen">
       {/* Nav bar */}
       <nav className="fixed top-0 z-50 h-[4.5rem] w-full items-center bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-        {/* Nav bar - left side*/}
         <div className="flex flex-row h-full items-center space-x-9">
           <div className="flex items-center h-full w-[299px] min-w-[299px] justify-center bg-gray-50">
             <img src={logoWithText} alt="Logo" />
-            <button type="button" onClick={handleToggleSidebar}>
+            <button
+              type="button"
+              onClick={handleToggleSidebar}
+              aria-label="Toggle Sidebar"
+            >
               <Icon
                 icon="mdi:hamburger-menu"
                 className="text-[#2578D3] size-11"
@@ -56,7 +59,7 @@ export default function RootLayout({
             </button>
           </div>
 
-          {/* Nav bar - right side*/}
+          {/* Nav bar - right side */}
           <div className="flex flex-row h-full grow items-center">
             {/* Breadcrumb */}
             <Breadcrumb />
@@ -66,9 +69,7 @@ export default function RootLayout({
               <Icon
                 icon="ph:user"
                 className="size-11 rounded-full p-2.5 text-white bg-[#F58634] hover:cursor-pointer"
-                onClick={() => {
-                  navigate("/account-management");
-                }}
+                onClick={() => navigate("/account-management")}
               />
               <div className="flex flex-col">
                 <p>Name S.</p>
@@ -77,16 +78,14 @@ export default function RootLayout({
               <Icon
                 icon="mingcute:exit-door-fill"
                 className="text-[#2578D3] size-[45px] hover:cursor-pointer"
-                onClick={() => {
-                  navigate("/sign-in");
-                }}
+                onClick={() => navigate("/sign-in")}
               />
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Side bar*/}
+      {/* Side bar */}
       <aside
         className={`fixed top-0 left-0 z-40 h-screen pt-[4.5rem] transition-transform ${
           isSidebarVisible ? "w-64 translate-x-0" : "-translate-x-full"
@@ -99,13 +98,11 @@ export default function RootLayout({
               <Link
                 key={name}
                 to={path}
-                className={`flex items-center py-2 px-4 space-x-2.5 rounded-[999px] 
-                ${
+                className={`flex items-center py-2 px-4 space-x-2.5 rounded-[999px] ${
                   locationPath === path
                     ? "bg-selected text-white"
                     : "text-black"
-                } 
-                  group`}
+                } group`}
               >
                 <Icon icon={icon} className="size-6" />
                 <span className="ms-3">{name}</span>
@@ -115,9 +112,11 @@ export default function RootLayout({
         </div>
       </aside>
 
-      {/* Children*/}
+      {/* Children */}
       <div
-        className={isSidebarVisible ? "pt-[4.5rem] pl-[299px]" : "pt-[4.5rem]"}
+        className={`min-w-fit  ${
+          isSidebarVisible ? "pt-[4.5rem] pl-[299px]" : "pt-[4.5rem]"
+        }`}
       >
         <div className="px-9 py-12">{children}</div>
       </div>
