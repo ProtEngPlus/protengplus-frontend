@@ -19,7 +19,6 @@ export default function SignInPage() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data.email, data.password, "user");
       await login(data.email, data.password, "user");
       navigate("/dashboard");
     } catch (error: unknown) {
