@@ -5,6 +5,7 @@ import Breadcrumb from "./Breadcrumb";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { userRoleMapper } from "../../interfaces/User.interface";
+import { logout } from "../../api/auth";
 
 type MenuItem = {
   icon: string;
@@ -86,7 +87,10 @@ export default function RootLayout({
               <Icon
                 icon="mingcute:exit-door-fill"
                 className="text-[#2578D3] size-[45px] hover:cursor-pointer"
-                onClick={() => navigate("/sign-in")}
+                onClick={() => {
+                  logout();
+                  navigate("/sign-in");
+                }}
               />
             </div>
           </div>
