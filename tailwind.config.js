@@ -4,6 +4,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/flowbite/**/*.js",
   ],
+
   theme: {
     extend: {
       fontFamily: {
@@ -18,6 +19,9 @@ export default {
       },
       boxShadow: {
         dropShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
+      },
+      screens: {
+        inputField: "900px",
       },
     },
   },

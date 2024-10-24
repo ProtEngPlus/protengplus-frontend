@@ -12,24 +12,41 @@ import {
   SuccessOverlay,
   SuccessOverlayProps,
 } from "../../../../commons/components/ModalOverlay/SuccessOverlay";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../../../commons/hooks/useAuth";
+import { updateMe } from "../../../../commons/api/user";
+import { Role } from "../../../../commons/interfaces/User.interface";
 
 type FormValues = {
-  firstName: string;
-  lastName: string;
+  name: string;
+  surname: string;
   email: string;
-  userRole: string;
+  user_role: string;
+  role: Role[];
 };
 
 export default function PersonalInformation() {
-  const form = useForm<FormValues>();
-  const { handleSubmit, watch } = form;
+  const { user, refreshUser } = useAuth();
+  const form = useForm<FormValues>({
+    defaultValues: {
+      name: user?.name || "",
+      surname: user?.surname || "",
+      email: user?.email || "",
+      user_role: user?.user_role || "",
+    },
+  });
+  const { handleSubmit, setValue } = form;
   const navigate = useNavigate();
 
   // State to store form data
   const [userData, setUserData] = useState<FormValues | null>(null);
+  useEffect(() => {
+    if (user) {
+      setValue("email", user.email); // Set email value manually
+    }
+  }, [user, setValue]);
 
-  // for ConfirmOverlay
+  // Confirm Overlay Props
   const [isConfirmVisible, setConfirmVisible] = useState(false);
   const ConfirmProps: ConfirmOverlayProps = {
     id: "update-user",
@@ -40,9 +57,9 @@ export default function PersonalInformation() {
       setConfirmVisible(false);
       if (userData) {
         try {
-          // await updateUser(userData);
+          await updateMe(userData);
           console.log(userData);
-
+          refreshUser();
           setSuccessVisible(true);
         } catch (error) {
           console.error(error);
@@ -53,7 +70,7 @@ export default function PersonalInformation() {
     message: "You made changes to this profile configuration",
   };
 
-  //for Success Overlay
+  // Success Overlay Props
   const [isSuccessVisible, setSuccessVisible] = useState(false);
   const SuccessProps: SuccessOverlayProps = {
     id: "update-user",
@@ -66,10 +83,11 @@ export default function PersonalInformation() {
   // onSubmit function
   const onSubmit = handleSubmit((data) => {
     setUserData({
-      firstName: data.firstName,
-      lastName: data.lastName,
+      name: data.name,
+      surname: data.surname,
       email: data.email,
-      userRole: data.userRole,
+      user_role: data.user_role,
+      role: ["user"],
     });
     setConfirmVisible(true); // Show confirm overlay
   });
@@ -94,37 +112,39 @@ export default function PersonalInformation() {
             <Icon icon="ph:user" className="text-gray-400 size-[1.875rem]" />
             <h1 className="text-[24px]">Personal Information</h1>
           </div>
-          <div className="grid grid-cols-2 gap-x-7 gap-y-[1.875rem]">
+          <div className="grid grid-flow-row gap-x-[3%] gap-y-[1.875rem] w-[77%] inputField:min-w-[900px] inputField:grid-cols-2">
             <PersonalField
               type="text"
               label="First name"
-              id="firstName"
+              id="name"
               placeholder="First name*"
             />
             <PersonalField
               type="text"
               label="Last name"
-              id="lastName"
+              id="surname"
               placeholder="Last name*"
             />
             <PersonalField
               type="select"
               label="Role"
-              id="userRole"
+              id="user_role"
               placeholder="Role*"
             />
           </div>
           <hr />
-          <div className="grid grid-cols-[9.375rem_25rem] gap-5">
-            {/* Disable Email Field */}
+          <div className="grid grid-cols-[9.375rem_25rem] gap-5 w-full">
             <div className="flex flex-row gap-x-3 items-center">
               <Icon icon="ion:mail-outline" className="text-gray-400 size-6" />
               <label className="font-light">Email:</label>
             </div>
-            <TextInput id="email" placeholder="Email*" disabled />
-
-            {/*Change Password button*/}
-            <div className="flex flex-row gap-x-3 items-center">
+            <TextInput
+              id="email"
+              placeholder="Email*"
+              disabled
+              className="w-full"
+            />
+            <div className="flex flex-row gap-x-[3%] items-center">
               <Icon icon="ph:key" className="text-gray-400 size-6" />
               <label className="font-light">Password:</label>
             </div>
