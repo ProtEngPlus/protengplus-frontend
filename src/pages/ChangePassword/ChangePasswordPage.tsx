@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PasswordField from "./components/PasswordWithLabel";
 import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
@@ -12,32 +12,18 @@ import {
   SuccessOverlay,
   SuccessOverlayProps,
 } from "../../commons/components/ModalOverlay/SuccessOverlay";
+import { changePassword } from "../../commons/api/auth";
 
 type FormValues = {
-  currentPassword: string;
-  newPassword: string;
-  confirmNewPassword: string;
+  current_password: string;
+  new_password: string;
+  confirm_new_password: string;
 };
 
 export default function ChangePasswordPage() {
-  const form = useForm<FormValues>({
-    mode: "onBlur",
-
-    // will edit after set api
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-    },
-  });
-
+  const form = useForm<FormValues>();
   const { handleSubmit, setError, watch } = form;
   const navigate = useNavigate();
-
-  // will edit role:Role[] after adding interface
-  const [userData, setUserData] = useState<
-    (FormValues & { role: string }) | null
-  >(null);
 
   // for ConfirmOverlay
   const [isConfirmVisible, setConfirmVisible] = useState(false);
@@ -48,18 +34,17 @@ export default function ChangePasswordPage() {
     },
     onConfirm: async () => {
       setConfirmVisible(false);
-      if (userData) {
-        try {
-          // await changePassword(userData); // Your logic to update password
-          console.log(userData);
-          setSuccessVisible(true);
-        } catch (error) {
-          console.error(error);
-          setError("currentPassword", {
-            type: "manual",
-            message: "Incorrect Password",
-          });
-        }
+      const current_password = watch("current_password");
+      const new_password = watch("new_password");
+      try {
+        await changePassword(current_password, new_password);
+        setSuccessVisible(true);
+      } catch (error) {
+        console.error(error);
+        setError("current_password", {
+          type: "manual",
+          message: "Incorrect Password",
+        });
       }
     },
     title: "Do you want to change the password?",
@@ -72,28 +57,22 @@ export default function ChangePasswordPage() {
     id: "success-change-password",
     onClose: () => {
       setSuccessVisible(false);
-      navigate("/profile"); // Navigate to profile or another page after success
+      navigate("/account-management");
     },
     title: "Password Successfully Updated",
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    if (data.newPassword !== data.confirmNewPassword) {
-      setError("confirmNewPassword", {
+    if (data.new_password !== data.confirm_new_password) {
+      setError("new_password", {
+        type: "manual",
+      });
+      setError("confirm_new_password", {
         type: "manual",
         message: "Passwords do not match",
       });
       return;
     }
-
-    // Set userData with all required fields and role "user"
-    setUserData({
-      currentPassword: data.currentPassword,
-      newPassword: data.newPassword,
-      confirmNewPassword: data.confirmNewPassword, // Ensure this field is included
-      role: "user", // Add the role field
-    });
-
     setConfirmVisible(true);
   });
 
@@ -114,7 +93,7 @@ export default function ChangePasswordPage() {
         </div>
 
         <PasswordField
-          id="currentPassword"
+          id="current_password"
           label="Current Password"
           placeholder="Current Password*"
           additionalValidation={{
@@ -123,23 +102,20 @@ export default function ChangePasswordPage() {
         />
 
         <PasswordField
-          id="newPassword"
+          id="new_password"
           label="New Password"
           placeholder="New Password*"
           additionalValidation={{
             required: { value: true },
-            validate: (value: string) => value === watch("confirmNewPassword"),
           }}
         />
 
         <PasswordField
-          id="confirmNewPassword"
+          id="confirm_new_password"
           label="Confirm New Password"
           placeholder="Confirm New Password*"
           additionalValidation={{
             required: { value: true },
-            validate: (value: string) =>
-              value === watch("newPassword") || "Password do not match!",
           }}
         />
 
@@ -148,7 +124,7 @@ export default function ChangePasswordPage() {
             id="cancel-change-password"
             buttonType="cancel"
             text="Cancel"
-            onClick={() => navigate("/profile")} // Navigate to profile or another page
+            onClick={() => navigate("/account-management")}
           />
 
           <Button

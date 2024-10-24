@@ -5,7 +5,7 @@ import {
   ApiResponse,
 } from "../interfaces/ApiResponse.interface";
 import { UserLogin } from "../interfaces/User.interface";
-import { get } from "./common";
+import { get, patch } from "./common";
 import { isResponseOk } from "./utils";
 import { addHoursToDate } from "../utils/utils";
 
@@ -86,11 +86,16 @@ export const changePassword = async (
   new_password: string
 ) => {
   const path = BACKEND_BASE_URL + "/proteng-user-mgmt/auth/changepassword";
-  const axios_response = await axios.patch(path, {
-    current_password,
-    new_password,
-  });
-  const res = axios_response.data as ApiResponse<null>;
+
+  // Using the custom patch method and passing true to include headers
+  const res = await patch(
+    path,
+    {
+      current_password,
+      new_password,
+    },
+    true
+  );
 
   // Check if the response is ok
   if (!isResponseOk(res)) {
