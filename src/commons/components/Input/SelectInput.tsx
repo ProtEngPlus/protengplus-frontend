@@ -4,18 +4,22 @@ import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
 import { InputProps } from "./InputPropsType";
 
-const options = [
-  { label: "Engineering", value: "Engineering" },
-  { label: "Art", value: "Art" },
-  { label: "Science", value: "Science" },
-];
+type Option = {
+  label: string;
+  value: string;
+};
 
-const SelectInput: React.FC<InputProps> = ({
+interface SelectInputProps extends InputProps {
+  options: Option[];
+}
+
+const SelectInput: React.FC<SelectInputProps> = ({
   id,
   placeholder,
   className,
   disabled = false,
   additionalValidation,
+  options,
 }) => {
   const {
     register,
@@ -55,7 +59,7 @@ const SelectInput: React.FC<InputProps> = ({
         className={clsx(
           "flex flex-row bg-white border font-light rounded-md py-3 px-4 cursor-pointer gap-1",
           {
-            "border-error": !!errors[id], // Apply red border if there's an error
+            "border-error": !!errors[id], // error border
             "border-[#DFE4EA]": !errors[id], // Default border color
             "border-selected": isOpen,
             "cursor-not-allowed bg-[#F3F4F6] border-[#F3F4F6] text-label":
@@ -79,7 +83,7 @@ const SelectInput: React.FC<InputProps> = ({
           icon="quill:chevron-down"
           className={`text-[#637381] size-4 my-auto ${
             disabled ? "text-gray-400" : "text-[#637381]"
-          }`} // Change icon color when disabled
+          }`}
         />
       </div>
 

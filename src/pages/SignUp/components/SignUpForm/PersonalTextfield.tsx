@@ -1,7 +1,7 @@
-import { Icon } from "@iconify/react";
 import { useFormContext } from "react-hook-form";
 import TextInput from "../../../../commons/components/Input/TextInput";
 import SelectInput from "../../../../commons/components/Input/SelectInput";
+import { userRoleMapper } from "../../../../commons/interfaces/User.interface";
 
 interface PersonalProps {
   label: string;
@@ -9,6 +9,11 @@ interface PersonalProps {
   placeholder: string;
   type: string;
 }
+
+const userRoleOptions = Object.entries(userRoleMapper).map(([key, value]) => ({
+  label: value,
+  value: key,
+}));
 
 const PersonalField: React.FC<PersonalProps> = ({
   label,
@@ -43,6 +48,7 @@ const PersonalField: React.FC<PersonalProps> = ({
           <SelectInput
             id={id}
             placeholder={placeholder}
+            options={userRoleOptions}
             additionalValidation={{
               required: {
                 value: true,

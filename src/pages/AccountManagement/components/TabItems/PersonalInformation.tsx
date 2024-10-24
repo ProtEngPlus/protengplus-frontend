@@ -58,7 +58,6 @@ export default function PersonalInformation() {
       if (userData) {
         try {
           await updateMe(userData);
-          console.log(userData);
           refreshUser();
           setSuccessVisible(true);
         } catch (error) {
@@ -102,11 +101,7 @@ export default function PersonalInformation() {
         isVisible={isSuccessVisible}
         successProps={SuccessProps}
       />
-      <form
-        onSubmit={onSubmit}
-        className="space-y-32 overflow-x-visible"
-        noValidate
-      >
+      <form className="space-y-32 overflow-x-visible" noValidate>
         <div className="space-y-12">
           <div className="flex flex-row gap-x-7 items-center">
             <Icon icon="ph:user" className="text-gray-400 size-[1.875rem]" />
@@ -163,7 +158,12 @@ export default function PersonalInformation() {
             buttonType="cancel"
             text="Cancel"
             onClick={() => {
-              window.location.reload();
+              form.reset({
+                name: user?.name || "", // Resetting to user's default name
+                surname: user?.surname || "", // Resetting to user's default surname
+                email: user?.email || "", // Resetting to user's default email
+                user_role: user?.user_role || "", // Resetting to user's default role
+              });
             }}
           />
           <Button
@@ -171,6 +171,7 @@ export default function PersonalInformation() {
             buttonType="submit"
             text="Save"
             type="submit"
+            onClick={onSubmit}
           />
         </div>
       </form>
