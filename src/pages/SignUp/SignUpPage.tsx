@@ -6,14 +6,17 @@ import Button from "../../commons/components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Role, UserRole } from "../../commons/interfaces/User.interface";
+import { createUser } from "../../commons/api/user";
+import { sendVerification } from "../../commons/api/auth";
 
 type FormValues = {
   email: string;
   password: string;
-  rePassword: string;
-  firstName: string;
-  lastName: string;
-  userRole: string;
+  re_password: string;
+  name: string;
+  surname: string;
+  user_role: UserRole;
 };
 
 export default function SignUpPage() {
@@ -25,16 +28,16 @@ export default function SignUpPage() {
     const userData = {
       email: data.email,
       password: data.password,
-      rePassword: data.rePassword,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      userRole: data.userRole,
-      role: ["user"],
+      name: data.name,
+      surname: data.surname,
+      user_role: data.user_role,
+      role: ["user"] as Role[],
     };
 
     try {
-      // await signUp(userData);
-      navigate("/sent-verification-email");
+      await createUser(userData);
+      await sendVerification(data.email);
+      navigate("/sent-verification-email", { state: { email: data.email } });
     } catch (error: unknown) {
       console.error(error);
       setError("email", {
@@ -93,7 +96,7 @@ export default function SignUpPage() {
                 placeholder="Password*"
                 additionalValidation={{
                   required: { value: true },
-                  validate: (value: string) => value === watch("rePassword"),
+                  validate: (value: string) => value === watch("re_password"),
                 }}
               />
 
@@ -103,7 +106,7 @@ export default function SignUpPage() {
                 <label className="font-light">Re-Password:</label>
               </div>
               <PasswordInput
-                id="rePassword"
+                id="re_password"
                 placeholder="Re-Password*"
                 additionalValidation={{
                   required: { value: true },

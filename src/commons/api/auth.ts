@@ -107,9 +107,8 @@ export const changePassword = async (
 
 /* ------------------------- for email verification ------------------------------------*/
 
-export const resendVerification = async (email: string) => {
-  const path =
-    BACKEND_BASE_URL + "/proteng-user-mgmt/users/resend-verification";
+export const sendVerification = async (email: string) => {
+  const path = BACKEND_BASE_URL + "/proteng-user-mgmt/auth/sendverification";
   const axios_response = await axios.post(path, {
     email,
   });

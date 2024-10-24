@@ -1,11 +1,15 @@
 import sentVerify from "../../assets/images/sentVerifyEmail/sentVerification.svg";
 import ResendModal from "./components/ResendModal";
+import { sendVerification } from "../../commons/api/auth";
+import { useLocation } from "react-router-dom";
 
 export default function SentVerificationPage() {
+  const location = useLocation();
+  const { email } = location.state || {};
   const resendEmail = async () => {
     try {
-      // await resendEmail(userData);
-      console.log("resend email");
+      console.log(`resend email ${email}`);
+      await sendVerification(email);
     } catch (error: unknown) {
       console.error(error);
     }
