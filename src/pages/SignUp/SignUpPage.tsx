@@ -153,6 +153,7 @@ export default function SignUpPage() {
                 id="cancel-sign-up"
                 buttonType="cancel"
                 text="Cancel"
+                type="button"
                 className="w-[11.875rem] px-7 py-3.5"
                 onClick={() => navigate("/sign-in")}
               />

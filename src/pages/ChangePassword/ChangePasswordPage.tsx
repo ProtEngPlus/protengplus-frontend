@@ -123,6 +123,7 @@ export default function ChangePasswordPage() {
           <Button
             id="cancel-change-password"
             buttonType="cancel"
+            type="button"
             text="Cancel"
             onClick={() => navigate("/account-management")}
           />
