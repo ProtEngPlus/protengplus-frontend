@@ -1,4 +1,3 @@
-import { Icon } from "@iconify/react";
 import { useFormContext } from "react-hook-form";
 import TextInput from "../../../../commons/components/Input/TextInput";
 import SelectInput from "../../../../commons/components/Input/SelectInput";
@@ -17,7 +16,6 @@ const PersonalField: React.FC<PersonalProps> = ({
   type,
 }) => {
   const {
-    register,
     formState: { errors },
   } = useFormContext();
 
