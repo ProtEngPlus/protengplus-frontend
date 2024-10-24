@@ -49,7 +49,7 @@ export default function Breadcrumb() {
                 <Icon icon="weui:arrow-outlined" className="w-3.5 h-7" />
               </span>
               {index === mappedPathArray.length - 1 ? (
-                <li>{pathInfo.name}</li>
+                <span>{pathInfo.name}</span>
               ) : (
                 <Link
                   to={index === mappedPathArray.length - 1 ? "" : pathInfo.path}
