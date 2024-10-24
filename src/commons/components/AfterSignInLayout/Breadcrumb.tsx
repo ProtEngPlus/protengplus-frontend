@@ -1,4 +1,3 @@
-import { Breadcrumbs } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
@@ -18,7 +17,7 @@ const nameMapping: { [key: string]: string } = {
 export default function Breadcrumb() {
   const pathNameArray = useLocation().pathname.split("/").filter(Boolean); // Remove empty strings
 
-  const pathArray = pathNameArray.reduce((acc, path, index) => {
+  const pathArray = pathNameArray.reduce((acc, path) => {
     const newPath =
       acc.length > 0 ? acc[acc.length - 1]?.path + "/" + path : "/" + path;
     acc.push({ name: nameMapping[path] || path, path: newPath });
