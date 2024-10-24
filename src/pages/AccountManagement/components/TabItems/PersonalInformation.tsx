@@ -58,6 +58,7 @@ export default function PersonalInformation() {
       if (userData) {
         try {
           await updateMe(userData);
+          console.log(userData);
           refreshUser();
           setSuccessVisible(true);
         } catch (error) {
@@ -101,7 +102,13 @@ export default function PersonalInformation() {
         isVisible={isSuccessVisible}
         successProps={SuccessProps}
       />
-      <form className="space-y-32 overflow-x-visible" noValidate>
+
+      {/* Attach onSubmit handler to the form */}
+      <form
+        className="space-y-32 overflow-x-visible"
+        noValidate
+        onSubmit={onSubmit}
+      >
         <div className="space-y-12">
           <div className="flex flex-row gap-x-7 items-center">
             <Icon icon="ph:user" className="text-gray-400 size-[1.875rem]" />
@@ -146,17 +153,21 @@ export default function PersonalInformation() {
             <Button
               id="change-password"
               buttonType="cancel"
+              type="button"
               text="Change Password"
               onClick={() => navigate("/account-management/change-password")}
               className="min-w-fit"
             />
           </div>
         </div>
+
+        {/* Correct button behavior */}
         <div className="flex space-x-2.5 justify-end items-end right-0 pb-[3.875rem]">
           <Button
             id="cancel-update-user"
             buttonType="cancel"
             text="Cancel"
+            type="button" // Add type="button" to prevent form submission
             onClick={() => {
               form.reset({
                 name: user?.name || "", // Resetting to user's default name
@@ -170,8 +181,7 @@ export default function PersonalInformation() {
             id="submit-update-user"
             buttonType="submit"
             text="Save"
-            type="submit"
-            onClick={onSubmit}
+            type="submit" // This button triggers form submission
           />
         </div>
       </form>
