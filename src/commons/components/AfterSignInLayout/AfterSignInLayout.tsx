@@ -3,6 +3,7 @@ import logoWithText from "../../../assets/images/LogoWithText/logoWithText.svg";
 import { Icon } from "@iconify/react";
 import Breadcrumb from "./Breadcrumb";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 type MenuItem = {
   icon: string;
@@ -17,6 +18,11 @@ export default function RootLayout({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  //get name and user_role
+  const { user } = useAuth();
+  const name = `${user?.name ?? ""} ${user?.surname?.[0] ?? ""}.`;
+  const user_role = user?.user_role;
 
   const locationPath = "/" + location.pathname.split("/")[1];
 
@@ -72,8 +78,8 @@ export default function RootLayout({
                 onClick={() => navigate("/account-management")}
               />
               <div className="flex flex-col">
-                <p>Name S.</p>
-                <p className="text-xs">position</p>
+                <p>{name}</p>
+                <p className="text-xs">{user_role}</p>
               </div>
               <Icon
                 icon="mingcute:exit-door-fill"
