@@ -38,7 +38,7 @@ const pagesData = [
     element: <SentVerifyEmailApp />,
   },
   {
-    path: "/success-verified/:token",
+    path: "/success-verified",
     element: <SuccessVerifyEmailApp />,
   },
   {
