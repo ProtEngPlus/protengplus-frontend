@@ -37,6 +37,7 @@ export default function SignUpPage() {
     try {
       await createUser(userData);
       await sendVerification(data.email);
+      console.log(userData);
       navigate("/sent-verification-email", { state: { email: data.email } });
     } catch (error: unknown) {
       console.error(error);
@@ -129,19 +130,19 @@ export default function SignUpPage() {
                 <PersonalField
                   type="text"
                   label="First name"
-                  id="firstName"
+                  id="name"
                   placeholder="First name*"
                 />
                 <PersonalField
                   type="text"
                   label="Last name"
-                  id="lastName"
+                  id="surname"
                   placeholder="Last name*"
                 />
                 <PersonalField
                   type="select"
                   label="Role"
-                  id="userRole"
+                  id="user_role"
                   placeholder="Role*"
                 />
               </div>
