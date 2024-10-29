@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "../../commons/components/Button/Button";
 import successVerified from "../../assets/images/SucessVerified/successVerified.svg";
 import { successVerification } from "../../commons/api/auth";
@@ -12,16 +12,6 @@ export default function SuccessVerifyEmailPage() {
   const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState<string | null>(null);
-
-  // const onSubmit = handleSubmit(async (data) => {
-  //   data.new_password;
-  //   try {
-  //     await resetPassword(data.new_password, token!);
-  //     navigate("/sign-in");
-  //   } catch (error: unknown) {
-  //     console.error(error);
-  //   }
-  // });
 
   useEffect(() => {
     const verifyEmail = async () => {

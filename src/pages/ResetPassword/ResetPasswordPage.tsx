@@ -1,7 +1,7 @@
 import logoWithText from "../../assets/images/LogoWithText/logoWithText.svg";
 import PasswordInput from "../../commons/components/Input/PasswordInput";
 import Button from "../../commons/components/Button/Button";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { resetPassword } from "../../commons/api/auth";
 
@@ -12,7 +12,7 @@ type FormValues = {
 
 export default function ResetPasswordPage() {
   const form = useForm<FormValues>();
-  const { handleSubmit, setError, watch } = form;
+  const { handleSubmit, watch } = form;
   const navigate = useNavigate();
 
   const params = new URLSearchParams(window.location.search);

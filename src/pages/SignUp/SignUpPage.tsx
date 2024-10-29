@@ -37,7 +37,6 @@ export default function SignUpPage() {
     try {
       await createUser(userData);
       await sendVerification(data.email);
-      console.log(userData);
       navigate("/sent-verification-email", { state: { email: data.email } });
     } catch (error: unknown) {
       console.error(error);
