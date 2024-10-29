@@ -6,16 +6,25 @@ import { successVerification } from "../../commons/api/auth";
 
 export default function SuccessVerifyEmailPage() {
   const navigate = useNavigate();
-  const { token } = useParams();
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
   const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState<string | null>(null);
 
+  // const onSubmit = handleSubmit(async (data) => {
+  //   data.new_password;
+  //   try {
+  //     await resetPassword(data.new_password, token!);
+  //     navigate("/sign-in");
+  //   } catch (error: unknown) {
+  //     console.error(error);
+  //   }
+  // });
+
   useEffect(() => {
     const verifyEmail = async () => {
-      if (!token) {
-        return navigate("/sign-in");
-      }
       try {
         const res = await successVerification(token!);
         const data = res?.data;
@@ -23,6 +32,7 @@ export default function SuccessVerifyEmailPage() {
         setName(name);
       } catch (error) {
         console.error("Error verifying email:", error);
+        navigate("/sign-in");
       } finally {
         setLoading(false);
       }
