@@ -1,4 +1,3 @@
-import React from "react";
 import PasswordInput from "../../../commons/components/Input/PasswordInput";
 import { InputProps } from "../../../commons/components/Input/InputPropsType";
 
@@ -6,13 +5,13 @@ interface PasswordFieldProps extends InputProps {
   label: string;
 }
 
-const PasswordField: React.FC<PasswordFieldProps> = ({
+export default function PasswordField({
   id,
   label,
   placeholder,
   additionalValidation,
   className,
-}) => {
+}: PasswordFieldProps) {
   return (
     <div className="grid grid-cols-[200px_400px] gap-5 items-center">
       <label className="font-light" htmlFor={id}>
@@ -26,6 +25,4 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
       />
     </div>
   );
-};
-
-export default PasswordField;
+}

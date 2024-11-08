@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
@@ -13,14 +13,14 @@ interface SelectInputProps extends InputProps {
   options: Option[];
 }
 
-const SelectInput: React.FC<SelectInputProps> = ({
+export default function SelectInput({
   id,
   placeholder,
   className,
   disabled = false,
   additionalValidation,
   options,
-}) => {
+}: SelectInputProps) {
   const {
     register,
     setValue,
@@ -30,12 +30,12 @@ const SelectInput: React.FC<SelectInputProps> = ({
   } = useFormContext();
 
   const [isOpen, setIsOpen] = useState(false);
-  const currentValue = getValues(id); // Get current value from the form
+  const currentValue = getValues(id);
 
   const handleOptionClick = (optionValue: string) => {
-    setValue(id, optionValue); // Update the form value
-    clearErrors(id); // Clear the error when the user selects an option
-    setIsOpen(false); // Close the dropdown
+    setValue(id, optionValue);
+    clearErrors(id);
+    setIsOpen(false);
   };
 
   // Close the dropdown when clicking outside
@@ -59,15 +59,15 @@ const SelectInput: React.FC<SelectInputProps> = ({
         className={clsx(
           "flex flex-row bg-white border font-light rounded-md py-3 px-4 cursor-pointer gap-1",
           {
-            "border-error": !!errors[id], // error border
-            "border-[#DFE4EA]": !errors[id], // Default border color
-            "border-selected": isOpen,
-            "cursor-not-allowed bg-[#F3F4F6] border-[#F3F4F6] text-label":
+            "border-error": !!errors[id],
+            "border-pep-gray-border": !errors[id],
+            "border-pep-blue": isOpen,
+            "cursor-not-allowed bg-gray-100 border-gray-100 text-label":
               disabled,
           },
           className
         )}
-        onClick={() => !disabled && setIsOpen((prev) => !prev)} // Prevent toggle when disabled
+        onClick={() => !disabled && setIsOpen((prev) => !prev)}
       >
         <div
           className={`grow ${
@@ -81,8 +81,8 @@ const SelectInput: React.FC<SelectInputProps> = ({
         </div>
         <Icon
           icon="quill:chevron-down"
-          className={`text-[#637381] size-4 my-auto ${
-            disabled ? "text-gray-400" : "text-[#637381]"
+          className={`text-pep-dark-gray size-4 my-auto ${
+            disabled ? "text-gray-400" : "text-pep-dark-gray"
           }`}
         />
       </div>
@@ -92,7 +92,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
           {options.map((option) => (
             <li
               key={option.value}
-              className="px-5 py-2 font-light text-label hover:text-selected hover:bg-blue-50 focus:bg-blue-100 cursor-pointer"
+              className="px-5 py-2 font-light text-label hover:text-pep-blue hover:bg-blue-50 focus:bg-blue-100 cursor-pointer"
               onClick={() => handleOptionClick(option.value)}
             >
               {option.label}
@@ -112,6 +112,4 @@ const SelectInput: React.FC<SelectInputProps> = ({
       )}
     </div>
   );
-};
-
-export default SelectInput;
+}

@@ -1,15 +1,14 @@
-import React from "react";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
 import { InputProps } from "./InputPropsType";
 
-const TextInput: React.FC<InputProps> = ({
+export default function TextInput({
   id,
   placeholder,
   className,
   disabled,
   additionalValidation,
-}) => {
+}: InputProps) {
   const {
     register,
     formState: { errors },
@@ -21,10 +20,10 @@ const TextInput: React.FC<InputProps> = ({
         id={id}
         placeholder={placeholder}
         className={clsx(
-          "h-[50px] w-full p-3 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-selected focus:outline-none disabled:cursor-not-allowed disabled:bg-[#F3F4F6] disabled:border-[#F3F4F6] disabled:text-label",
+          "h-[50px] w-full p-3 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:border-gray-100 disabled:text-label",
           {
-            "border-error": !!errors[id], // Apply red border if there's an error
-            "border-[#DFE4EA]": !errors[id], // Default border color
+            "border-error": !!errors[id],
+            "border-gray-border": !errors[id],
           },
           className
         )}
@@ -39,6 +38,4 @@ const TextInput: React.FC<InputProps> = ({
       )}
     </div>
   );
-};
-
-export default TextInput;
+}

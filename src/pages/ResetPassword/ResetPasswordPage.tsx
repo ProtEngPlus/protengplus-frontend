@@ -1,7 +1,7 @@
 import logoWithText from "../../assets/images/LogoWithText/logoWithText.svg";
 import PasswordInput from "../../commons/components/Input/PasswordInput";
 import Button from "../../commons/components/Button/Button";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { resetPassword } from "../../commons/api/auth";
 
@@ -44,7 +44,7 @@ export default function ResetPasswordPage() {
             className="space-y-5"
             noValidate
           >
-            {/* New-Password Field */}
+           
             <PasswordInput
               id="new_password"
               placeholder="New Password"
@@ -55,7 +55,6 @@ export default function ResetPasswordPage() {
               }}
             />
 
-            {/* Confirm-New-Password Field */}
             <PasswordInput
               id="confirm_new_password"
               placeholder="Confirm New Password"

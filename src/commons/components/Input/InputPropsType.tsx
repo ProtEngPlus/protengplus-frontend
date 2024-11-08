@@ -1,5 +1,4 @@
-import { InputHTMLAttributes } from "react";
-type ValidationProps =
+export type ValidationProps =
   | {
       value: string | number | RegExp | boolean;
       message?: string;

@@ -39,14 +39,13 @@ export default function SuccessVerifyEmailPage() {
           <div className="space-y-12">
             <div className="space-y-3">
               <h1 className="text-4xl">Verified</h1>
-              <p className="font-light text-[#8899A8] text-2xl leading-loose">
+              <p className="font-light text-gray-500 text-2xl leading-loose">
                 Your account has successfully been created.
               </p>
               <hr className="w-[50%] mx-auto" />
             </div>
             <div>
-              <p className="font-light text-[#8899A8] text-2xl mt-12 leading-loose">
-                {/* Conditionally render the name or a loading message */}
+              <p className="font-light text-gray-500 text-2xl mt-12 leading-loose">
                 {loading ? "Welcome" : `Welcome, ${name}`}
               </p>
               <Button

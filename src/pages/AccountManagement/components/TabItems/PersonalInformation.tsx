@@ -38,15 +38,13 @@ export default function PersonalInformation() {
   const { handleSubmit, setValue } = form;
   const navigate = useNavigate();
 
-  // State to store form data
   const [userData, setUserData] = useState<FormValues | null>(null);
   useEffect(() => {
     if (user) {
-      setValue("email", user.email); // Set email value manually
+      setValue("email", user.email); 
     }
   }, [user, setValue]);
 
-  // Confirm Overlay Props
   const [isConfirmVisible, setConfirmVisible] = useState(false);
   const ConfirmProps: ConfirmOverlayProps = {
     id: "update-user",
@@ -58,7 +56,6 @@ export default function PersonalInformation() {
       if (userData) {
         try {
           await updateMe(userData);
-          console.log(userData);
           refreshUser();
           setSuccessVisible(true);
         } catch (error) {
@@ -70,7 +67,6 @@ export default function PersonalInformation() {
     message: "You made changes to this profile configuration",
   };
 
-  // Success Overlay Props
   const [isSuccessVisible, setSuccessVisible] = useState(false);
   const SuccessProps: SuccessOverlayProps = {
     id: "update-user",
@@ -80,7 +76,6 @@ export default function PersonalInformation() {
     title: "Profile Successfully Updated",
   };
 
-  // onSubmit function
   const onSubmit = handleSubmit((data) => {
     setUserData({
       name: data.name,
@@ -89,7 +84,7 @@ export default function PersonalInformation() {
       user_role: data.user_role,
       role: ["user"],
     });
-    setConfirmVisible(true); // Show confirm overlay
+    setConfirmVisible(true); 
   });
 
   return (
@@ -161,19 +156,18 @@ export default function PersonalInformation() {
           </div>
         </div>
 
-        {/* Correct button behavior */}
         <div className="flex space-x-2.5 justify-end items-end right-0 pb-[3.875rem]">
           <Button
             id="cancel-update-user"
             buttonType="cancel"
             text="Cancel"
-            type="button" // Add type="button" to prevent form submission
+            type="button" 
             onClick={() => {
               form.reset({
-                name: user?.name || "", // Resetting to user's default name
-                surname: user?.surname || "", // Resetting to user's default surname
-                email: user?.email || "", // Resetting to user's default email
-                user_role: user?.user_role || "", // Resetting to user's default role
+                name: user?.name || "", 
+                surname: user?.surname || "", 
+                email: user?.email || "", 
+                user_role: user?.user_role || "", 
               });
             }}
           />
@@ -181,7 +175,7 @@ export default function PersonalInformation() {
             id="submit-update-user"
             buttonType="submit"
             text="Save"
-            type="submit" // This button triggers form submission
+            type="submit"
           />
         </div>
       </form>

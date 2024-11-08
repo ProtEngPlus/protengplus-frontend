@@ -7,7 +7,7 @@ type PathInfo = {
 } | null;
 
 const nameMapping: { [key: string]: string } = {
-  dashboard: "Dashboard",
+  "dashboard": "Dashboard",
   "create-job": "Create Job",
   "account-management": "Account Management",
   "job-detail": "Job Detail",
@@ -15,7 +15,7 @@ const nameMapping: { [key: string]: string } = {
 };
 
 export default function Breadcrumb() {
-  const pathNameArray = useLocation().pathname.split("/").filter(Boolean); // Remove empty strings
+  const pathNameArray = useLocation().pathname.split("/").filter(Boolean); 
 
   const pathArray = pathNameArray.reduce((acc, path) => {
     const newPath =

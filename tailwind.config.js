@@ -9,13 +9,22 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Mitr", "sans-serif"],
+        "mitr": ["Mitr", "sans-serif"],
       },
       colors: {
         placeholder: "#9CA3AF",
-        label: "#6B7280", // gray-500
+        label: "#6B7280", 
         text: "black",
-        error: "#EF4444", // red-500
+        error: "#EF4444", 
         selected: "#2578D3",
+        "pep-blue": "#2578D3",
+        "pep-orange": "#F58634",
+        "pep-green": "#60B86B",
+        "pep-pink": "#D30085",
+        "pep-gray": "#9CA3AF",
+        "pep-blue-hover": "#1D5B9E",
+        "pep-gray-border" : "#DFE4EA",
+        "pep-dark-gray" : "#637381"
       },
       boxShadow: {
         dropShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
