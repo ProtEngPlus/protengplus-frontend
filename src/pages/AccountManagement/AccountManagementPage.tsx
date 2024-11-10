@@ -9,7 +9,6 @@ export default function AccountManagementPage() {
     const tabsElement = document.getElementById("tabs");
 
     if (tabsElement) {
-      // Create an array of objects with the id, trigger element (button), and content element
       const tabElements: TabItem[] = [
         {
           id: "personal-information-tab",
@@ -25,19 +24,16 @@ export default function AccountManagementPage() {
         (item) => item.triggerEl !== null && item.targetEl !== null
       ) as TabItem[];
 
-      // Options with default values
       const options: TabsOptions = {
-        defaultTabId: "personal-information-tab", // Set the default tab
+        defaultTabId: "personal-information-tab", 
         activeClasses:
-          "text-[#F58634] hover:text-[#F58634] dark:text-[#F58634] dark:hover:text-[#F58634] border-[#F58634] dark:border-[#F58634]",
+          "text-pep-orange hover:text-pep-orange dark:text-pep-orange dark:hover:text-pep-orange border-pep-orange dark:border-pep-orange",
         inactiveClasses:
           "text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300",
       };
 
-      // Initialize Tabs
       const tabs: TabsInterface = new Tabs(tabsElement, tabElements, options);
 
-      // Open the default tab based on id
       tabs.show("personal-information-tab");
     } else {
       console.error("Tabs element not found!");
@@ -59,7 +55,7 @@ export default function AccountManagementPage() {
               type="button"
               role="tab"
               aria-controls="personal-information-content"
-              aria-selected="true" // Set aria-selected true for the default tab
+              aria-selected="true" 
             >
               Personal Information
             </button>

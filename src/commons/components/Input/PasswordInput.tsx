@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
 import { InputProps } from "./InputPropsType";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-const PasswordInput: React.FC<InputProps> = ({
+export default function PasswordInput({
   id,
   placeholder,
   className,
   disabled,
   additionalValidation,
-}) => {
+}: InputProps) {
   const {
     register,
     formState: { errors },
@@ -30,10 +30,10 @@ const PasswordInput: React.FC<InputProps> = ({
           placeholder={placeholder}
           type={isPasswordVisible ? "text" : "password"}
           className={clsx(
-            "h-[50px] w-full pl-3 pr-[60px] bg-white border font-light placeholder:text-placeholder rounded-md focus:border-selected focus:outline-none disabled:cursor-not-allowed disabled:bg-[#F3F4F6] disabled:border-[#F3F4F6] disabled:text-label",
+            "h-[50px] w-full pl-3 pr-[60px] bg-white border font-light placeholder:text-placeholder rounded-md focus:border-selected focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:border-gray-100 disabled:text-label",
             {
-              "border-error": !!errors[id], // Apply red border if there's an error
-              "border-[#DFE4EA]": !errors[id], // Default border color
+              "border-error": !!errors[id],
+              "border-pep-gray-border": !errors[id],
             },
             className
           )}
@@ -62,6 +62,4 @@ const PasswordInput: React.FC<InputProps> = ({
       )}
     </div>
   );
-};
-
-export default PasswordInput;
+}

@@ -44,7 +44,7 @@ export default function ResetPasswordPage() {
             className="space-y-5"
             noValidate
           >
-            {/* New-Password Field */}
+           
             <PasswordInput
               id="new_password"
               placeholder="New Password"
@@ -55,7 +55,6 @@ export default function ResetPasswordPage() {
               }}
             />
 
-            {/* Confirm-New-Password Field */}
             <PasswordInput
               id="confirm_new_password"
               placeholder="Confirm New Password"

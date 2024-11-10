@@ -55,7 +55,6 @@ export default function SignUpPage() {
           <img src={logo} alt="Logo" className="absolute h-36" />
         </div>
 
-        {/* Form Section */}
         <FormProvider {...form}>
           <form
             onSubmit={onSubmit}
@@ -63,10 +62,7 @@ export default function SignUpPage() {
             noValidate
           >
             <h1 className="text-[40px]">Sign Up</h1>
-
-            {/* Email & Password Fields */}
             <div className="grid grid-cols-[9.375rem_25rem] gap-5">
-              {/* Email Field */}
               <div className="flex flex-row gap-x-3 items-center">
                 <Icon
                   icon="ion:mail-outline"
@@ -86,7 +82,6 @@ export default function SignUpPage() {
                 }}
               />
 
-              {/* Password Field */}
               <div className="flex flex-row gap-x-3 items-center">
                 <Icon icon="ph:key" className="text-gray-400 size-6" />
                 <label className="font-light">Password:</label>
@@ -100,7 +95,6 @@ export default function SignUpPage() {
                 }}
               />
 
-              {/* Re-Password Field */}
               <div className="flex flex-row gap-x-3 items-center">
                 <Icon icon="ph:key" className="text-gray-400 size-6" />
                 <label className="font-light">Re-Password:</label>
@@ -116,7 +110,6 @@ export default function SignUpPage() {
               />
             </div>
 
-            {/* Personal Information Section */}
             <div>
               <div className="flex flex-row gap-x-7 items-center mb-[1.875rem]">
                 <Icon
@@ -147,7 +140,6 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="grid grid-flow-col justify-end space-x-2.5 py-[3.875rem]">
               <Button
                 id="cancel-sign-up"

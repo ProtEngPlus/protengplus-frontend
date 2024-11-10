@@ -25,7 +25,6 @@ export default function ChangePasswordPage() {
   const { handleSubmit, setError, watch } = form;
   const navigate = useNavigate();
 
-  // for ConfirmOverlay
   const [isConfirmVisible, setConfirmVisible] = useState(false);
   const ConfirmProps: ConfirmOverlayProps = {
     id: "confirm-change-password",
@@ -51,7 +50,6 @@ export default function ChangePasswordPage() {
     message: "Please ensure your new password is secure and memorable.",
   };
 
-  // for SuccessOverlay
   const [isSuccessVisible, setSuccessVisible] = useState(false);
   const SuccessProps: SuccessOverlayProps = {
     id: "success-change-password",

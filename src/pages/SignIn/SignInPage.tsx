@@ -98,7 +98,7 @@ export default function SignInPage() {
           <label className="font-light">
             Not a member yet?{" "}
             <a
-              className="text-[#F58634] font-normal cursor-pointer"
+              className="text-pep-orange font-normal cursor-pointer"
               onClick={() => navigate("/sign-up")}
             >
               Sign Up

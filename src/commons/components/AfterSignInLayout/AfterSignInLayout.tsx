@@ -63,7 +63,7 @@ export default function RootLayout({
             >
               <Icon
                 icon="mdi:hamburger-menu"
-                className="text-[#2578D3] size-11"
+                className="text-pep-blue size-11"
               />
             </button>
           </div>
@@ -77,7 +77,7 @@ export default function RootLayout({
             <div className="flex flex-row items-center min-w-fit h-full bg-gray-50 rounded-b-xl px-5 space-x-4 m-auto">
               <Icon
                 icon="ph:user"
-                className="size-11 rounded-full p-2.5 text-white bg-[#F58634] hover:cursor-pointer"
+                className="size-11 rounded-full p-2.5 text-white bg-pep-orange hover:cursor-pointer"
                 onClick={() => navigate("/account-management")}
               />
               <div className="flex flex-col">
@@ -86,7 +86,7 @@ export default function RootLayout({
               </div>
               <Icon
                 icon="mingcute:exit-door-fill"
-                className="text-[#2578D3] size-[45px] hover:cursor-pointer"
+                className="text-pep-blue size-[45px] hover:cursor-pointer"
                 onClick={() => {
                   logout();
                   navigate("/sign-in");
@@ -112,7 +112,7 @@ export default function RootLayout({
                 to={path}
                 className={`flex items-center py-2 px-4 space-x-2.5 rounded-[999px] ${
                   locationPath === path
-                    ? "bg-selected text-white"
+                    ? "bg-pep-blue text-white"
                     : "text-black"
                 } group`}
               >

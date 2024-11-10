@@ -14,12 +14,12 @@ const userRoleOptions = Object.entries(userRoleMapper).map(([key, value]) => ({
   value: key,
 }));
 
-const PersonalField: React.FC<PersonalProps> = ({
+export default function PersonalField({
   label,
   id,
   placeholder,
   type,
-}) => {
+}: PersonalProps) {
   const {
     formState: { errors },
   } = useFormContext();
@@ -57,6 +57,4 @@ const PersonalField: React.FC<PersonalProps> = ({
       </div>
     </div>
   );
-};
-
-export default PersonalField;
+}
