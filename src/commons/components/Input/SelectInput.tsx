@@ -2,20 +2,27 @@ import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
-import { InputProps } from "./InputPropsType";
+import { ValidationProps } from "./InputPropsType";
 
-type Option = {
+export type Option = {
   label: string;
   value: string;
 };
 
-interface SelectInputProps extends InputProps {
+export type SelectInputProps = {
+  id: string;
+  placeholder?: string;
+  defaultValue?: string;
+  className?: string;
+  disabled?: boolean;
+  additionalValidation?: Record<string, ValidationProps>;
   options: Option[];
-}
+};
 
 export default function SelectInput({
   id,
   placeholder,
+  defaultValue,
   className,
   disabled = false,
   additionalValidation,
@@ -24,19 +31,28 @@ export default function SelectInput({
   const {
     register,
     setValue,
-    getValues,
     clearErrors,
+    watch,
     formState: { errors },
   } = useFormContext();
 
   const [isOpen, setIsOpen] = useState(false);
-  const currentValue = getValues(id);
+  const currentValue = watch(id);
 
   const handleOptionClick = (optionValue: string) => {
     setValue(id, optionValue);
     clearErrors(id);
     setIsOpen(false);
   };
+
+  // set value at beginning
+  useEffect(() => {
+    if (defaultValue) {
+      setValue(id, defaultValue);
+    } else if (!placeholder && options.length > 0) {
+      setValue(id, options[0].value);
+    }
+  }, []);
 
   // Close the dropdown when clicking outside
   useEffect(() => {
@@ -103,7 +119,7 @@ export default function SelectInput({
 
       <input
         type="hidden"
-        {...register(id, { ...additionalValidation })}
+        {...register(id, { ...(additionalValidation || {}) })}
         value={currentValue || ""}
       />
 
