@@ -24,7 +24,7 @@ export default function Button({
     cancel:
       "font-light bg-white hover:bg-blue-50 text-black hover:text-pep-blue border border-pep-gray-border",
     delete: "font-medium bg-red-500 hover:bg-red-700 text-white",
-    next: "bg-pep-orange hover:bg-pep-orange-hover text-white",
+    next: "bg-pep-orange text-white",
   };
 
   return (
