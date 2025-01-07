@@ -17,6 +17,7 @@ export default {
         text: "black",
         error: "#EF4444",
         selected: "#2578D3",
+        disabled: "#F3F4F6",
         "pep-blue": "#2578D3",
         "pep-orange": "#F58634",
         "pep-green": "#60B86B",
@@ -26,6 +27,8 @@ export default {
         "pep-orange-hover": "#DB782F",
         "pep-gray-border": "#DFE4EA",
         "pep-dark-gray": "#637381",
+        "pep-blue-light": "#EFF6FF",
+        "pep-gray-light": "#F9FAFB",
       },
       boxShadow: {
         dropShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
