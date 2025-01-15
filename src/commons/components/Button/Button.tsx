@@ -18,7 +18,8 @@ export default function Button({
   children,
   ...props
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const baseStyles = "w-48 h-[3.125rem] rounded-md px-7 py-3";
+  const baseStyles =
+    "w-48 h-[3.125rem] rounded-md px-7 py-3 disabled:cursor-not-allowed";
   const typeStyles = {
     submit: "font-medium bg-pep-blue hover:bg-pep-blue-hover text-white",
     cancel:
