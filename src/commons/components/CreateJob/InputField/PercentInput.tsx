@@ -12,6 +12,7 @@ export type RangeNumberInputProps = {
   className?: string;
   disabled?: boolean;
   additionalValidation?: Record<string, ValidationProps>;
+  onEdit?: boolean;
 };
 
 export default function PercentInput({
@@ -21,16 +22,23 @@ export default function PercentInput({
   className,
   disabled,
   additionalValidation,
+  onEdit = true,
 }: NumberInputProps) {
   const {
     register,
     formState: { errors },
-    setValue: setFormValue,
-    getValues,
+    setValue,
+    watch,
   } = useFormContext();
 
+  const currentValue = (() => {
+    const watchedValue = parseFloat(watch(id));
+    if (!isNaN(watchedValue)) return watchedValue;
+    return defaultValue ?? 0;
+  })();
+
   const [localValue, setLocalValue] = useState<string>(
-    `${defaultValue?.toFixed(2)}%` || "0.00%"
+    `${currentValue.toFixed(2)}%`
   );
 
   // format value
@@ -82,97 +90,94 @@ export default function PercentInput({
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
+    const numericValue = parseFloat(value.replace("%", ""));
     const formattedValue = formatValue(value);
 
     setLocalValue(formattedValue);
-    setFormValue(id, value);
+    setValue(id, isNaN(numericValue) ? defaultValue : numericValue);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      const currentValue = parseFloat(getValues(id)) || 0;
+      const numericValue = parseFloat(localValue.replace("%", ""));
       const formattedValue = formatValue(localValue);
 
       setLocalValue(formattedValue);
-      setFormValue(id, currentValue);
+      setValue(id, isNaN(numericValue) ? defaultValue : numericValue);
     }
   };
 
-  // increase button
   const handleIncrease = (e: React.MouseEvent) => {
     e.preventDefault();
-    const currentValue = parseFloat(getValues(id)) || 0;
-    if (currentValue >= 100) return;
-
-    let newValue = currentValue + 1;
-    if (newValue > 100) newValue = 100;
+    const numericValue = parseFloat(localValue.replace("%", "")) || 0;
+    const newValue = Math.min(100, numericValue + 1);
 
     setLocalValue(`${newValue.toFixed(2)}%`);
-    setFormValue(id, newValue);
+    setValue(id, newValue);
   };
 
-  // decrease button
   const handleDecrease = (e: React.MouseEvent) => {
     e.preventDefault();
-    const currentValue = parseFloat(getValues(id)) || 0;
-    if (currentValue <= 0) return;
-
-    let newValue = currentValue - 1;
-    if (newValue < 0) newValue = 0;
+    const numericValue = parseFloat(localValue.replace("%", "")) || 0;
+    const newValue = Math.max(0, numericValue - 1);
 
     setLocalValue(`${newValue.toFixed(2)}%`);
-    setFormValue(id, newValue);
+    setValue(id, newValue);
   };
 
   return (
-    <div className="w-[230px] min-w-fit flex flex-row justify-between space-x-2 text-center items-center">
+    <div className="w-[22%] min-w-fit flex flex-row justify-between space-x-3 text-center items-center">
       <label className="font-light">{label}:</label>
-      <div className="relative w-fit min-w-fit">
-        <input
-          id={id}
-          type="text"
-          value={localValue}
-          defaultValue={`${defaultValue?.toFixed(2)}%` || "0.00%"}
-          onKeyDown={handleKeyDown}
-          {...register(id, {
-            ...(additionalValidation || {}),
-            onChange: (e) => {
-              handleInputChange(e);
-            },
-            onBlur: handleBlur,
-          })}
-          className={clsx(
-            "h-[40px] w-24 p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:border-gray-100 disabled:text-label",
-            {
-              "border-error": !!errors[id],
-              "border-gray-border": !errors[id],
-            },
-            className
+      {!onEdit ? (
+        <div className="w-24 text-start">{localValue}</div>
+      ) : (
+        <div className="relative w-fit min-w-fit">
+          <input
+            id={id}
+            type="text"
+            value={localValue}
+            onKeyDown={handleKeyDown}
+            {...register(id, {
+              ...(additionalValidation || {}),
+              onChange: (e) => {
+                handleInputChange(e);
+              },
+              valueAsNumber: true,
+              onBlur: handleBlur,
+            })}
+            className={clsx(
+              "h-[40px] w-24 p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
+              {
+                "border-error": !!errors[id],
+                "border-gray-border": !errors[id],
+              },
+              className
+            )}
+            disabled={disabled}
+            autoComplete="off"
+            aria-label={`Percentage input for ${id}`}
+          />
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex flex-col gap-1">
+            {/* Increase button */}
+            <Icon
+              icon="mingcute:up-line"
+              className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
+              onClick={handleIncrease}
+            />
+            {/* Decrease button */}
+            <Icon
+              icon="mingcute:down-line"
+              className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
+              onClick={handleDecrease}
+            />
+          </div>
+          {errors[id]?.message && (
+            <span className="font-light text-error text-xs">
+              {errors[id]?.message as string}
+            </span>
           )}
-          disabled={disabled}
-          autoComplete="off"
-          aria-label={`Percentage input for ${id}`}
-        />
-        <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex flex-col gap-1">
-          {/* Increase button */}
-          <Icon
-            icon="mingcute:up-line"
-            className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
-            onClick={handleIncrease}
-          />
-          {/* Decrease button */}
-          <Icon
-            icon="mingcute:down-line"
-            className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
-            onClick={handleDecrease}
-          />
         </div>
-        {errors[id]?.message && (
-          <span className="font-light text-error text-xs">
-            {errors[id]?.message as string}
-          </span>
-        )}
-      </div>
+      )}
     </div>
   );
 }

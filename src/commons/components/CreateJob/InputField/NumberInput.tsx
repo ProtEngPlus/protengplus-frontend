@@ -10,6 +10,7 @@ export type NumberInputProps = {
   className?: string;
   disabled?: boolean;
   additionalValidation?: Record<string, ValidationProps>;
+  onEdit?: boolean;
 };
 
 export default function NumberInput({
@@ -19,76 +20,89 @@ export default function NumberInput({
   className,
   disabled,
   additionalValidation,
+  onEdit = true,
 }: NumberInputProps) {
   const {
     register,
     formState: { errors },
-    setValue: setFormValue,
-    getValues,
+    setValue,
+    watch,
   } = useFormContext();
+
+  const currentValue = Number(watch(id)) || defaultValue || 0;
 
   const handleIncrease = (e: React.MouseEvent) => {
     e.preventDefault();
-    const currentValue = parseFloat(getValues(id)) || 0;
-    setFormValue(id, currentValue + 1);
+    setValue(id, Number(currentValue) + 1);
   };
 
   const handleDecrease = (e: React.MouseEvent) => {
     e.preventDefault();
-    const currentValue = parseFloat(getValues(id)) || 0;
-    setFormValue(id, Math.max(0, currentValue - 1));
+    setValue(id, Math.max(0, Number(currentValue) - 1));
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     if (value === "") {
-      setFormValue(id, defaultValue || 0);
+      setValue(id, defaultValue || 0);
+    } else {
+      setValue(id, Number(value));
     }
   };
 
   return (
-    <div className="w-[230px] min-w-fit flex flex-row justify-between space-x-2 items-center">
-      <label className="font-light">{label}:</label>
+    <div
+      className={`
+        w-[22%] min-w-fit flex flex-row space-x-3 items-center justify-between`}
+    >
+      <label className="font-light ">{label}:</label>
       <div className="relative w-fit min-w-fit">
-        <input
-          id={id}
-          type="text"
-          defaultValue={defaultValue}
-          {...register(id, {
-            ...(additionalValidation || {}),
-            onBlur: handleBlur,
-          })}
-          className={clsx(
-            "h-[40px] w-24 p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:border-gray-100 disabled:text-label",
-            {
-              "border-error": !!errors[id],
-              "border-gray-border": !errors[id],
-            },
-            className
-          )}
-          disabled={disabled}
-          autoComplete="off"
-          aria-label={`Percentage input for ${id}`}
-        />
-        <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex flex-col gap-1">
-          {/* Increase button */}
-          <Icon
-            icon="mingcute:up-line"
-            className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
-            onClick={handleIncrease}
-          />
-          {/* Decrease button */}
-          <Icon
-            icon="mingcute:down-line"
-            className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
-            onClick={handleDecrease}
-          />
-        </div>
+        {!onEdit ? (
+          <div className="w-24 text-start">{currentValue}</div>
+        ) : (
+          <div>
+            <input
+              id={id}
+              type="text"
+              defaultValue={defaultValue}
+              {...register(id, {
+                ...(additionalValidation || {}),
+                valueAsNumber: true,
+                onBlur: handleBlur,
+              })}
+              className={clsx(
+                "h-[40px] w-24 p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
+                {
+                  "border-error": !!errors[id],
+                  "border-gray-border": !errors[id],
+                },
+                className
+              )}
+              disabled={disabled}
+              autoComplete="off"
+              aria-label={`Percentage input for ${id}`}
+            />
+            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex flex-col gap-1">
+              {/* Increase button */}
+              <Icon
+                icon="mingcute:up-line"
+                className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
+                onClick={handleIncrease}
+              />
+              {/* Decrease button */}
+              <Icon
+                icon="mingcute:down-line"
+                className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
+                onClick={handleDecrease}
+              />
+            </div>
 
-        {errors[id]?.message && (
-          <span className="font-light text-error text-xs">
-            {errors[id]?.message as string}
-          </span>
+            {errors[id]?.message && (
+              <span className="font-light text-error text-xs">
+                {errors[id]?.message as string}
+              </span>
+            )}
+          </div>
         )}
       </div>
     </div>

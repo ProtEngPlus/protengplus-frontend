@@ -6,9 +6,9 @@ export type DropdownProps = {
   label: string;
   defaultValue?: string;
   options: string[];
-  className?: string;
   disabled?: boolean;
   additionalValidation?: Record<string, ValidationProps>;
+  onEdit?: boolean;
 };
 
 export default function DropdownInput({
@@ -18,6 +18,7 @@ export default function DropdownInput({
   options,
   disabled,
   additionalValidation,
+  onEdit = true,
 }: DropdownProps) {
   const optionsValue: Option[] = options.map((option) => ({
     label: option,
@@ -25,15 +26,17 @@ export default function DropdownInput({
   }));
 
   return (
-    <div className="min-w-fit w-[436px] flex flex-row justify-between items-center space-x-3">
-      <label className="font-light w-[88px]">{label}:</label>
+    <div className="min-w-fit w-[40%] flex flex-row justify-between items-center space-x-3">
+      <label className="font-light w-[40%]">{label}:</label>
+
       <SelectInput
         id={id}
         defaultValue={defaultValue}
         options={optionsValue}
-        className="w-full"
+        className="grow"
         disabled={disabled}
         additionalValidation={additionalValidation}
+        onEdit={onEdit}
       />
     </div>
   );
