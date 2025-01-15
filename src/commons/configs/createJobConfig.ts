@@ -1,10 +1,74 @@
-import { PipelineItem } from "../interfaces/CreateJob.interface";
+import { CreateJobDetailInterface, PipelineItem, PipelineItems } from "../interfaces/CreateJob.interface";
+import { RunType } from "../interfaces/Job.interface";
+
+export const steps = [
+    "Protein Query",
+    "Protein Representation",
+    "Upload Lab Input",
+    "Top Model",
+    "Mutation",
+    "Conclusion",
+];
+
+// all pipelines
+export const Pipelines: PipelineItems[] = [
+    { method: "Protein Query", subMethod: ["Blast"] },
+    { method: "Protein Representation", subMethod: ["Unirep"] },
+    { method: "Top Model", subMethod: ["RidgeCV"] },
+    { method: "Mutation", subMethod: ["Mutation"] },
+];
+
+// default pipeline
+export const defaultPipeline: PipelineItem[] = [
+  { method: "Protein Query", subMethod: "Blast" },
+  { method: "Protein Representation", subMethod: "Unirep" },
+  { method: "Top Model", subMethod: "RidgeCV" },
+  { method: "Mutation", subMethod: "Mutation" },
+];
+
+// default create job detail
+export const defaultCreateJobDetail: CreateJobDetailInterface = {
+    name: "",
+    description: "",
+    run_type: "one-step",
+    is_notification_on: true,
+    input_protein: "",
+    input_mode: "prot_seq",
+    lab_result: []
+}
+
+// format input and helper text
+export const formatInput: Record<
+  number,
+  { input: string; helperText: string; insideHelperText: (value: any) => string }
+> = {
+  1: {
+    input: "flex flex-row gap-x-[5%] gap-y-4 flex-wrap",
+    helperText: "flex flex-row gap-x-[5%] gap-y-4 flex-wrap",
+    insideHelperText: (value) =>
+        value.type === "dropdown" || value.type === "multiNumberDropdown"  ? "grid grid-cols-[1fr,5fr] w-[46%] gap-x-3" : "grid grid-cols-[2fr,3fr] w-[30%] gap-x-3",
+  },
+
+  2: {
+    input: "grid grid-cols-[1fr,1fr] gap-y-4 w-fit gap-x-[250px]",
+    helperText: "grid grid-cols-[1fr,1fr] gap-y-4 w-fit gap-x-[150px]",
+    insideHelperText: (value) =>
+      value.type === "rangeNumber" ? "flex flex-col space-y-2" : "grid grid-cols-[1fr,2fr] gap-x-3",
+  },
+
+  3: {
+    input: "flex flex-col gap-y-4",
+    helperText: "space-y-5 w-fit",
+    insideHelperText: () => "grid grid-cols-[1fr,4fr] space-x-3 text-start",
+  },
+};
 
 export interface CreateJobConfigInterface {
   [method: string]: {
     description: string;
     tool: {
       [subMethod: string]: {
+        formatInput:number;
         description: string;
         parameters: MethodParameter[];
       };
@@ -15,68 +79,65 @@ export interface CreateJobConfigInterface {
 export interface MethodParameter {
   name: string;
   id: string;
-  type: "string" | "number" | "rangeNumber" | "percent" | "dropdown" | "multiNumberDropdown";
+  type: "dropdown" | "string" | "number" | "rangeNumber" | "percent" | "multiNumberDropdown" | "boolean" | RunType
   description: string;
-  default?: string | number | number[];
+  default?: string | number | number[] | boolean | RunType,
   low?: number;
   high?: number;
-  itemType?: string;
   dropdownItems?: string[] | number[];
   additionalValidation?: ValidationRule;
 }
 
 export interface ValidationRule {
-  required?: { value: boolean; message: string };
-  min?: { value: number; message: string };
-  max?: { value: number; message: string };
-  minLength?: { value: number; message: string };
-  maxLength?: { value: number; message: string };
-  pattern?: { value: RegExp; message: string };
-  isInteger?: { value: boolean; message: string };
+    required?: { value: boolean; message: string };
+    min?: { value: number; message: string };
+    max?: { value: number; message: string };
+    minLength?: { value: number; message: string };
+    maxLength?: { value: number; message: string };
+    pattern?: { value: RegExp; message: string };
+    isInteger?: { value: boolean; message: string };
+    validate?: (value: any) => boolean | string;
 }
+  
 
-export const defaultPipeline: PipelineItem[] = [
-  { method: "Protein Query", subMethod: "Blast" },
-  { method: "Protein Representation", subMethod: "Unirep" },
-  { method: "Top Model", subMethod: "RidgeCV" },
-  { method: "Mutation", subMethod: "MCMC" },
-];
-
-export const createJpbConfig: CreateJobConfigInterface = {
-    "Protein Input": {
-        description: "Protein sequence to be mutated and scored, provided in FASTA format or UniProt ID.",
-        tool: {
-            "ProteinFilter": {
-                description: "The specific species or biological entity from which the protein sequence originates",
-                parameters: [
+export const createJobConfig: CreateJobConfigInterface = {
+    "Protein Input":{
+        description:"Protein sequence to be mutated and scored, provided in FASTA format or UniProt ID.",
+        tool:{
+            "Protein Input Config":{
+                formatInput:1,
+                description:"",
+                parameters:[
                     {
                         name: "Percent Identity",
-                        id: "perc_ident",
-                        type: "multiNumberDropdown",
+                        id: "prot_perc_ident",
+                        type: "rangeNumber",
                         description: "The minimum percentage of sequence identity in the database required for a match to the query sequence to be considered significant",
                     },
                     {
                         name: "E Value",
-                        id: "expect",
-                        type: "multiNumberDropdown",
+                        id: "prot_expect",
+                        type: "rangeNumber",
                         description:
                         "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match.",
                     },
                     {
                         name: "Query Cover",
-                        id: "query_cover",
-                        type: "multiNumberDropdown",
+                        id: "prot_query_cover",
+                        type: "rangeNumber",
                         description:
                         "The percentage of the query sequence (your specimen) that overlaps with the database sequence",
                     },
-                ],
-            },
+
+                ]
+            }
         },
     },
     "Protein Query": {
         description: "Protein Query Tool to gather similar proteins from a global database",
         tool: {
             Blast: {
+                formatInput:1,
                 description: "Tool used to compare a query protein sequence against a database of sequences by aligning sequences based on local matches.",
                 parameters: [
                     {
@@ -92,7 +153,7 @@ export const createJpbConfig: CreateJobConfigInterface = {
                         id: "database",
                         type: "dropdown",
                         description: "Database targeted for protein query",
-                        dropdownItems: ["nr"],
+                        dropdownItems: ["nr","other"],
                         default: "nr",
                         additionalValidation: {
                             required: { value: true, message: "Database is required." },
@@ -126,7 +187,7 @@ export const createJpbConfig: CreateJobConfigInterface = {
                         name: "Sequence Length",
                         id: "seq_length",
                         type: "number",
-                        description: "",
+                        description: "The expected length of protein sequences response from database",
                         default: 70,
                         additionalValidation: {
                             required: {
@@ -189,6 +250,7 @@ export const createJpbConfig: CreateJobConfigInterface = {
         description: "A fine-tuning tool that combines features from both the global and local sequence landscapes and presents them in a holistic statistical summary",
         tool: {
             Unirep: {
+                formatInput:2,
                 description: "Model that generates fixed-length numerical representations (embeddings) of protein sequences.",
                 parameters: [
                     {
@@ -252,6 +314,7 @@ export const createJpbConfig: CreateJobConfigInterface = {
         description:"Machine Learning model for training the dataset",
         tool:{
             RidgeCV:{
+                formatInput:3,
                 description: "RidgeCV is a linear regression model that includes built-in cross-validation to automatically select the best regularization parameter (alpha). ",
                 parameters:[
                     {
@@ -259,9 +322,13 @@ export const createJpbConfig: CreateJobConfigInterface = {
                         id: "train_batch_sizes",
                         type: "multiNumberDropdown",
                         description: "The number of training examples the model sees before updating its internal parameters (number of samples per iteration) Multiple batch sizes can be selected to find the best one",
-                        itemType: "number",
                         dropdownItems: [24, 32, 64, 96, 128],
                         default: [24,32],
+                        additionalValidation: {
+                            required: { value: true, message: "Training Batch Sizes is required." },
+                            validate: (value: number[]) => 
+                                value.length > 0 || "Training Batch Sizes must not be empty.",
+                        }
                     },
                     {
                         name: "N Batch",
@@ -280,8 +347,7 @@ export const createJpbConfig: CreateJobConfigInterface = {
                         type: "number",
                         description: "A measure of how much the model is overfitting, Regularization Strength As alpha increases, strength increases, leading to more variance from the regular model",
                         default: 0.1,
-                        additionalValidation: {
-                        required: { value: true, message: "Alpha is required." },
+                        additionalValidation: { required: { value: true, message: "Alpha is required." },
                         min: { value: 0, message: "Alpha must be at least 0." },
                         },
                     },
@@ -292,7 +358,8 @@ export const createJpbConfig: CreateJobConfigInterface = {
     Mutation:{
         description:"The output of the model",
         tool:{
-            MCMC:{
+            Mutation:{
+                formatInput:3,
                 description:"This training model is designed to generate mutated protein sequences from the query sequence and predict assay scores.",
                 parameters:[
                     {
@@ -335,7 +402,7 @@ export const createJpbConfig: CreateJobConfigInterface = {
                     },
                     {
                         name: "Mutated Position Range",
-                        id: "mutated_pos_range",
+                        id: "mutate_pos_range",
                         type: "number",
                         description: "The range of positions from the current mutated position where the next mutation is located",
                         default: 5,
@@ -365,6 +432,4 @@ export const createJpbConfig: CreateJobConfigInterface = {
             }
         }
     }
-};
-
-
+}
