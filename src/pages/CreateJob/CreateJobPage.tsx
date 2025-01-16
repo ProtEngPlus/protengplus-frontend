@@ -235,6 +235,7 @@ export default function CreateJobPage() {
                 <div className="rounded-lg border border-pep-gray-border px-6 py-8 space-y-2">
                   {state === 1 && (
                     <ProteinQuery
+                      isWithConfig={isWithConfig}
                       initialStep={initialStep}
                       state={state}
                       errors={errors}

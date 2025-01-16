@@ -13,10 +13,15 @@ import TextInput from "../../../../../commons/components/Input/TextInput";
 import Textarea from "../../../../../commons/components/CreateJob/InputField/Textarea";
 import InputField from "../../InputField/InputField";
 import DropdownInput from "../../../../../commons/components/CreateJob/InputField/Dropdown";
-import SearchInput from "../../../../../commons/components/CreateJob/InputField/SearchInput";
 import Button from "../../../../../commons/components/Button/Button";
+import {
+  InputProteinOverlay,
+  InputProteinOverlayProps,
+} from "../../InputProteeinOverlay/InputProteinOverlay";
+import searchIcon from "../../../../../assets/images/CreateJob/searchIcon.svg";
 
 interface Props {
+  isWithConfig?: boolean;
   initialStep: number;
   state: number;
   errors: any;
@@ -28,16 +33,17 @@ interface Props {
 }
 
 export default function ProteinQuery({
+  isWithConfig = true,
   initialStep,
   state,
   errors,
   pipeline,
   setPipeline,
-  isConclusion,
+  isConclusion = false,
   onEditInfo = true,
   onEditProt = true,
 }: Props) {
-  const { getValues, setValue, watch } = useFormContext();
+  const { register, getValues, setValue, watch, trigger } = useFormContext();
   const currentSubMethod = watch(`tool_${steps[state - 1]}`);
   const inputProtein = watch("input_protein");
   const input_mode = watch("input_mode") ?? "prot_seq";
@@ -159,8 +165,22 @@ export default function ProteinQuery({
     );
   }, [jobConfig]);
 
+  // input protein overlay
+  const [isProteinVisible, setProteinVisible] = useState(false);
+  const InputProteinProps: InputProteinOverlayProps = {
+    inputProtein: inputProtein,
+    onClose: () => {
+      setProteinVisible(false);
+    },
+  };
+
   return (
     <div className="space-y-11">
+      <InputProteinOverlay
+        isVisible={isProteinVisible}
+        inputProteinProps={InputProteinProps}
+      />
+
       {/* --------------------------------- Job detail ----------------------------------------------------------------- */}
       <Context
         title="General"
@@ -261,7 +281,7 @@ export default function ProteinQuery({
                   text="View"
                   className="w-fit px-3 py-2 font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-3 text-pep-dark-gray"
                   onClick={() => {
-                    console.log("view protein input");
+                    setProteinVisible(true);
                   }}
                 >
                   <Icon
@@ -293,49 +313,92 @@ export default function ProteinQuery({
             <Icon icon="hugeicons:dna" className="size-6 text-pep-gray" />
             <label className="text-center text-nowrap">Input Protein</label>
             <div className="grow">
-              <SearchInput
-                id="input_protein"
-                placeholder="Input Protein*"
-                className="text-wrap"
-                disabled={initialStep > state}
-                additionalValidation={{
-                  required: {
-                    value: true,
-                    message: "Protein input is required",
-                  },
-                  pattern: {
-                    value:
-                      /^(?!.*ATGC)(?!.*atgc)[A-IK-NP-TVWY]*$|^(?!.*ATGC)(?!.*atgc)[a-ik-np-tvwy]*$/,
-                    message: "Incorrect protein sequence format.",
-                  },
-                }}
-              />
+              <div className="relative items-center">
+                <input
+                  id="input_protein"
+                  placeholder="Input Protein*"
+                  className={`text-wrap h-[50px] min-w-[500px] w-full pl-3 pr-10 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label ${
+                    errors.input_protein ? "border-error" : "border-gray-border"
+                  }`}
+                  disabled={initialStep > state}
+                  {...register("input_protein", {
+                    validate:
+                      input_mode === "prot_seq"
+                        ? {
+                            required: (value) =>
+                              !!value || "Protein input is required",
+                            pattern: (value) =>
+                              /^(?!.*ATGC)(?!.*atgc)[A-IK-NP-TVWY]*$|^(?!.*ATGC)(?!.*atgc)[a-ik-np-tvwy]*$/.test(
+                                value
+                              ) || "Incorrect protein sequence format.",
+                          }
+                        : undefined,
+                  })}
+                  onBlur={() => {
+                    if (input_mode === "prot_seq") {
+                      trigger("input_protein");
+                    }
+                  }}
+                  autoComplete="off"
+                />
+                <img
+                  src={searchIcon}
+                  alt="search"
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2"
+                />
+              </div>
               {/* Error Message */}
-              {errors.input_protein && (
+              {errors.input_protein && input_mode === "prot_seq" && (
                 <span className="absolute font-light text-error text-xs">
                   {errors.input_protein.message}
                 </span>
               )}
             </div>
+
             <Button
-              type="button"
-              buttonType={input_mode === "prot_seq" ? "submit" : "cancel"}
-              onClick={() => setValue("input_mode", "prot_seq")}
               id="prot_seq"
+              buttonType={input_mode === "prot_seq" ? "submit" : "cancel"}
+              type="button"
+              disabled={state < initialStep}
+              onClick={() => setValue("input_mode", "prot_seq")}
               text="Amino Acid Sequence"
               className="!font-light !p-0 w-[100px] text-sm"
             />
             <Button
-              buttonType={input_mode === "uniprot_id" ? "submit" : "cancel"}
-              onClick={() => setValue("input_mode", "uniprot_id")}
-              type="button"
               id="uniprot_id"
+              buttonType={input_mode === "uniprot_id" ? "submit" : "cancel"}
+              type="button"
+              disabled={state < initialStep}
+              onClick={() => setValue("input_mode", "uniprot_id")}
               text="UniprotID"
               className="!font-light !p-0 w-[100px] text-sm"
             />
+            <Button
+              id="btn-view-protein"
+              buttonType="cancel"
+              type="button"
+              disabled={
+                input_mode === "prot_seq" &&
+                (errors.input_protein || !watch("input_protein"))
+              }
+              onClick={() => {
+                setProteinVisible(true);
+              }}
+              text="View"
+              className="w-fit px-3 py-2 font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-3 text-pep-dark-gray"
+            >
+              <Icon icon="carbon:view" className="size-[30px] text-pep-gray" />
+            </Button>
           </div>
         )}
       </div>
+      {!isConclusion && !isWithConfig && (
+        <div className="text-center text-pep-dark-gray font-light">
+          Note: Blast Results can be manually filtered and selected only in{" "}
+          <span className="text-pep-orange font-normal">'One-Step Run'</span>{" "}
+          mode
+        </div>
+      )}
     </div>
   );
 }
