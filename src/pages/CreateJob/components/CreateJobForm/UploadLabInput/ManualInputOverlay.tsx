@@ -48,7 +48,7 @@ export function ManualInput({
 
     return () => {
       if (modal) {
-        modal.hide(); // Hide the modal if it was instantiated
+        modal.hide();
       }
     };
   }, [isVisible]);
@@ -58,12 +58,12 @@ export function ManualInput({
     const lines = inputManual.trim().split("\n");
 
     // Map each line into an object with sequence and score
-    const y = lines.map((line: any) => {
+    const newData = lines.map((line: any) => {
       const [sequence, score] = line.split(",").map((item: any) => item.trim());
       return { sequence, score: parseFloat(score) };
     });
 
-    setData(y);
+    setData(newData);
   };
 
   return (
