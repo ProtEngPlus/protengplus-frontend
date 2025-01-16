@@ -11,7 +11,7 @@ import { ManualInput, ManualInputOverlayProps } from "./ManualInputOverlay";
 import {
   InputProteinOverlay,
   InputProteinOverlayProps,
-} from "./InputProteinOverlay";
+} from "../../InputProteeinOverlay/InputProteinOverlay";
 import {
   ConfirmOverlay,
   ConfirmOverlayProps,
