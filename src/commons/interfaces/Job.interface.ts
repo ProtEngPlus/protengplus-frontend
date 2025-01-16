@@ -2,8 +2,6 @@ export type RunType = "auto" | "one-step";
 
 export type State = "Created" | "Pending" | "Ongoing" | "Failed" | "Completed";
 
-export type InputMode = "uniprot_id" | "prot_seq";
-
 export type LabResult = {
   total: number;
   sequences: string[];
@@ -22,7 +20,6 @@ export interface JobInterface {
   ref_job_id?: string;
   user_id: string;
   stage_id: number;
-  input_mode: InputMode;
   name: string;
   description: string;
   input_protein: string;

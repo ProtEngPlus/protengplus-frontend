@@ -3,6 +3,7 @@ import {
   CreateJobInterface,
   CreateJobDetailInterface,
   PipelineItem,
+  CreateJobInfo,
 } from "../../commons/interfaces/CreateJob.interface";
 import {
   createJobConfig,
@@ -35,12 +36,13 @@ import {
   ConfirmOverlayProps,
 } from "../../commons/components/ModalOverlay/ConfirmOverlay";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../commons/hooks/useAuth";
 
 export default function CreateJobPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [isWithConfig, setIsWithConfig] = useState(false);
-  const [isInitialStep3, setInitialStep3] = useState(false);
   const [initialStep, setInitialStep] = useState(1);
   const [state, setState] = useState(0);
   const [pipeline, setPipeline] = useState<PipelineItem[]>(defaultPipeline);
@@ -65,7 +67,6 @@ export default function CreateJobPage() {
   const initialJobInfo = (job?: JobResponse, stepConfig?: number) => {
     if (!isWithConfig) {
       setInitialStep(1);
-      setInitialStep3(false);
       setJobInfo(generateInitialJob());
       setPipeline(defaultPipeline);
       setState(1);
@@ -105,10 +106,12 @@ export default function CreateJobPage() {
   // update info after clicking confirm (conclusion)
   const updateInfo = (): Promise<{
     detail: CreateJobDetailInterface;
-    info: CreateJobInterface;
+    info: CreateJobInfo;
+    meta: string[];
   }> => {
     return new Promise((resolve, reject) => {
-      const newJobInfo = {} as CreateJobInterface;
+      const newJobInfo = {} as CreateJobInfo;
+      const meta = [] as string[];
 
       handleSubmit(
         (data: any) => {
@@ -120,7 +123,6 @@ export default function CreateJobPage() {
               is_notification_on: data["is_notification_on"],
               lab_result: data["lab_result"],
               name: data["name"],
-              input_mode: data["input_mode"],
               run_type: data["run_type"],
             };
 
@@ -130,18 +132,18 @@ export default function CreateJobPage() {
                 method,
                 subMethod,
               }: { method: string; subMethod: string } = step;
-              newJobInfo[method] = {};
-              newJobInfo[method][subMethod] = {};
+              meta.push(subMethod.toLowerCase());
+              newJobInfo[subMethod.toLowerCase()] = {};
               const jobConfig =
                 createJobConfig[method].tool[subMethod].parameters;
 
               jobConfig.forEach((param) => {
-                newJobInfo[method][subMethod][param.id] =
+                newJobInfo[subMethod.toLowerCase()][param.id] =
                   data[param.id] ?? data[method][subMethod][param.id];
               });
             }
 
-            resolve({ detail: newJobDetail, info: newJobInfo });
+            resolve({ detail: newJobDetail, info: newJobInfo, meta: meta });
           } catch (error) {
             reject(error);
           }
@@ -162,8 +164,14 @@ export default function CreateJobPage() {
     },
     onConfirm: async () => {
       setConfirmVisible(false);
-      const { detail, info } = await updateInfo();
-      console.log("confirm data", { ...detail, ...info });
+      const { detail, info, meta } = await updateInfo();
+      console.log("confirm data", {
+        stage_id: 0,
+        user_id: user?.id,
+        option: { ...info },
+        ...detail,
+        meta,
+      });
       try {
         setSuccessVisible(true);
       } catch (error) {

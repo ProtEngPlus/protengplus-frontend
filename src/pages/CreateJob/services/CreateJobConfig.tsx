@@ -27,7 +27,6 @@ export function generateInitialJobConfig(jobConfig: JobResponse): {
       sequence: sequence,
       score: jobConfig.lab_result.scores[index],
     })),
-    input_mode: jobConfig.input_mode,
     name: jobConfig.name,
     run_type: jobConfig.run_type,
   };

@@ -40,7 +40,7 @@ export default function ProteinQuery({
   const { getValues, setValue, watch } = useFormContext();
   const currentSubMethod = watch(`tool_${steps[state - 1]}`);
   const inputProtein = watch("input_protein");
-  const input_mode = watch("input_mode");
+  const input_mode = watch("input_mode") ?? "prot_seq";
 
   // isEdit (for conclusion step)
   const [isEditInfo, setEditInfo] = useState(onEditInfo);

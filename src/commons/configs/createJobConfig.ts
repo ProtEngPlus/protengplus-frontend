@@ -33,7 +33,6 @@ export const defaultCreateJobDetail: CreateJobDetailInterface = {
     run_type: "one-step",
     is_notification_on: true,
     input_protein: "",
-    input_mode: "prot_seq",
     lab_result: []
 }
 
