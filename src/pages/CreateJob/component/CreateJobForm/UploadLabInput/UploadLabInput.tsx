@@ -22,7 +22,6 @@ import { stepsForCreateJob } from "../../../../../commons/interfaces/CreateJob.i
 import onEditIcon from "../../../../../assets/images/CreateJob/onEditIcon.svg";
 import editIcon from "../../../../../assets/images/CreateJob/editIcon.svg";
 import { ViewLabResult, ViewLabResultOverlayProps } from "./ViewLabResultModal";
-import ViewButton from "../../../../../commons/components/Button/ViewButton";
 
 const exampleLabResult = [
   { sequence: "ASIQHFHW", score: 0.002914 },

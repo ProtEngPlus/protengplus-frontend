@@ -55,11 +55,7 @@ export default function CreateJobPage() {
     defaultValues: { file_name: "", ...jobDetail, ...jobOption },
   });
 
-  const {
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = form;
+  const { handleSubmit, reset } = form;
 
   // generate initial job
   const initialJobOption = (job?: JobInterface, stepConfig?: number) => {
