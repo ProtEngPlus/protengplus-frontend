@@ -42,3 +42,10 @@ export interface JobInterface {
   created_at: string;
   complete_at?: string;
 }
+
+export interface JobSearchParams {
+  name?: string;
+  state?: string | string[];
+  sort?: string;
+  order?: string;
+}
