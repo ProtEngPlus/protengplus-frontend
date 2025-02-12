@@ -11,6 +11,7 @@ import AccountManagementApp from "../pages/AccountManagement/AccountManagementAp
 import ChangePasswordApp from "../pages/ChangePassword/ChangePasswordApp";
 import CreateJobApp from "../pages/CreateJob/CreateJobApp";
 import JobDetailApp from "../pages/JobDetail/JobDetailApp";
+import ReportApp from "../pages/Report/ReportApp";
 
 const pagesData = [
   {
@@ -61,6 +62,10 @@ const pagesData = [
     path: "/dashboard/job-detail/:jobid",
     element: <JobDetailApp />,
   },
+  {
+    path: "/report",
+    element: <ReportApp />,
+  }
 ] as unknown as RouteProps[];
 
 export default pagesData;

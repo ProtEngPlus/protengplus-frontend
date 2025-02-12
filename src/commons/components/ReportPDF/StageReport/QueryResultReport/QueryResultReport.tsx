@@ -1,0 +1,75 @@
+import { Text, View } from "@react-pdf/renderer";
+import { ReportStyles as styles } from "../../ReportStyle";
+import InfoBox from "../../ReportInfoBox";
+import Table from "../../ReportTable";
+
+export default function QueryResultReport({
+  queryResult,
+}: {
+  queryResult: Record<string, any>[];
+}) {
+  const queryResultColConfig = [
+    {
+      title: "#",
+      dataKey: "index",
+      styleCol: { width: "5%", textAlign: "center" },
+    },
+    {
+      title: "Description",
+      dataKey: "description",
+      styleCol: { width: "25%", textAlign: "left" },
+    },
+    {
+      title: "Scientific Name",
+      dataKey: "organisms",
+      styleCol: { width: "15%", textAlign: "left" },
+    },
+    {
+      title: "Max Score",
+      dataKey: "max_score",
+      styleCol: { width: "10%", textAlign: "center" },
+    },
+    {
+      title: "Total Score",
+      dataKey: "score",
+      styleCol: { width: "10%", textAlign: "center" },
+    },
+    {
+      title: "Query Cover",
+      dataKey: "query_cover",
+      styleCol: { width: "10%", textAlign: "center" },
+    },
+    {
+      title: "E Value",
+      dataKey: "e_values",
+      styleCol: { width: "10%", textAlign: "center" },
+    },
+    {
+      title: "Perc. Identity",
+      dataKey: "percent_identity",
+      styleCol: { width: "10%", textAlign: "center" },
+    },
+    {
+      title: "Acc. len",
+      dataKey: "acc_len",
+      styleCol: { width: "10%", textAlign: "center" },
+    },
+    {
+      title: "Accession",
+      dataKey: "accession",
+      styleCol: { width: "15%", textAlign: "center" },
+    },
+  ];
+
+  return (
+    <View style={styles.stageInfoBox}>
+      <View style={styles.stageTitle}>
+        <View style={styles.infoBox}>
+          <Text style={styles.stageLabel}>Blast - Query Result</Text>
+        </View>
+      </View>
+      <InfoBox label={"Total"} text={`${queryResult.length}`} />
+      <Table columns={queryResultColConfig} data={queryResult} />
+    </View>
+  );
+}
