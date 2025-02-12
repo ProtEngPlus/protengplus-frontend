@@ -7,15 +7,12 @@ import InputProteinTable, { ResultProps } from "./InputProteinTable";
 import DownloadCSVButton from "../../Button/DownloadCSVButton";
 import ViewButton from "../../Button/ViewButton";
 import searchIcon from "../../../../assets/images/CreateJob/searchIcon.svg";
+import { useState } from "react";
+import { ProteinFilterModal, ProteinFilterProps } from "./ProteinFilterModal";
 
 interface Props {
   onEdit: boolean;
   inputProtein: string;
-  jobConfigProtein: {
-    formatInput: number;
-    description: string;
-    parameters: MethodParameter[];
-  };
   jobWithConfig?: boolean;
 }
 
@@ -180,7 +177,6 @@ const result: ResultProps[] = [
 export default function InputProtein({
   onEdit,
   inputProtein,
-  jobConfigProtein,
   jobWithConfig = true,
 }: Props) {
   const {
@@ -192,8 +188,17 @@ export default function InputProtein({
   } = useFormContext();
   const inputMode = watch("input_mode") ?? "prot_seq";
 
+  const [isFilterVisible, setFilterVisible] = useState(false);
+  const ProteinFilterProps: ProteinFilterProps = {
+    onClose: () => setFilterVisible(false),
+  };
+
   return (
     <div className="space-y-12">
+      <ProteinFilterModal
+        isVisible={isFilterVisible}
+        proteinFilterProps={ProteinFilterProps}
+      />
       {/* Header Section */}
       <div
         className={`space-y-[10px] rounded-lg border-pep-gray-border ${
@@ -309,7 +314,17 @@ export default function InputProtein({
                 <span className="text-pep-blue">100 sequences selected</span>
               </div>
               <div className="flex items-center space-x-[10px] text-nowrap">
-                <div></div>
+                <div
+                  className="flex flex-row bg-white border font-light rounded-md py-3 px-4 cursor-pointer gap-1 disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label"
+                  onClick={() => setFilterVisible(true)}
+                >
+                  <div className="">Filter</div>
+                  <Icon
+                    icon="quill:chevron-down"
+                    className="text-pep-dark-gray size-4 my-auto"
+                  />
+                </div>
+
                 <div className="flex items-center space-x-2">
                   <Icon
                     icon="ic:baseline-sort"
