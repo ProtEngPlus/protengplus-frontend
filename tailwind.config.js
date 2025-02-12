@@ -9,7 +9,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Mitr", "sans-serif"],
-        "mitr": ["Mitr", "sans-serif"],
+        mitr: ["Mitr", "sans-serif"],
       },
       colors: {
         placeholder: "#9CA3AF",
