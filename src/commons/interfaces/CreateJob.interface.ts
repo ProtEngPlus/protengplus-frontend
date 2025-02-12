@@ -1,4 +1,4 @@
-import { OptionValue, RunType, State } from "./Job.interface";
+import { OptionValue, RunType } from "./Job.interface";
 
 export const stepsForCreateJob = [
   "Protein Query",
