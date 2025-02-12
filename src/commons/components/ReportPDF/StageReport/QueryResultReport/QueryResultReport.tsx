@@ -10,7 +10,7 @@ export default function QueryResultReport({
 }) {
   const queryResultColConfig = [
     {
-      title: "#",
+      title: "",
       dataKey: "index",
       styleCol: { width: "5%", textAlign: "center" },
     },
