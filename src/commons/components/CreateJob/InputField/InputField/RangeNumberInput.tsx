@@ -121,7 +121,7 @@ export default function RangeNumberInput({
                   onBlur: () => handleBlur(`${id}_max`, defaultHigh),
                 })}
                 className={clsx(
-                  "h-[46px] w-[80px] p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:border-gray-100 disabled:text-label",
+                  "h-[46px] w-[80px] p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
                   {
                     "border-error": !!errors[`${id}_max`],
                     "border-gray-border": !errors[`${id}_max`],
