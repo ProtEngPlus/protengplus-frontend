@@ -20,12 +20,9 @@ export interface PipelineItems {
 }
 
 export interface CreateJobDetail {
-  state: State;
-  stage_id: number;
   name: string;
   description: string;
   input_protein: string;
-  meta: string[];
   lab_result: { sequence: string; score: number }[]; // to add in table and export csv easier
   run_type: RunType;
   is_notification_on: boolean;
