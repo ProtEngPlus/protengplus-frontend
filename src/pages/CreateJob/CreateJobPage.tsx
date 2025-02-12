@@ -3,11 +3,13 @@ import { useAuth } from "../../commons/hooks/useAuth";
 import { useState } from "react";
 import {
   CreateJobDetail,
+  CreateJobOption,
   JobOption,
   PipelineItem,
   stepsForCreateJob,
 } from "../../commons/interfaces/CreateJob.interface";
 import {
+  createJobConfig,
   defaultCreateJobDetail,
   defaultPipeline,
 } from "../../commons/configs/createJobConfig";
@@ -17,8 +19,8 @@ import {
 } from "./services/CreateJobConfig";
 import { JobInterface } from "../../commons/interfaces/Job.interface";
 import { FormProvider, useForm } from "react-hook-form";
-import CreateJobWithConfig from "./component/CreateJobOption/CreateJob";
-import CreateJob from "./component/CreateJobOption/CreateJobWithConfig";
+import CreateJobWithConfig from "./component/CreateJobOption/CreateJobWithConfig";
+import CreateJob from "./component/CreateJobOption/CreateJob";
 import Stepper from "../../commons/components/CreateJob/Stepper/Stepper";
 import ProteinQuery from "./component/CreateJobForm/ProteinQuery/ProteinQuery";
 import ProteinRepresentation from "./component/CreateJobForm/ProteinRepresentation/ProteinRepresentation";
@@ -38,6 +40,7 @@ import {
 
 export default function CreateJobPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [isWithConfig, setIsWithConfig] = useState(false);
   const [initialStep, setInitialStep] = useState(1);
@@ -86,11 +89,68 @@ export default function CreateJobPage() {
   const handleBack = () => {
     setStep(step - 1);
   };
-
   const changeStep = (nextStep: number) => {
-    if (nextStep <= stepsForCreateJob.length) {
-      setStep(nextStep);
-    }
+    handleSubmit((data: any) => {
+      console.log(data);
+      if (nextStep <= stepsForCreateJob.length) {
+        setStep(nextStep);
+      }
+    })();
+  };
+
+  // update info after clicking confirm (conclusion)
+  const updateInfo = (): Promise<{
+    detail: CreateJobDetail;
+    option: CreateJobOption;
+    meta: string[];
+  }> => {
+    return new Promise((resolve, reject) => {
+      const newJobOption = {} as CreateJobOption;
+      const meta = [] as string[];
+
+      handleSubmit(
+        (data: any) => {
+          try {
+            // Update jobDetail -> assign each key
+            const newJobDetail: CreateJobDetail = {
+              artifact: data["artifact"],
+              ref_job_id: data["ref_job_id"],
+              description: data["description"],
+              input_protein: data["input_protein"],
+              is_notification_on: data["is_notification_on"],
+              lab_result: data["lab_result"],
+              name: data["name"],
+              run_type: data["run_type"],
+            };
+
+            // Update newJobInfo
+            for (const step of pipeline) {
+              const {
+                method,
+                subMethod,
+              }: { method: string; subMethod: string } = step;
+              meta.push(subMethod.toLowerCase());
+              newJobOption[subMethod.toLowerCase()] = {};
+              const jobConfig =
+                createJobConfig[method].tool[subMethod].parameters;
+
+              jobConfig.forEach((param) => {
+                newJobOption[subMethod.toLowerCase()][param.id] =
+                  data[param.id] ?? data[method][subMethod][param.id];
+              });
+            }
+
+            resolve({ detail: newJobDetail, option: newJobOption, meta: meta });
+          } catch (error) {
+            reject(error);
+          }
+        },
+        (errors) => {
+          console.log("Validation errors:", errors);
+          reject(errors);
+        }
+      )();
+    });
   };
 
   // click confirm at conclusion step
@@ -102,6 +162,14 @@ export default function CreateJobPage() {
     },
     onConfirm: async () => {
       setIsConfirmVisible(false);
+      const { detail, option, meta } = await updateInfo();
+      console.log("confirm data", {
+        user_id: user?.id,
+        stage_id: 0,
+        option: { ...option },
+        ...detail,
+        meta,
+      });
       try {
         setIsSuccessVisible(true);
       } catch (error) {
@@ -163,15 +231,52 @@ export default function CreateJobPage() {
             <form className="py-5 gap-5 min-w-fit min-h-fit">
               {step < 6 && (
                 <div className="rounded-lg border border-pep-gray-border px-6 py-8 space-y-2">
-                  {step === 1 && <ProteinQuery />}
-                  {step === 2 && <ProteinRepresentation />}
-                  {step === 3 && <UploadLabInput />}
+                  {step === 1 && (
+                    <ProteinQuery
+                      isWithConfig={isWithConfig}
+                      initialStep={initialStep}
+                      pipeline={pipeline}
+                      setPipeline={setPipeline}
+                      step={step}
+                    />
+                  )}
+                  {step === 2 && (
+                    <ProteinRepresentation
+                      initialStep={initialStep}
+                      pipeline={pipeline}
+                      setPipeline={setPipeline}
+                      step={step}
+                    />
+                  )}
+                  {step === 3 && (
+                    <UploadLabInput initialStep={initialStep} step={step} />
+                  )}
 
-                  {step === 4 && <TopModel />}
-                  {step === 5 && <Mutation />}
+                  {step === 4 && (
+                    <TopModel
+                      initialStep={initialStep}
+                      pipeline={pipeline}
+                      setPipeline={setPipeline}
+                      step={step}
+                    />
+                  )}
+                  {step === 5 && (
+                    <Mutation
+                      initialStep={initialStep}
+                      pipeline={pipeline}
+                      setPipeline={setPipeline}
+                      step={step}
+                    />
+                  )}
                 </div>
               )}
-              {step === 6 && <Conclusion />}
+              {step === 6 && (
+                <Conclusion
+                  initialStep={initialStep}
+                  pipeline={pipeline}
+                  setPipeline={setPipeline}
+                />
+              )}
 
               {/* ------------------- Button for each step ---------------------- */}
               <div className="flex justify-between gap-2 py-5">

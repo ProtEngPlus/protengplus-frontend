@@ -39,12 +39,9 @@ export function generateInitialJobConfig(jobConfig: JobInterface): {
   const initialJobOption = {} as JobOption;
   const pipelineItem = defaultPipeline;
   const initialJobDetail: CreateJobDetail = {
-    state: "CREATED",
-    stage_id: 0,
     name: jobConfig.name,
     description: jobConfig.description,
     input_protein: jobConfig.input_protein,
-    meta: jobConfig.meta,
     lab_result: jobConfig.lab_result.sequences.map((sequence, index) => ({
       sequence: sequence,
       score: jobConfig.lab_result.scores[index],
