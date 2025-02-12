@@ -23,6 +23,7 @@ export default {
         "pep-pink": "#D30085",
         "pep-gray": "#9CA3AF",
         "pep-blue-hover": "#1D5B9E",
+        "pep-blue-light": "#EFF6FF",
         "pep-gray-border": "#DFE4EA",
         "pep-dark-gray": "#637381",
       },
