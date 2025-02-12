@@ -103,6 +103,12 @@ export const createJobConfig: CreateJobConfig = {
                         id: "prot_perc_ident",
                         type: "rangeNumber",
                         description: "The minimum percentage of sequence identity in the database required for a match to the query sequence to be considered significant",
+                        low: 1,
+                        high: 2,
+                        additionalValidation: {
+                            required: { value: true, message: "Percent Identity is required." },
+                            min: { value: 0, message: "Percent Identity must be at least 0." },
+                        },
                     },
                     {
                         name: "E Value",
@@ -110,6 +116,12 @@ export const createJobConfig: CreateJobConfig = {
                         type: "rangeNumber",
                         description:
                         "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match.",
+                        low: 1,
+                        high: 2,
+                        additionalValidation: {
+                            required: { value: true, message: "E Value is required." },
+                            min: { value: 0, message: "E Value must be at least 0." },
+                        },
                     },
                     {
                         name: "Query Cover",
@@ -117,6 +129,12 @@ export const createJobConfig: CreateJobConfig = {
                         type: "rangeNumber",
                         description:
                         "The percentage of the query sequence (your specimen) that overlaps with the database sequence",
+                        low: 1,
+                        high: 2,
+                        additionalValidation: {
+                            required: { value: true, message: "Query Cover is required." },
+                            min: { value: 0, message: "Query Cover must be at least 0." },
+                        },
                     },
 
                 ]
