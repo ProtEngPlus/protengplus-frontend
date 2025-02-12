@@ -52,7 +52,7 @@ export function DeleteOverlay({
         tabIndex={-1}
         className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-900/50"
       >
-        <div className="modal-container bg-white opacity-100 border border-pep-gray-border rounded-lg px-8 py-5 space-y-11 w-fit m-auto shadow-dropShadow z-[100] text-center">
+        <div className="modal-container max-w-[530px] w-fit bg-white opacity-100 border border-pep-gray-border rounded-lg px-8 py-5 space-y-11 m-auto shadow-dropShadow z-[100] text-center">
           <div className="modal-content">
             <img src={deleteIcon} alt="Delete Icon" className="mx-auto" />
             <h1 className="leading-loose">{title}</h1>
