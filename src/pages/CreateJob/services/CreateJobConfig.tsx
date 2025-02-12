@@ -63,12 +63,11 @@ export function generateInitialJobConfig(jobConfig: JobInterface): {
     Pipelines[index].subMethod.forEach((value) => {
       if (value.toLowerCase() === subMethod) {
         pipelineItem[index].subMethod = value;
-        initialJobOption[currentMethod][value] = jobConfig.options[value];
+        initialJobOption[currentMethod][value] = jobConfig.options[subMethod];
       }
     });
     index++;
   });
-
   return {
     initialJobOption: initialJobOption,
     initialJobDetail: initialJobDetail,
