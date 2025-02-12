@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../commons/hooks/useAuth";
 import { useState } from "react";
 import {
+  CreateJobInterface,
   CreateJobDetail,
   CreateJobOption,
   JobOption,
@@ -37,6 +38,7 @@ import {
   SuccessOverlay,
   SuccessOverlayProps,
 } from "../../commons/components/ModalOverlay/SuccessOverlay";
+import { createJob } from "../../commons/api/job";
 
 export default function CreateJobPage() {
   const navigate = useNavigate();
@@ -159,14 +161,29 @@ export default function CreateJobPage() {
     onConfirm: async () => {
       setIsConfirmVisible(false);
       const { detail, option, meta } = await updateInfo();
-      console.log("confirm data", {
-        user_id: user?.id,
+      const { lab_result, ...otherDetails } = detail;
+      const labResult = lab_result.reduce(
+        (acc, item) => {
+          acc.sequences.push(item.sequence);
+          acc.scores.push(item.score);
+          acc.total += item.score;
+          return acc;
+        },
+        { total: 0, sequences: [] as string[], scores: [] as number[] }
+      );
+
+      const newJob: CreateJobInterface = {
+        user_id: user?.id ?? "",
         stage_id: 0,
-        option: { ...option },
-        ...detail,
-        meta,
-      });
+        state: "CREATED",
+        options: option,
+        lab_result: labResult,
+        ...otherDetails,
+        meta: meta,
+      };
+
       try {
+        await createJob(newJob);
         setIsSuccessVisible(true);
       } catch (error) {
         console.error(error);

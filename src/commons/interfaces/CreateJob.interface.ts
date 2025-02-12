@@ -1,4 +1,4 @@
-import { OptionValue, RunType } from "./Job.interface";
+import { LabResult, OptionValue, RunType, State } from "./Job.interface";
 
 export const stepsForCreateJob = [
   "Protein Query",
@@ -17,6 +17,22 @@ export interface PipelineItem {
 export interface PipelineItems {
   method: string;
   subMethod: string[];
+}
+
+export interface CreateJobInterface {
+  user_id: string;
+  stage_id: number;
+  state: State;
+  ref_job_id?: string;
+  name: string;
+  description: string;
+  input_protein: string;
+  meta: string[];
+  lab_result: LabResult;
+  options: Record<string, Record<string, OptionValue>>;
+  is_notification_on: boolean;
+  run_type: RunType;
+  artifact: Record<string, object> | null;
 }
 
 export interface CreateJobDetail {
