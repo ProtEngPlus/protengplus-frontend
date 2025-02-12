@@ -28,6 +28,7 @@ export default {
         "pep-dark-gray": "#637381",
         "pep-dark-blue": "#165BAA",
         "pep-light-gray": "#F1F1F1",
+        "pep-gray-light": "#F9FAFB",
       },
       boxShadow: {
         dropShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
