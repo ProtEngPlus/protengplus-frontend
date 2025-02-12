@@ -2,7 +2,7 @@ import NumberInput from "./InputField/NumberInput";
 import PercentInput from "./InputField/PercentInput";
 import RangeNumberInput from "./InputField/RangeNumberInput";
 import DropdownInput from "./InputField/Dropdown";
-import MultiNumberDropdown from "./InputField/MultiNumberDropdown";
+import MultiNumberDropdown from "./InputField/MutiNumberDropdown";
 import { MethodParameter } from "../../../../commons/configs/createJobConfig";
 import { ValidationProps } from "../../../../commons/components/Input/InputPropsType";
 
@@ -10,7 +10,7 @@ interface GetInputFieldProps {
   id: MethodParameter["id"];
   label: MethodParameter["name"];
   type: MethodParameter["type"];
-  value: MethodParameter["default"] | { low?: number; high?: number };
+  value?: MethodParameter["default"] | { low?: number; high?: number };
   options?: MethodParameter["dropdownItems"];
   additionalValidation?: MethodParameter["additionalValidation"];
   disable?: boolean;

@@ -52,7 +52,7 @@ export default function RootLayout({
   return (
     <div className="h-screen">
       {/* Nav bar */}
-      <nav className="fixed top-0 z-[50] h-[4.5rem] w-full items-center bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav className="fixed top-0 z-50 h-[4.5rem] w-full items-center bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="flex flex-row h-full items-center space-x-9">
           <div className="flex items-center h-full w-[299px] min-w-[299px] justify-center bg-gray-50">
             <img src={logoWithText} alt="Logo" />

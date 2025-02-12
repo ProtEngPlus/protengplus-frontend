@@ -3,9 +3,12 @@ import { RunType } from "../interfaces/Job.interface";
 
 // default create job detail
 export const defaultCreateJobDetail: CreateJobDetail = {
+    state: "CREATED",
+    stage_id: 0,
     name: "",
     description: "",
     input_protein: "",
+    meta: ["blast","unirep","ridgeCV","mutation"],
     lab_result: [],
     run_type: "one-step",
     is_notification_on: true,
