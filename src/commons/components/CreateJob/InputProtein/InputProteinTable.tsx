@@ -60,7 +60,7 @@ export default function InputProteinTable({
       {/* Job Table */}
       <div className="relative overflow-auto rounded-xl border border-pep-gray-border shadow-table">
         <table className="w-full text-xs text-left rtl:text-right">
-          <thead className="leading-6 bg-pep-light-gray text-center border-b">
+          <thead className="leading-6 bg-pep-gray-light text-center border-b">
             <tr>
               <th className="font-normal px-6 py-2 text-base"></th>
               {headers.map((header, index) => (
