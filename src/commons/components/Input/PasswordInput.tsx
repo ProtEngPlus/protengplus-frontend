@@ -30,7 +30,7 @@ export default function PasswordInput({
           placeholder={placeholder}
           type={isPasswordVisible ? "text" : "password"}
           className={clsx(
-            "h-[50px] w-full pl-3 pr-[60px] bg-white border font-light placeholder:text-placeholder rounded-md focus:border-selected focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
+            "h-[50px] w-full pl-3 pr-[60px] bg-white border font-light placeholder:text-placeholder rounded-md focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
             {
               "border-error": !!errors[id],
               "border-pep-gray-border": !errors[id],
