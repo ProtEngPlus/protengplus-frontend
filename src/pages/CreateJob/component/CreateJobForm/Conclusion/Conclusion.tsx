@@ -9,12 +9,14 @@ import { PipelineItem } from "../../../../../commons/interfaces/CreateJob.interf
 import { useFormContext } from "react-hook-form";
 
 interface Props {
+  isWithConfig: boolean;
   initialStep: number;
   pipeline: PipelineItem[];
   setPipeline: (p: PipelineItem[]) => void;
 }
 
 export default function Conclusion({
+  isWithConfig,
   initialStep,
   pipeline,
   setPipeline,
@@ -94,6 +96,7 @@ export default function Conclusion({
           isConclusion={true}
           onEditInfo={false}
           onEditOption={false}
+          isWithConfig={isWithConfig}
         />
 
         <ProteinRepresentation

@@ -8,6 +8,7 @@ import {
   JobOption,
   PipelineItem,
   stepsForCreateJob,
+  JobConfiguration,
 } from "../../commons/interfaces/CreateJob.interface";
 import {
   createJobConfig,
@@ -18,7 +19,6 @@ import {
   generateInitialJob,
   generateInitialJobConfig,
 } from "./services/CreateJobConfig";
-import { JobInterface } from "../../commons/interfaces/Job.interface";
 import { FormProvider, useForm } from "react-hook-form";
 import CreateJobWithConfig from "./component/CreateJobOption/CreateJobWithConfig";
 import CreateJob from "./component/CreateJobOption/CreateJob";
@@ -60,7 +60,7 @@ export default function CreateJobPage() {
   const { handleSubmit, reset } = form;
 
   // generate initial job
-  const initialJobOption = (job?: JobInterface, stepConfig?: number) => {
+  const initialJobOption = (job?: JobConfiguration, stepConfig?: number) => {
     if (!isWithConfig) {
       setInitialStep(1);
       setJobOption(generateInitialJob());
@@ -68,7 +68,7 @@ export default function CreateJobPage() {
       setInitialStep(1);
       setStep(1);
     } else if (job && stepConfig) {
-      const data = generateInitialJobConfig(job);
+      const data = generateInitialJobConfig(job, stepConfig);
       reset({
         ...data.initialJobDetail,
         ...data.initialJobOption,
@@ -89,7 +89,6 @@ export default function CreateJobPage() {
   };
   const changeStep = (nextStep: number) => {
     handleSubmit((data: any) => {
-      console.log(data);
       if (nextStep <= stepsForCreateJob.length) {
         setStep(nextStep);
       }
@@ -109,7 +108,7 @@ export default function CreateJobPage() {
       handleSubmit(
         (data: any) => {
           try {
-            // Update jobDetail -> assign each key
+            // Update jobDetail
             const newJobDetail: CreateJobDetail = {
               artifact: data["artifact"],
               ref_job_id: data["ref_job_id"],
@@ -133,8 +132,15 @@ export default function CreateJobPage() {
                 createJobConfig[method].tool[subMethod].parameters;
 
               jobConfig.forEach((param) => {
-                newJobOption[subMethod.toLowerCase()][param.id] =
-                  data[param.id] ?? data[method][subMethod][param.id];
+                if (param.type === "rangeNumber") {
+                  newJobOption[subMethod.toLowerCase()][`${param.id}_low`] =
+                    data[`${param.id}_low`];
+                  newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
+                    data[`${param.id}_high`];
+                } else {
+                  newJobOption[subMethod.toLowerCase()][param.id] =
+                    data[param.id];
+                }
               });
             }
 
@@ -144,7 +150,6 @@ export default function CreateJobPage() {
           }
         },
         (errors) => {
-          console.log("Validation errors:", errors);
           reject(errors);
         }
       )();
@@ -166,7 +171,7 @@ export default function CreateJobPage() {
         (acc, item) => {
           acc.sequences.push(item.sequence);
           acc.scores.push(item.score);
-          acc.total += item.score;
+          acc.total++;
           return acc;
         },
         { total: 0, sequences: [] as string[], scores: [] as number[] }
@@ -174,13 +179,12 @@ export default function CreateJobPage() {
 
       const newJob: CreateJobInterface = {
         user_id: user?.id ?? "",
-        stage_id: 0,
-        state: "CREATED",
         options: option,
         lab_result: labResult,
         ...otherDetails,
         meta: meta,
       };
+      console.log(newJob);
 
       try {
         await createJob(newJob);
@@ -223,7 +227,7 @@ export default function CreateJobPage() {
       {step === 0 && isWithConfig && (
         <CreateJobWithConfig
           onCancel={() => setIsWithConfig(false)}
-          onConfirm={(job: JobInterface | undefined, step: string) => {
+          onConfirm={(job: JobConfiguration | undefined, step: string) => {
             setInitialStep(Number(step));
             initialJobOption(job, Number(step));
           }}
@@ -285,6 +289,7 @@ export default function CreateJobPage() {
               )}
               {step === 6 && (
                 <Conclusion
+                  isWithConfig={isWithConfig}
                   initialStep={initialStep}
                   pipeline={pipeline}
                   setPipeline={setPipeline}
