@@ -48,6 +48,7 @@ export default function InputFields({
           additionalValidation={
             disable ? undefined : value.additionalValidation
           }
+          formatInput={jobConfig.formatInput}
         />
       ))}
     </div>

@@ -15,6 +15,7 @@ interface GetInputFieldProps {
   additionalValidation?: MethodParameter["additionalValidation"];
   disable?: boolean;
   onEdit?: boolean;
+  formatInput?: number;
 }
 
 export default function GetInputField({
@@ -26,6 +27,7 @@ export default function GetInputField({
   additionalValidation,
   disable = false,
   onEdit = true,
+  formatInput = 2,
 }: GetInputFieldProps) {
   // Filter out undefined validation rules
   const filteredValidation: Record<string, ValidationProps> | undefined =
@@ -62,6 +64,7 @@ export default function GetInputField({
           additionalValidation={filteredValidation}
           disabled={disable}
           onEdit={onEdit}
+          formatInput={formatInput}
         />
       );
 
@@ -74,6 +77,7 @@ export default function GetInputField({
           additionalValidation={filteredValidation}
           disabled={disable}
           onEdit={onEdit}
+          formatInput={formatInput}
         />
       );
 
@@ -115,6 +119,7 @@ export default function GetInputField({
           additionalValidation={filteredValidation}
           disabled={disable}
           onEdit={onEdit}
+          formatInput={formatInput}
         />
       );
   }
