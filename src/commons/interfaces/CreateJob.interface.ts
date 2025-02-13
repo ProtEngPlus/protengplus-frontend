@@ -21,8 +21,6 @@ export interface PipelineItems {
 
 export interface CreateJobInterface {
   user_id: string;
-  stage_id: number;
-  state: State;
   ref_job_id?: string;
   name: string;
   description: string;
@@ -60,4 +58,20 @@ export interface JobOption {
       [key: string]: OptionValue;
     };
   };
+}
+
+export interface JobConfiguration {
+  state: State;
+  id: string;
+  user_id: string;
+  ref_job_id: string;
+  name: string;
+  description: string;
+  input_protein: string;
+  meta: string[];
+  lab_result: LabResult;
+  options: Record<string, Record<string, OptionValue>>;
+  is_notification_on: boolean;
+  run_type: RunType;
+  artifact: Record<string, object>;
 }
