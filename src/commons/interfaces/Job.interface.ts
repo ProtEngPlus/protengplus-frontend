@@ -41,6 +41,9 @@ export interface JobInterface {
   error_logs: string[];
   created_at: string;
   complete_at?: string;
+  updated_at: string;
+  error_log: string[];
+  runtime: {};
 }
 
 export interface JobSearchParams {
