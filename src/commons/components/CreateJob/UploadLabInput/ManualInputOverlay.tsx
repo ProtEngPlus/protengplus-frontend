@@ -26,6 +26,10 @@ export function ManualInput({
   const inputManual = watch("lab-result-manual");
   const inputProtein = watch("input_protein");
   const [data, setData] = useState<{ sequence: string; score: number }[]>([]);
+  const [isError, setIsError] = useState({
+    isValidate: true,
+    errorMessage: "",
+  });
 
   useEffect(() => {
     const $modalElement = document.querySelector(`manual-input`);
@@ -38,8 +42,6 @@ export function ManualInput({
         backdropClasses:
           "bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-10",
         closable: true,
-        onHide: () => console.log("Confirm modal is hidden"),
-        onShow: () => console.log("Confirm modal is shown"),
       };
 
       modal = new Modal($modalElement, modalOptions);
@@ -53,6 +55,30 @@ export function ManualInput({
     };
   }, [isVisible]);
 
+  const checkValidate = (data: { sequence: string; score: number }[]) => {
+    // Regular expression for valid amino acid sequences
+    const validSequenceRegex = /^(?!.*[BJOUXZ])[A-Z]+$/i;
+
+    for (const { sequence, score } of data) {
+      if (
+        !sequence ||
+        score == null ||
+        isNaN(score) ||
+        !validSequenceRegex.test(sequence) ||
+        sequence.toUpperCase().includes("ATGC") ||
+        (sequence !== sequence.toUpperCase() &&
+          sequence !== sequence.toLowerCase())
+      ) {
+        return {
+          isValidate: false,
+          errorMessage: "Input format mismatch!",
+        };
+      }
+    }
+
+    return { isValidate: true, errorMessage: "" };
+  };
+
   const handleAdd = () => {
     // Split the string into lines
     const lines = inputManual.trim().split("\n");
@@ -63,7 +89,12 @@ export function ManualInput({
       return { sequence, score: parseFloat(score) };
     });
 
-    setData(newData);
+    const validation = checkValidate(newData);
+    setIsError(validation);
+
+    if (validation.isValidate) {
+      setData(newData);
+    }
   };
 
   return (
@@ -83,16 +114,25 @@ export function ManualInput({
                 />
                 <label className="font-light">Input:</label>
               </div>
-              <Textarea
-                id="lab-result-manual"
-                className="!w-full !min-w-[500px] !min-h-[220px]"
-                placeholder={`Protein Sequence, Score\nProtein Sequence, Score\nProtein Sequence, Score`}
-                additionalValidation={{
-                  maxLength: {
-                    value: 50,
-                  },
-                }}
-              />
+              <div className="">
+                <Textarea
+                  id="lab-result-manual"
+                  className={`!w-full !min-w-[500px] !min-h-[220px] ${
+                    !isError.isValidate ? "!border-error" : ""
+                  }`}
+                  placeholder={`Protein Sequence, Score\nProtein Sequence, Score\nProtein Sequence, Score`}
+                  additionalValidation={{
+                    maxLength: {
+                      value: 50,
+                    },
+                  }}
+                />
+                {!isError.isValidate && (
+                  <span className="w-full flex text-right ml-auto text-sm font-light text-error">
+                    {isError.errorMessage}
+                  </span>
+                )}
+              </div>
               <Button
                 id="add-input"
                 buttonType="submit"
