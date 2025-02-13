@@ -26,18 +26,20 @@ export default function DropdownInput({
   }));
 
   return (
-    <div className="min-w-fit w-[40%] flex flex-row justify-between items-center space-x-3">
-      <label className="font-light w-[40%]">{label}:</label>
+    <div className="w-[40%]">
+      <div className="min-w-fit justify-between items-center space-x-3 grid grid-cols-[1fr,4fr] max-w-[1000px]">
+        <label className="font-light w-[40%]">{label}:</label>
 
-      <SelectInput
-        id={id}
-        defaultValue={defaultValue}
-        options={optionsValue}
-        className="grow"
-        disabled={disabled}
-        additionalValidation={additionalValidation}
-        onEdit={onEdit}
-      />
+        <SelectInput
+          id={id}
+          defaultValue={defaultValue}
+          options={optionsValue}
+          className="w-[336px]"
+          disabled={disabled}
+          additionalValidation={additionalValidation}
+          onEdit={onEdit}
+        />
+      </div>
     </div>
   );
 }

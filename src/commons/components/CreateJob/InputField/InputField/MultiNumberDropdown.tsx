@@ -12,6 +12,7 @@ export type DropdownProps = {
   additionalValidation?: Record<string, ValidationProps>;
   onEdit?: boolean;
   onChange?: (selected: number[]) => void;
+  formatInput?: number;
 };
 
 export default function MultiNumberDropdown({
@@ -23,6 +24,7 @@ export default function MultiNumberDropdown({
   additionalValidation,
   onEdit = true,
   onChange,
+  formatInput = 2,
 }: DropdownProps) {
   const {
     register,
@@ -68,9 +70,11 @@ export default function MultiNumberDropdown({
   }, []);
 
   return (
-    <div className="min-w-fit w-[50%] flex flex-row justify-between items-center space-x-3">
-      <label className="font-light w-[40%]">{label}:</label>
-      <div className="relative w-full custom-select">
+    <div
+      className={`min-w-fit justify-between items-center space-x-3 grid grid-cols-[1fr,4fr] max-w-[1000px]`}
+    >
+      <label className="font-light">{label}:</label>
+      <div className="relative custom-select w-[336px]">
         {!onEdit ? (
           <div>{currentValue.join(", ")}</div>
         ) : (

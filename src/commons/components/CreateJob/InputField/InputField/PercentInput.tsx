@@ -13,6 +13,7 @@ export type RangeNumberInputProps = {
   disabled?: boolean;
   additionalValidation?: Record<string, ValidationProps>;
   onEdit?: boolean;
+  formatInput?: number;
 };
 
 export default function PercentInput({
@@ -23,6 +24,7 @@ export default function PercentInput({
   disabled,
   additionalValidation,
   onEdit = true,
+  formatInput = 2,
 }: NumberInputProps) {
   const {
     register,
@@ -130,7 +132,17 @@ export default function PercentInput({
   };
 
   return (
-    <div className="w-[22%] min-w-fit flex flex-row justify-between space-x-3 text-center items-center">
+    <div
+      className={`
+        ${
+          formatInput === 1
+            ? "grid grid-cols-2 w-[22%] place-items-start"
+            : formatInput === 2
+            ? "flex flex-row justify-between max-w-[1000px]"
+            : "grid grid-cols-[1fr,4fr] max-w-[1000px]"
+        }
+         min-w-fit space-x-3 items-center`}
+    >
       <label className="font-light">{label}:</label>
       {!onEdit ? (
         <div className="w-24 text-start">{localValue}</div>
