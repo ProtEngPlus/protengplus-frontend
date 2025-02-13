@@ -1,6 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Button from "../../Button/Button";
-import { MethodParameter } from "../../../configs/createJobConfig";
 import { useFormContext } from "react-hook-form";
 import SelectInput, { Option } from "../../Input/SelectInput";
 import InputProteinTable, { ResultProps } from "./InputProteinTable";

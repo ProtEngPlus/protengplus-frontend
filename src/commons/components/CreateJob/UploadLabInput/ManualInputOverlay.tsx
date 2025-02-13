@@ -102,7 +102,7 @@ export function ManualInput({
       <div
         id="manual-input"
         tabIndex={-1}
-        className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-900/50 mt-0"
+        className="absolute top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-900/50 mt-0"
       >
         <div className="space-y-5">
           <div className="flex bg-pep-blue-light opacity-100 px-8 py-5 gap-x-8 min-w-fit w-[90%] m-auto z-[70] text-center">

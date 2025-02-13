@@ -5,10 +5,10 @@ import {
 } from "../../../commons/configs/createJobConfig";
 import {
   CreateJobDetail,
+  JobConfiguration,
   JobOption,
   PipelineItem,
 } from "../../../commons/interfaces/CreateJob.interface";
-import { JobInterface } from "../../../commons/interfaces/Job.interface";
 
 export function generateInitialJob(): JobOption {
   const initialJob = {} as JobOption;
@@ -31,26 +31,16 @@ export function generateInitialJob(): JobOption {
   return initialJob;
 }
 
-export function generateInitialJobConfig(jobConfig: JobInterface): {
+export function generateInitialJobConfig(
+  jobConfig: JobConfiguration,
+  stepConfig: number
+): {
   initialJobOption: JobOption;
   initialJobDetail: CreateJobDetail;
   pipelineItem: PipelineItem[];
 } {
   const initialJobOption = {} as JobOption;
   const pipelineItem = defaultPipeline;
-  const initialJobDetail: CreateJobDetail = {
-    name: jobConfig.name,
-    description: jobConfig.description,
-    input_protein: jobConfig.input_protein,
-    lab_result: jobConfig.lab_result.sequences.map((sequence, index) => ({
-      sequence: sequence,
-      score: jobConfig.lab_result.scores[index],
-    })),
-    run_type: jobConfig.run_type,
-    is_notification_on: jobConfig.is_notification_on,
-    ref_job_id: jobConfig.ref_job_id,
-    artifact: jobConfig.artifact,
-  };
 
   // add input protein config here
   initialJobOption["Protein Input"] = {};
@@ -61,14 +51,12 @@ export function generateInitialJobConfig(jobConfig: JobInterface): {
     initialJobOption["Protein Input"]["Protein Input Config"][
       `${value.id}_low`
     ] = value.low;
-    console.log(value.low);
     initialJobOption["Protein Input"]["Protein Input Config"][
       `${value.id}_high`
     ] = value.high;
   });
 
-  let index = 0;
-  jobConfig.meta.forEach((subMethod) => {
+  jobConfig.meta.forEach((subMethod, index) => {
     const currentMethod = pipelineItem[index].method;
     initialJobOption[currentMethod] = {};
 
@@ -78,8 +66,30 @@ export function generateInitialJobConfig(jobConfig: JobInterface): {
         initialJobOption[currentMethod][value] = jobConfig.options[subMethod];
       }
     });
-    index++;
   });
+
+  const artifact = {} as Record<string, object>;
+
+  pipelineItem.forEach((value, index) => {
+    if (index < stepConfig - 1)
+      artifact[value.subMethod.toLowerCase()] =
+        jobConfig.artifact[value.subMethod.toLowerCase()];
+  });
+
+  const initialJobDetail: CreateJobDetail = {
+    name: jobConfig.name,
+    description: jobConfig.description,
+    input_protein: jobConfig.input_protein,
+    lab_result: jobConfig.lab_result.sequences.map((sequence, index) => ({
+      sequence: sequence,
+      score: jobConfig.lab_result.scores[index],
+    })),
+    run_type: jobConfig.run_type,
+    is_notification_on: jobConfig.is_notification_on,
+    ref_job_id: jobConfig.id,
+    artifact: artifact,
+  };
+
   return {
     initialJobOption: initialJobOption,
     initialJobDetail: initialJobDetail,

@@ -1,181 +1,9 @@
 import Button from "../../../../commons/components/Button/Button";
-import { JobInterface } from "../../../../commons/interfaces/Job.interface";
 import { useEffect, useMemo, useState } from "react";
 import SelectInput from "../../../../commons/components/Input/SelectInput";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-
-const mockData: JobInterface[] = [
-  {
-    id: "672850f8f90bb0327c9dc7d4",
-    state: "COMPLETED",
-    name: "New Job#1",
-    description: "this is a job#1",
-    stage_id: 0,
-    user_id: "65d100cf306894794f89017f",
-    lab_result: {
-      total: 24,
-      sequences: [
-        "ASIQHFHW",
-        "CSIQHFHW",
-        "DSIQHFHW",
-        "ESIQHFHW",
-        "FSIQHFHW",
-        "GSIQHFHW",
-        "HSIQHFHW",
-        "ISIQHFHW",
-        "JSIQHFHW",
-        "KSIQHFHW",
-        "LSIQHFHW",
-        "MSIQHFHW",
-        "NSIQHFHW",
-        "OSIQHFHW",
-        "PSIQHFHW",
-        "QSIQHFHW",
-        "RSIQHFHW",
-        "SSIQHFHW",
-        "TSIQHFHW",
-        "USIQHFHW",
-        "VSIQHFHW",
-        "WSIQHFHW",
-        "XSIQHFHW",
-        "YSIQHFHW",
-      ],
-      scores: [
-        0.0029140000697225332, 0.003019999945536256, 0.0022189998999238014,
-        0.004379000049084425, 0.0029140000697225332, 0.003019999945536256,
-        0.0022189998999238014, 0.004379000049084425, 0.0029140000697225332,
-        0.003019999945536256, 0.0022189998999238014, 0.004379000049084425,
-        0.0029140000697225332, 0.003019999945536256, 0.0022189998999238014,
-        0.004379000049084425, 0.0029140000697225332, 0.003019999945536256,
-        0.0022189998999238014, 0.004379000049084425, 0.0029140000697225332,
-        0.003019999945536256, 0.0022189998999238014, 0.004379000049084425,
-      ],
-    },
-    options: {
-      blast: {
-        program: "blastp",
-        hitlist_size: 50,
-        database: "nr",
-        expect: 10,
-        perc_ident: 100,
-        random_state: 50,
-        seq_length: 70,
-        hsp_cov: 0,
-      },
-      unirep: {
-        n_trials: 2,
-        n_splits: 2,
-        n_epochs_config_low: 1,
-        n_epochs_config_high: 11,
-        learning_rate_config_low: 0.00001,
-        learning_rate_config_high: 0.0001,
-      },
-      ridgecv: {
-        train_batch_sizes: [24, 64, 96],
-        n_batch: 12,
-        alpha: 0.1,
-      },
-      mutation: {
-        temperature: 0.01,
-        num_iterations: 25,
-        num_trajectories: 5,
-        mutate_pos_range: 8,
-      },
-    },
-    meta: ["blast", "unirep", "ridgecv", "mutation"],
-    artifact: null,
-    input_protein: "MLDDYDQS",
-    run_type: "auto",
-    is_notification_on: true,
-    created_at: "",
-    error_logs: [],
-  },
-  {
-    id: "672850f8f90bb0327c9dc7d3",
-    state: "COMPLETED",
-    name: "New Job#2",
-    description: "this is a job#2",
-    stage_id: 0,
-    user_id: "65d100cf306894794f89017f",
-    lab_result: {
-      total: 24,
-      sequences: [
-        "ASIQHFHW",
-        "CSIQHFHW",
-        "DSIQHFHW",
-        "ESIQHFHW",
-        "FSIQHFHW",
-        "GSIQHFHW",
-        "HSIQHFHW",
-        "ISIQHFHW",
-        "JSIQHFHW",
-        "KSIQHFHW",
-        "LSIQHFHW",
-        "MSIQHFHW",
-        "NSIQHFHW",
-        "OSIQHFHW",
-        "PSIQHFHW",
-        "QSIQHFHW",
-        "RSIQHFHW",
-        "SSIQHFHW",
-        "TSIQHFHW",
-        "USIQHFHW",
-        "VSIQHFHW",
-        "WSIQHFHW",
-        "XSIQHFHW",
-        "YSIQHFHW",
-      ],
-      scores: [
-        0.0029140000697225332, 0.003019999945536256, 0.0022189998999238014,
-        0.004379000049084425, 0.0029140000697225332, 0.003019999945536256,
-        0.0022189998999238014, 0.004379000049084425, 0.0029140000697225332,
-        0.003019999945536256, 0.0022189998999238014, 0.004379000049084425,
-        0.0029140000697225332, 0.003019999945536256, 0.0022189998999238014,
-        0.004379000049084425, 0.0029140000697225332, 0.003019999945536256,
-        0.0022189998999238014, 0.004379000049084425, 0.0029140000697225332,
-        0.003019999945536256, 0.0022189998999238014, 0.004379000049084425,
-      ],
-    },
-    options: {
-      blast: {
-        program: "blastp",
-        hitlist_size: 50,
-        database: "nr",
-        expect: 10,
-        perc_ident: 100,
-        random_state: 50,
-        seq_length: 70,
-        hsp_cov: 0,
-      },
-      unirep: {
-        n_trials: 2,
-        n_splits: 2,
-        n_epochs_config_low: 1,
-        n_epochs_config_high: 11,
-        learning_rate_config_low: 0.00001,
-        learning_rate_config_high: 0.0001,
-      },
-      ridgecv: {
-        train_batch_sizes: [24, 64, 96],
-        n_batch: 12,
-        alpha: 0.1,
-      },
-      mutation: {
-        temperature: 0.01,
-        num_iterations: 25,
-        num_trajectories: 5,
-        mutate_pos_range: 8,
-      },
-    },
-    meta: ["blast", "unirep", "ridgecv", "mutation"],
-    artifact: null,
-    input_protein: "MLDDYDQS",
-    run_type: "auto",
-    is_notification_on: true,
-    created_at: "",
-    error_logs: [],
-  },
-];
+import { getAllConfigurationJobs } from "../../../../commons/api/job";
+import { JobConfiguration } from "../../../../commons/interfaces/CreateJob.interface";
 
 type FormValues = {
   selectConfigJob: string;
@@ -187,7 +15,7 @@ export default function CreateJobWithConfig({
   onConfirm,
 }: {
   onCancel: () => void;
-  onConfirm: (configJob: JobInterface | undefined, step: string) => void;
+  onConfirm: (configJob: JobConfiguration | undefined, step: string) => void;
 }) {
   const form = useForm<FormValues>();
   const selectedJobId = useWatch({
@@ -195,15 +23,17 @@ export default function CreateJobWithConfig({
     name: "selectConfigJob",
   });
 
-  const [jobConfigs, setJobConfigs] = useState<JobInterface[]>([]);
+  const [jobConfigs, setJobConfigs] = useState<JobConfiguration[]>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);
       try {
-        const data = mockData;
-        setJobConfigs(data);
+        const data = await getAllConfigurationJobs();
+        if (data.data) {
+          setJobConfigs(data.data);
+        }
       } catch (err) {
         console.log("Failed to load configurations.");
       } finally {

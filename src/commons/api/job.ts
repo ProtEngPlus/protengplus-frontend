@@ -2,7 +2,10 @@ import { get, post, put, del } from "./common";
 import { BACKEND_BASE_URL } from "../configs/apiConfig";
 import { JobInterface, JobSearchParams } from "../interfaces/Job.interface";
 import { Params } from "../interfaces/ApiResponse.interface";
-import { CreateJobInterface } from "../interfaces/CreateJob.interface";
+import {
+  CreateJobInterface,
+  JobConfiguration,
+} from "../interfaces/CreateJob.interface";
 
 const JOB_PATH = BACKEND_BASE_URL + "/proteng-conductor/jobs";
 export const getAllJobs = async (params: JobSearchParams) => {
@@ -18,4 +21,9 @@ export const getJob = async (id: string) => {
 export const createJob = async (job: CreateJobInterface) => {
   const path = JOB_PATH;
   return await post<CreateJobInterface>(path, job, true);
+};
+
+export const getAllConfigurationJobs = async () => {
+  const path = JOB_PATH + "/configurations";
+  return await get<JobConfiguration[]>(path, true);
 };
