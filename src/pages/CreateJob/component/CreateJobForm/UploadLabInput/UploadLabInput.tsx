@@ -175,7 +175,7 @@ export default function UploadLabInput({
   };
 
   return (
-    <div className="rounded-lg border border-pep-gray-border px-6 py-8 space-y-11 font-light">
+    <div>
       <ConfirmOverlay
         confirmProps={ConfirmProps}
         isVisible={isConfirmVisible}
@@ -193,180 +193,181 @@ export default function UploadLabInput({
         isVisible={isViewVisible}
         viewLabResultProps={ViewLabResultProps}
       />
+      <div className="space-y-11">
+        {/*------------------------------------ Lab Input Template ----------------------------------*/}
+        {!isConclusion && (
+          <div className="space-y-6 font-light">
+            <div className="flex border-l-4 border-pep-orange px-6 text-xl">
+              Lab Input Template
+            </div>
+            <hr />
+            <div className="flex justify-between space-x-4">
+              <Icon
+                icon={isExpand ? "mingcute:up-line" : "mingcute:down-line"}
+                onClick={() => setIsExpand(!isExpand)}
+                className="cursor-pointer text-pep-gray size-[30px]"
+              />
+              <DownloadCSVButton onClick={() => ExportToCsv(labResultForm)} />
+            </div>
+            <div className="rounded-lg bg-pep-blue-light p-5 text-pep-dark-gray">
+              {isExpand ? (
+                <LabInputTable data={exampleLabResult} isExample={true} />
+              ) : (
+                "Click expand to see full template"
+              )}
+            </div>
+          </div>
+        )}
 
-      {/*------------------------------------ Lab Input Template ----------------------------------*/}
-      {!isConclusion && (
+        {/*------------------------------------ Upload Lab Input ----------------------------------*/}
         <div className="space-y-6 font-light">
-          <div className="flex border-l-4 border-pep-orange px-6 text-xl">
-            Lab Input Template
-          </div>
-          <hr />
-          <div className="flex justify-between space-x-4">
+          <div className="w-[353px] min-w-fit flex justify-between border-l-4 border-pep-orange px-6 font-light text-xl gap-x-5">
+            {stepsForCreateJob[step - 1]}
             <Icon
-              icon={isExpand ? "mingcute:up-line" : "mingcute:down-line"}
-              onClick={() => setIsExpand(!isExpand)}
-              className="cursor-pointer text-pep-gray size-[30px]"
-            />
-            <DownloadCSVButton onClick={() => ExportToCsv(labResultForm)} />
-          </div>
-          <div className="rounded-lg bg-pep-blue-light p-5 text-pep-dark-gray">
-            {isExpand ? (
-              <LabInputTable data={exampleLabResult} isExample={true} />
-            ) : (
-              "Click expand to see full template"
-            )}
-          </div>
-        </div>
-      )}
-
-      {/*------------------------------------ Upload Lab Input ----------------------------------*/}
-      <div className="space-y-6 font-light">
-        <div className="w-[353px] min-w-fit flex justify-between border-l-4 border-pep-orange px-6 font-light text-xl gap-x-5">
-          {stepsForCreateJob[step - 1]}
-          <Icon
-            icon="material-symbols:info-outline"
-            className={`size-8 cursor-pointer ${
-              isRead ? "text-pep-blue" : "text-pep-gray"
-            }
+              icon="material-symbols:info-outline"
+              className={`size-8 cursor-pointer ${
+                isRead ? "text-pep-blue" : "text-pep-gray"
+              }
            
             `}
-            onClick={() => setRead(!isRead)}
-          />
-          {isConclusion && (
-            <img
-              src={isEdit ? onEditIcon : editIcon}
-              alt="edit"
-              className="size-8 cursor-pointer"
-              onClick={() => setEdit(!isEdit)}
+              onClick={() => setRead(!isRead)}
             />
-          )}
-        </div>
-        <hr />
-        <div className="relative space-y-8">
-          <div className="flex justify-between space-x-5 place-items-center">
-            {!isError.isValidate ? (
-              <div className="text-error flex flex-row items-center space-x-[10px]">
-                <div>*</div>
-                <div
-                  className="text-wrap"
-                  dangerouslySetInnerHTML={{
-                    __html: isError.errorMessage.replace(/\n/g, "<br />"),
-                  }}
-                ></div>
-              </div>
-            ) : labResult.length === 0 ? (
-              <div>Please upload your lab input</div>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <Icon
-                  icon="heroicons:paper-clip-20-solid"
-                  className="text-pep-gray size-5"
-                />
-                <div>{getValues("file_name")}</div>
-              </div>
+            {isConclusion && (
+              <img
+                src={isEdit ? onEditIcon : editIcon}
+                alt="edit"
+                className="size-8 cursor-pointer"
+                onClick={() => setEdit(!isEdit)}
+              />
             )}
-
-            {isEdit ? (
-              <div className="flex space-x-5">
-                {/* --------------------------------Upload lab Button------------------------------------ */}
-                <div>
-                  <input
-                    type="file"
-                    accept=".csv"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    className="hidden"
+          </div>
+          <hr />
+          <div className="relative space-y-8">
+            <div className="flex justify-between space-x-5 place-items-center">
+              {!isError.isValidate ? (
+                <div className="text-error flex flex-row items-center space-x-[10px]">
+                  <div>*</div>
+                  <div
+                    className="text-wrap"
+                    dangerouslySetInnerHTML={{
+                      __html: isError.errorMessage.replace(/\n/g, "<br />"),
+                    }}
+                  ></div>
+                </div>
+              ) : labResult.length === 0 ? (
+                <div>Please upload your lab input</div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Icon
+                    icon="heroicons:paper-clip-20-solid"
+                    className="text-pep-gray size-5"
                   />
+                  <div>{getValues("file_name")}</div>
+                </div>
+              )}
+
+              {isEdit ? (
+                <div className="flex space-x-5">
+                  {/* --------------------------------Upload lab Button------------------------------------ */}
+                  <div>
+                    <input
+                      type="file"
+                      accept=".csv"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    <Button
+                      id="upload-lab-input"
+                      type="button"
+                      buttonType="submit"
+                      text="Upload"
+                      className="w-fit font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-2 !px-2"
+                      onClick={handleButtonClick}
+                      disabled={initialStep > step}
+                    >
+                      <Icon icon="uil:upload" className="size-5" />
+                    </Button>
+                  </div>
+
+                  {/* -------------------------------------Manual input Button----------------------------------------- */}
                   <Button
-                    id="upload-lab-input"
+                    id="upload-lab-input-manual"
                     type="button"
                     buttonType="submit"
-                    text="Upload"
-                    className="w-fit font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-2 !px-2"
-                    onClick={handleButtonClick}
+                    text="Manual Input"
+                    className={`w-fit font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-2 !px-2`}
                     disabled={initialStep > step}
+                    onClick={() => setConfirmVisible(true)}
                   >
-                    <Icon icon="uil:upload" className="size-5" />
+                    <Icon
+                      icon="material-symbols-light:keyboard-external-input-rounded"
+                      className="size-5"
+                    />
                   </Button>
                 </div>
-
-                {/* -------------------------------------Manual input Button----------------------------------------- */}
-                <Button
-                  id="upload-lab-input-manual"
-                  type="button"
-                  buttonType="submit"
-                  text="Manual Input"
-                  className={`w-fit font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-2 !px-2`}
-                  disabled={initialStep > step}
-                  onClick={() => setConfirmVisible(true)}
-                >
-                  <Icon
-                    icon="material-symbols-light:keyboard-external-input-rounded"
-                    className="size-5"
-                  />
-                </Button>
-              </div>
-            ) : (
-              labResultForm.length !== 0 && (
-                <Button
-                  id="btn-view-protein"
-                  buttonType="cancel"
-                  type="button"
-                  text="View"
-                  className="w-fit px-3 py-2 font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-3 text-pep-dark-gray"
-                  onClick={() => {
-                    setViewVisible(true);
-                  }}
-                >
-                  <Icon
-                    icon="carbon:view"
-                    className="size-[30px] text-pep-gray"
-                  />
-                </Button>
-              )
-            )}
+              ) : (
+                labResultForm.length !== 0 && (
+                  <Button
+                    id="btn-view-protein"
+                    buttonType="cancel"
+                    type="button"
+                    text="View"
+                    className="w-fit px-3 py-2 font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-3 text-pep-dark-gray"
+                    onClick={() => {
+                      setViewVisible(true);
+                    }}
+                  >
+                    <Icon
+                      icon="carbon:view"
+                      className="size-[30px] text-pep-gray"
+                    />
+                  </Button>
+                )
+              )}
+            </div>
           </div>
-        </div>
 
-        {/*----------------------------------- Lab Input Table --------------------------------------------*/}
-        {isEdit && labResult.length !== 0 && isError.isValidate && (
-          <div className="rounded-lg p-5 bg-pep-blue-light place-items-center">
-            <div className="w-[738px] space-y-8">
-              <div className="flex space-x-2">
-                <span className="text-pep-dark-gray font-normal">Total:</span>
-                <span className="font-light text-pep-blue">
-                  {labResult.length} sequences
+          {/*----------------------------------- Lab Input Table --------------------------------------------*/}
+          {isEdit && labResult.length !== 0 && isError.isValidate && (
+            <div className="rounded-lg p-5 bg-pep-blue-light place-items-center">
+              <div className="w-[738px] space-y-8">
+                <div className="flex space-x-2">
+                  <span className="text-pep-dark-gray font-normal">Total:</span>
+                  <span className="font-light text-pep-blue">
+                    {labResult.length} sequences
+                  </span>
+                </div>
+                <div>
+                  <LabInputTable
+                    data={labResult}
+                    isExample={false}
+                    inputProtein={inputProtein}
+                    setProteinVisible={setProteinVisible}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/*------------------------------------- Helper Text -------------------------------------------------*/}
+          {isRead && (
+            <div className="absolute inset-0 -translate-y-[35px] rounded-lg p-5 z-10 bg-pep-blue-light min-h-fit">
+              <div className="flex space-x-3">
+                <Icon icon="ep:setting" className="text-pep-gray size-6" />
+                <label>Parameter Setup</label>
+              </div>
+              <div className="flex mt-4 space-x-5 text-pep-dark-gray items-center">
+                <span className="text-nowrap">Upload Lab Result:</span>
+                <span className="leading-10">
+                  Upload your lab results with the experimented protein
+                  sequences and their scores. This data will be used to train
+                  the model for low-n engineering.
                 </span>
               </div>
-              <div>
-                <LabInputTable
-                  data={labResult}
-                  isExample={false}
-                  inputProtein={inputProtein}
-                  setProteinVisible={setProteinVisible}
-                />
-              </div>
             </div>
-          </div>
-        )}
-
-        {/*------------------------------------- Helper Text -------------------------------------------------*/}
-        {isRead && (
-          <div className="absolute inset-0 -translate-y-[35px] rounded-lg p-5 z-10 bg-pep-blue-light min-h-fit">
-            <div className="flex space-x-3">
-              <Icon icon="ep:setting" className="text-pep-gray size-6" />
-              <label>Parameter Setup</label>
-            </div>
-            <div className="flex mt-4 space-x-5 text-pep-dark-gray items-center">
-              <span className="text-nowrap">Upload Lab Result:</span>
-              <span className="leading-10">
-                Upload your lab results with the experimented protein sequences
-                and their scores. This data will be used to train the model for
-                low-n engineering.
-              </span>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
