@@ -2,6 +2,7 @@ import { ValidationProps } from "../../../Input/InputPropsType";
 import { useFormContext } from "react-hook-form";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
+import { useEffect } from "react";
 
 export type RangeNumberInputProps = {
   id: string;
@@ -31,8 +32,12 @@ export default function RangeNumberInput({
     setValue,
     getValues,
   } = useFormContext();
-  const currentValueMin = watch(`${id}_min`) ?? defaultLow;
-  const currentValueMax = watch(`${id}_max`) ?? defaultHigh;
+  useEffect(() => {
+    setValue(`${id}_low`, defaultLow);
+    setValue(`${id}_high`, defaultHigh);
+  }, []);
+  const currentValueLow = watch(`${id}_low`) ?? defaultLow;
+  const currentValueHigh = watch(`${id}_high`) ?? defaultHigh;
 
   const handleIncrease = (field: string) => {
     const currentValue = parseFloat(getValues(field)) || 0;
@@ -57,7 +62,7 @@ export default function RangeNumberInput({
         <div className="w-full min-w-fit flex flex-row justify-between space-x-3 items-center">
           <label>{label}:</label>
           <div className="w-24 min-w-fit text-start">
-            {currentValueMin} - {currentValueMax}
+            {currentValueLow} - {currentValueHigh}
           </div>
         </div>
       ) : (
@@ -67,18 +72,18 @@ export default function RangeNumberInput({
             {/*----------------------------------- Min Input ------------------------------------------*/}
             <div className="relative w-fit min-w-fit">
               <input
-                id={`${id}_min`}
+                id={`${id}_low`}
                 type="text"
                 defaultValue={defaultLow}
-                {...register(`${id}_min`, {
+                {...register(`${id}_low`, {
                   ...(additionalValidation || {}),
-                  onBlur: () => handleBlur(`${id}_min`, defaultLow),
+                  onBlur: () => handleBlur(`${id}_low`, defaultLow),
                 })}
                 className={clsx(
                   "h-[46px] w-[80px] p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
                   {
-                    "border-error": !!errors[`${id}_min`],
-                    "border-gray-border": !errors[`${id}_min`],
+                    "border-error": !!errors[`${id}_low`],
+                    "border-gray-border": !errors[`${id}_low`],
                   },
                   className
                 )}
@@ -90,12 +95,12 @@ export default function RangeNumberInput({
                 <Icon
                   icon="mingcute:up-line"
                   className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
-                  onClick={() => handleIncrease(`${id}_min`)}
+                  onClick={() => handleIncrease(`${id}_low`)}
                 />
                 <Icon
                   icon="mingcute:down-line"
                   className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
-                  onClick={() => handleDecrease(`${id}_min`)}
+                  onClick={() => handleDecrease(`${id}_low`)}
                 />
               </div>
             </div>
@@ -105,26 +110,26 @@ export default function RangeNumberInput({
             {/*----------------------------------- Max Input ------------------------------------------*/}
             <div className="relative w-fit min-w-fit">
               <input
-                id={`${id}_max`}
+                id={`${id}_high`}
                 type="text"
                 defaultValue={defaultHigh}
-                {...register(`${id}_max`, {
+                {...register(`${id}_high`, {
                   ...(additionalValidation || {}),
                   validate: (value: string) => {
-                    const min = parseFloat(watch(`${id}_min`)) || 0;
+                    const min = parseFloat(watch(`${id}_high`)) || 0;
                     const max = parseFloat(value) || 0;
                     if (min > max) {
                       return "Max value should be greater than min value.";
                     }
                     return true;
                   },
-                  onBlur: () => handleBlur(`${id}_max`, defaultHigh),
+                  onBlur: () => handleBlur(`${id}_high`, defaultHigh),
                 })}
                 className={clsx(
                   "h-[46px] w-[80px] p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
                   {
-                    "border-error": !!errors[`${id}_max`],
-                    "border-gray-border": !errors[`${id}_max`],
+                    "border-error": !!errors[`${id}_high`],
+                    "border-gray-border": !errors[`${id}_high`],
                   },
                   className
                 )}
@@ -136,12 +141,12 @@ export default function RangeNumberInput({
                 <Icon
                   icon="mingcute:up-line"
                   className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
-                  onClick={() => handleIncrease(`${id}_max`)}
+                  onClick={() => handleIncrease(`${id}_high`)}
                 />
                 <Icon
                   icon="mingcute:down-line"
                   className="text-pep-dark-gray size-[15px] hover:text-pep-gray cursor-pointer"
-                  onClick={() => handleDecrease(`${id}_max`)}
+                  onClick={() => handleDecrease(`${id}_high`)}
                 />
               </div>
             </div>

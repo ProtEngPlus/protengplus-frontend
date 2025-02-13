@@ -2,6 +2,7 @@ import { ValidationProps } from "../../../Input/InputPropsType";
 import { useFormContext } from "react-hook-form";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
+import { useEffect } from "react";
 
 export type NumberInputProps = {
   id: string;
@@ -28,6 +29,10 @@ export default function NumberInput({
     setValue,
     watch,
   } = useFormContext();
+
+  useEffect(() => {
+    setValue(id, defaultValue);
+  }, []);
 
   const currentValue = Number(watch(id)) || defaultValue || 0;
 
