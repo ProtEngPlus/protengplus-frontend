@@ -2,7 +2,7 @@ import { ValidationProps } from "../../../Input/InputPropsType";
 import { NumberInputProps } from "./NumberInput";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 
 export type RangeNumberInputProps = {
@@ -31,8 +31,12 @@ export default function PercentInput({
     watch,
   } = useFormContext();
 
+  useEffect(() => {
+    setValue(id, defaultValue);
+  }, []);
+
   const currentValue = (() => {
-    const watchedValue = parseFloat(watch(id));
+    const watchedValue = parseFloat(watch(id)) ?? defaultValue;
     if (!isNaN(watchedValue)) return watchedValue;
     return defaultValue ?? 0;
   })();
