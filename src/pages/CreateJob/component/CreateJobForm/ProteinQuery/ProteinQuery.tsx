@@ -181,6 +181,7 @@ export default function ProteinQuery({
             jobWithConfig={isWithConfig}
             inputProtein={inputProtein}
             initialStep={initialStep}
+            isConclusion={isConclusion}
           />
         )}
       </ContextWithHelperText>
@@ -191,6 +192,7 @@ export default function ProteinQuery({
           jobWithConfig={isWithConfig}
           inputProtein={inputProtein}
           initialStep={initialStep}
+          isConclusion={isConclusion}
         />
       )}
     </div>
