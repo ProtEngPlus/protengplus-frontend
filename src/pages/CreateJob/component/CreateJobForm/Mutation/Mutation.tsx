@@ -62,6 +62,7 @@ export default function Mutation({
         isConclusion={isConclusion}
         onEdit={isEdit}
         onEditChange={() => setIsEdit(!isEdit)}
+        disabled={initialStep > step}
       >
         <div className="space-y-4">
           {/* Select SubMethod's Tool */}

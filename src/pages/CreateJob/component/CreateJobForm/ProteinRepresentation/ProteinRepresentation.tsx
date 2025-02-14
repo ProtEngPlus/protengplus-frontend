@@ -62,6 +62,7 @@ export default function ProteinRepresentation({
         isConclusion={isConclusion}
         onEdit={isEdit}
         onEditChange={() => setIsEdit(!isEdit)}
+        disabled={initialStep > step}
       >
         <div className="space-y-4">
           {/* Select SubMethod's Tool */}
