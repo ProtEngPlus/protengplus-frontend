@@ -180,6 +180,7 @@ export default function ProteinQuery({
             onEdit={isEditOption}
             jobWithConfig={isWithConfig}
             inputProtein={inputProtein}
+            initialStep={initialStep}
           />
         )}
       </ContextWithHelperText>
@@ -189,6 +190,7 @@ export default function ProteinQuery({
           onEdit={isEditOption}
           jobWithConfig={isWithConfig}
           inputProtein={inputProtein}
+          initialStep={initialStep}
         />
       )}
     </div>

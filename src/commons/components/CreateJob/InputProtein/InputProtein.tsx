@@ -13,6 +13,7 @@ interface Props {
   onEdit: boolean;
   inputProtein: string;
   jobWithConfig?: boolean;
+  initialStep: number;
 }
 
 const sortByOption: Option[] = [
@@ -177,6 +178,7 @@ export default function InputProtein({
   onEdit,
   inputProtein,
   jobWithConfig = true,
+  initialStep,
 }: Props) {
   const {
     register,
@@ -214,6 +216,7 @@ export default function InputProtein({
               <div className="grow">
                 <div className="relative items-center">
                   <input
+                    disabled={initialStep > 1}
                     id="input_protein"
                     placeholder="Input Protein*"
                     className={`text-wrap h-[50px] w-full min-w-fit pl-3 pr-10 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label ${
@@ -256,6 +259,7 @@ export default function InputProtein({
                 )}
               </div>
               <Button
+                disabled={initialStep > 1}
                 id="prot_seq"
                 buttonType={inputMode === "prot_seq" ? "submit" : "cancel"}
                 type="button"
@@ -265,6 +269,7 @@ export default function InputProtein({
               />
 
               <Button
+                disabled={initialStep > 1}
                 id="uniprot_id"
                 buttonType={inputMode === "uniprot_id" ? "submit" : "cancel"}
                 type="button"
