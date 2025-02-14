@@ -2,10 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Modal } from "flowbite";
 import type { ModalOptions, ModalInterface } from "flowbite";
 import { useEffect } from "react";
-import {
-  createJobConfig,
-  MethodParameter,
-} from "../../../configs/createJobConfig";
+import { createJobConfig } from "../../../configs/createJobConfig";
 import GetInputField from "../InputField/GetInputField";
 import { useFormContext } from "react-hook-form";
 import Button from "../../Button/Button";

@@ -184,7 +184,6 @@ export default function CreateJobPage() {
         ...otherDetails,
         meta: meta,
       };
-      console.log(newJob);
 
       try {
         await createJob(newJob);
