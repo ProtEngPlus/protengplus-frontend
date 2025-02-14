@@ -75,7 +75,6 @@ export default function InputProteinTable({
     "Acc. len",
     "Accession",
   ];
-  console.log(isOverlay);
   return (
     <div className="space-y-[10px]">
       <div

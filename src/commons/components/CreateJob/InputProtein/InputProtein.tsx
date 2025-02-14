@@ -180,7 +180,6 @@ export default function InputProtein({
     watch,
     trigger,
   } = useFormContext();
-  console.log(jobWithConfig, isConclusion);
   const inputMode = watch("input_mode") ?? "prot_seq";
 
   const [isFilterVisible, setFilterVisible] = useState(false);
@@ -309,7 +308,6 @@ export default function InputProtein({
                     text="View"
                     className="w-fit px-3 py-2 font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-3 text-pep-dark-gray"
                     onClick={() => {
-                      console.log("in");
                       setProteinWithTableVisible(true);
                     }}
                   >
