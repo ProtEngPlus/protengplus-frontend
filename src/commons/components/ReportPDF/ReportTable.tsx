@@ -10,10 +10,13 @@ export type ColumnConfig = {
 export default function Table({
   columns,
   data,
+  countFrom,
 }: {
   columns: ColumnConfig[];
   data: Record<string, any>[];
+  countFrom?: number;
 }) {
+  var countRow = countFrom || 0;
   return (
     <View style={styles.table}>
       <View style={styles.tableRow}>
@@ -42,7 +45,7 @@ export default function Table({
                   : styles.tableCell
               }
             >
-              {col.dataKey === "index" ? index + 1 : row[col.dataKey]}
+              {col.dataKey === "index" ? countRow + index + 1 : row[col.dataKey]}
             </Text>
           ))}
         </View>

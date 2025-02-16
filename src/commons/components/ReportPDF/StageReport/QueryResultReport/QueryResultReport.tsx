@@ -5,8 +5,12 @@ import Table from "../../ReportTable";
 
 export default function QueryResultReport({
   queryResult,
+  countFrom,
+  totalCount,
 }: {
   queryResult: Record<string, any>[];
+  countFrom?: number;
+  totalCount: number;
 }) {
   const queryResultColConfig = [
     {
@@ -68,8 +72,8 @@ export default function QueryResultReport({
           <Text style={styles.stageLabel}>Blast - Query Result</Text>
         </View>
       </View>
-      <InfoBox label={"Total"} text={`${queryResult.length}`} />
-      <Table columns={queryResultColConfig} data={queryResult} />
+      <InfoBox label={"Total"} text={`${totalCount}`} />
+      <Table columns={queryResultColConfig} data={queryResult} countFrom={countFrom}/>
     </View>
   );
 }

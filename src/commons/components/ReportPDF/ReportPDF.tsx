@@ -5,20 +5,34 @@ import {
   Document,
   PDFViewer,
   Image,
+  pdf,
 } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "./ReportStyle";
 import logo from "../../../assets/images/Report/protengplus-logo.png";
+import chart from "../../../assets/images/Report/mock-mutation-chart.png";
 import GeneralInfo from "./StageReport/GeneralInfo/GeneralInfo";
 import ProteinQueryReport from "./StageReport/ProteinQueryReport/ProteinQueryReport";
 import ProteinRepresentationReport from "./StageReport/ProteinRepresentationReport/ProteinRepresentationReport";
 import TopModelReport from "./StageReport/TopModelReport/TopModelReport";
 import MutationReport from "./StageReport/MutationReport/MutationReport";
 import { formatTime } from "../../utils/FormatTime";
-import UploadLabResultReport from "./StageReport/UploadLabResultReport/UploadLabResultReport";
+import UploadLabResultReport, {
+  labResult,
+} from "./StageReport/UploadLabResultReport/UploadLabResultReport";
 import QueryResultReport from "./StageReport/QueryResultReport/QueryResultReport";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
 
 export default function ReportPDF() {
+  const [loading, setLoading] = useState(false);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [paginatedLabResults, setPaginatedLabResults] = useState<labResult[]>(
+    []
+  );
+  const [paginatedQueryResults, setPaginatedQueryResults] = useState<
+    Record<string, any>[]
+  >([]);
+
   const username = "John Doe";
   const jobMockData = {
     artifact: {
@@ -989,6 +1003,39 @@ export default function ReportPDF() {
         "MSIQHFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIEMDLNSGKILESFRPEERFPMMSTFKVLLCGAVLSRVDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVRELCSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTMPAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGSRGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW",
     },
   ];
+  const labResultPerPage = 20;
+  const queryResultPerPage = 12;
+
+  useEffect(() => {
+    const paginatedLabResults: labResult[] = [];
+
+    for (
+      let i = 0;
+      i < jobMockData.lab_result.scores.length;
+      i += labResultPerPage
+    ) {
+      paginatedLabResults.push({
+        scores: jobMockData.lab_result.scores.slice(i, i + labResultPerPage),
+        sequences: jobMockData.lab_result.sequences.slice(
+          i,
+          i + labResultPerPage
+        ),
+      });
+    }
+    setPaginatedLabResults(paginatedLabResults);
+
+    const paginatedQueryResults: Record<string, any>[] = [];
+    for (let i = 0; i < queryResultData.length; i += queryResultPerPage) {
+      paginatedQueryResults.push({
+        queryResult: queryResultData.slice(i, i + queryResultPerPage),
+      });
+    }
+    setPaginatedQueryResults(paginatedQueryResults);
+
+    setPageIndex(
+      1 + paginatedLabResults.length + paginatedQueryResults.length + 1
+    );
+  }, []);
 
   const Header = () => (
     <View style={styles.header}>
@@ -996,7 +1043,7 @@ export default function ReportPDF() {
         <Image src={logo} style={{ width: 207, height: 47 }} />
       </View>
       <View style={styles.spaceY}>
-        <Text>{dayjs(jobMockData.created_at).format('D MMMM YYYY')}</Text>
+        <Text>{dayjs(jobMockData.created_at).format("D MMMM YYYY")}</Text>
         <Text>Created By: {username}</Text>
       </View>
     </View>
@@ -1059,19 +1106,82 @@ export default function ReportPDF() {
           }
           runTime={formatTime(jobMockData.run_time.mutation)}
         />
-        <Footer index={1} total={2} />
+        <Footer index={1} total={pageIndex} />
       </Page>
+      {paginatedLabResults.map((chunk, index) => (
+        <Page key={index} size="A4" style={styles.page}>
+          <Header />
+          <UploadLabResultReport
+            labResult={chunk}
+            countFrom={index * labResultPerPage}
+            totalCount={jobMockData.lab_result.total}
+          />
+          <Footer index={index + 2} total={pageIndex} />
+        </Page>
+      ))}
+      {paginatedQueryResults.map((chunk, index) => (
+        <Page key={index} size="A4" style={styles.page}>
+          <Header />
+          <QueryResultReport
+            queryResult={chunk.queryResult}
+            countFrom={index * queryResultPerPage}
+            totalCount={queryResultData.length}
+          />
+          <Footer
+            index={paginatedLabResults.length + index + 2}
+            total={pageIndex}
+          />
+        </Page>
+      ))}
       <Page size="A4" style={styles.page}>
         <Header />
-        <UploadLabResultReport labResult={jobMockData.lab_result} />
-        <QueryResultReport queryResult={queryResultData} />
-        <Footer index={2} total={2} />
+        <View style={styles.stageInfoBox}>
+          <View style={styles.stageTitle}>
+            <View style={styles.infoBox}>
+              <Text style={styles.stageLabel}>
+                Mutation Result Distribution
+              </Text>
+            </View>
+          </View>
+          <View>
+            <Image src={chart} style={{ width: 500, height: 176 }} />
+          </View>
+        </View>
+        <Footer
+          index={
+            1 + paginatedLabResults.length + paginatedQueryResults.length + 1
+          }
+          total={pageIndex}
+        />
       </Page>
     </Document>
   );
 
+  const handleDownload = async () => {
+    setLoading(true);
+    const blob = await pdf(<Report />).toBlob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Report_${jobMockData.id}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setLoading(false);
+  };
+
   return (
-    <div>
+    <div className="flex flex-col space-y-4">
+      <div className="flex space-x-4">
+        <button
+          onClick={handleDownload}
+          className="px-4 py-2 bg-pep-blue text-white rounded hover:bg-pep-blue-hover"
+          disabled={loading}
+        >
+          {loading ? "Downloading..." : "Download"}
+        </button>
+      </div>
       <div className="w-full h-[750px] overflow-auto">
         <PDFViewer width="100%" height="100%">
           <Report />

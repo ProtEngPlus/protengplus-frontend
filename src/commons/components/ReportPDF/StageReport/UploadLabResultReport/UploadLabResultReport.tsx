@@ -13,15 +13,19 @@ function convertLabResultToUploadData(labResult: {
   }));
 }
 
-type labResult = {
+export type labResult = {
   scores: number[];
   sequences: string[];
 };
 
 export default function UploadLabResultReport({
   labResult,
+  countFrom,
+  totalCount,
 }: {
   labResult: labResult;
+  countFrom?: number;
+  totalCount: number;
 }) {
   const uploadLabResultData = convertLabResultToUploadData(labResult);
 
@@ -50,8 +54,8 @@ export default function UploadLabResultReport({
           <Text style={styles.stageLabel}>Upload Lab Input</Text>
         </View>
       </View>
-      <InfoBox label={"Total"} text={`${uploadLabResultData.length}`} />
-      <Table columns={uploadLabResultColConfig} data={uploadLabResultData} />
+      <InfoBox label={"Total"} text={`${totalCount}`} />
+      <Table columns={uploadLabResultColConfig} data={uploadLabResultData} countFrom={countFrom}/>
     </View>
   );
 }
