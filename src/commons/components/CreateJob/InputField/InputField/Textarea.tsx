@@ -4,6 +4,7 @@ import { ValidationProps } from "../../../Input/InputPropsType";
 
 export type TextareaProps = {
   id: string;
+  maxLength?: number;
   placeholder: string;
   defaultValue?: string;
   className?: string;
@@ -14,6 +15,7 @@ export type TextareaProps = {
 
 export default function Textarea({
   id,
+  maxLength,
   placeholder,
   className,
   disabled,
@@ -57,9 +59,11 @@ export default function Textarea({
                 {errors[id]?.message as string}
               </span>
             )}
-            <span className={`text-${!!errors[id] ? "error" : "black"}`}>
-              {textareaValue.length}/50
-            </span>
+            {maxLength && (
+              <span className={`text-${!!errors[id] ? "error" : "black"}`}>
+                {textareaValue.length}/{maxLength}
+              </span>
+            )}
           </div>
         </div>
       )}
