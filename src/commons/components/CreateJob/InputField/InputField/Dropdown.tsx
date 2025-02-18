@@ -34,7 +34,7 @@ export default function DropdownInput({
           id={id}
           defaultValue={defaultValue}
           options={optionsValue}
-          className="w-[336px]"
+          className="!w-[336px]"
           disabled={disabled}
           additionalValidation={additionalValidation}
           onEdit={onEdit}
