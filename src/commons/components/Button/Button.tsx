@@ -19,7 +19,7 @@ export default function Button({
   ...props
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const baseStyles =
-    "w-48 h-[3.125rem] rounded-md px-7 py-3 disabled:cursor-not-allowed disabled:bg-white disabled:text-pep-dark-gray disabled:border-pep-gray-border";
+    "w-48 h-[3.125rem] rounded-md px-7 py-3 disabled:cursor-not-allowed disabled:bg-white disabled:text-label disabled:border-pep-gray-border";
   const typeStyles = {
     submit: "font-medium bg-pep-blue hover:bg-pep-blue-hover text-white",
     cancel:
