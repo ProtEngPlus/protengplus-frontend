@@ -54,9 +54,14 @@ export default function CreateJobPage() {
   const [jobOption, setJobOption] = useState<JobOption>(generateInitialJob());
 
   const form = useForm({
-    defaultValues: { file_name: "", ...jobDetail, ...jobOption },
+    defaultValues: {
+      file_name: "",
+      input_protein_field: jobDetail.input_protein,
+      initial_input_protein: jobDetail.input_protein,
+      ...jobDetail,
+      ...jobOption,
+    },
   });
-
   const { handleSubmit, reset } = form;
 
   // generate initial job
@@ -72,6 +77,8 @@ export default function CreateJobPage() {
       reset({
         ...data.initialJobDetail,
         ...data.initialJobOption,
+        input_protein_field: data.initialJobDetail.input_protein,
+        initial_input_protein: data.initialJobDetail.input_protein,
         file_name: job.lab_result.total > 0 ? "recent_lab_result" : "",
       });
 
