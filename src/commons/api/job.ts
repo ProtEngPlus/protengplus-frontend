@@ -27,3 +27,8 @@ export const getAllConfigurationJobs = async () => {
   const path = JOB_PATH + "/configurations";
   return await get<JobConfiguration[]>(path, true);
 };
+
+export const getUniProtId = async (uniProtId: string) => {
+  const path = BACKEND_BASE_URL + `/proteng-conductor/uniProt/${uniProtId}`;
+  return await get<string>(path, true);
+};
