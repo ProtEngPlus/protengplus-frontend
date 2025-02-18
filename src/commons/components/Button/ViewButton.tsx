@@ -36,12 +36,12 @@ export default function ViewButton({
         buttonType="cancel"
         type="button"
         text="View"
-        className="w-fit px-3 py-2 font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-3 text-pep-dark-gray"
+        className="w-fit px-3 py-2 font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-3 text-pep-dark-gray disabled:text-label disabled:cursor-default"
         onClick={() => {
           setProteinVisible(true);
         }}
       >
-        <Icon icon="carbon:view" className="size-[30px] text-pep-gray" />
+        <Icon icon="carbon:view" className="size-[30px] text-label" />
       </Button>
     </div>
   );
