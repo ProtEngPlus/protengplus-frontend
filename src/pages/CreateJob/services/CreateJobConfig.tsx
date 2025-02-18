@@ -86,7 +86,7 @@ export function generateInitialJobConfig(
     })),
     run_type: jobConfig.run_type,
     is_notification_on: jobConfig.is_notification_on,
-    ref_job_id: jobConfig.id,
+    ref_job_id: jobConfig.ref_job_id,
     artifact: artifact,
   };
 
