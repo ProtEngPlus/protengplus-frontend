@@ -11,7 +11,7 @@ import Textarea from "../../../../../commons/components/CreateJob/InputField/Inp
 import TextInput from "../../../../../commons/components/Input/TextInput";
 import ContextWithHelperText from "../../../../../commons/components/CreateJob/Context/ContextWithHelper";
 import DropdownInput from "../../../../../commons/components/CreateJob/InputField/InputField/Dropdown";
-import InputFields from "../../../../../commons/components/CreateJob/InputField/InputFields";
+import InputFields from "./InputField";
 import HelperText from "../../../../../commons/components/CreateJob/InputField/HelperText";
 import InputProtein from "../../../../../commons/components/CreateJob/InputProtein/InputProtein";
 
@@ -45,7 +45,9 @@ export default function ProteinQuery({
   const currentSubMethod =
     watch(`tool_${stepsForCreateJob[step - 1]}`) ??
     pipeline[step - 1].subMethod;
-  const inputProtein = watch("input_protein");
+
+  // detect input change for display query result Table
+  const [isChange, setIsChange] = useState(false);
 
   // isEdit (for conclusion step)
   const [isEditInfo, setEditInfo] = useState(onEditInfo);
@@ -167,6 +169,7 @@ export default function ProteinQuery({
         {/* SubMethod's input */}
         <div className="space-y-2">
           <InputFields
+            setIsChange={setIsChange}
             jobConfig={jobConfig}
             jobValue={getValues(
               `${stepsForCreateJob[step - 1]}.${currentSubMethod}`
@@ -177,9 +180,10 @@ export default function ProteinQuery({
         </div>
         {!isEditOption && (
           <InputProtein
+            isChange={isChange}
+            setIsChange={setIsChange}
             onEdit={isEditOption}
             jobWithConfig={isWithConfig}
-            inputProtein={inputProtein}
             initialStep={initialStep}
             isConclusion={isConclusion}
           />
@@ -188,9 +192,10 @@ export default function ProteinQuery({
 
       {isEditOption && (
         <InputProtein
+          isChange={isChange}
+          setIsChange={setIsChange}
           onEdit={isEditOption}
           jobWithConfig={isWithConfig}
-          inputProtein={inputProtein}
           initialStep={initialStep}
           isConclusion={isConclusion}
         />
