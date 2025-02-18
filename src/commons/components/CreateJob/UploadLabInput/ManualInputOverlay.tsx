@@ -22,9 +22,12 @@ export function ManualInput({
   manualInputProps: ManualInputOverlayProps;
 }) {
   const { onClose, onConfirm } = manualInputProps;
-  const { watch } = useFormContext();
+  const { watch, getValues } = useFormContext();
   const inputManual = watch("lab-result-manual");
   const inputProtein = watch("input_protein");
+  const minimumSize =
+    getValues("train_batch_sizes")?.[0] ??
+    getValues("Top Model.RidgeCV.train_batch_sizes")?.[0];
   const [data, setData] = useState<{ sequence: string; score: number }[]>([]);
   const [isError, setIsError] = useState({
     isValidate: true,
@@ -58,6 +61,12 @@ export function ManualInput({
   const checkValidate = (data: { sequence: string; score: number }[]) => {
     // Regular expression for valid amino acid sequences
     const validSequenceRegex = /^(?!.*[BJOUXZ])[A-Z]+$/i;
+    if (data.length < minimumSize) {
+      return {
+        isValidate: false,
+        errorMessage: `Total sequences should match minimum training batch size ! Minimum training batch size can be modify in Step-4 “Top Model”`,
+      };
+    }
 
     for (const { sequence, score } of data) {
       if (
@@ -102,11 +111,11 @@ export function ManualInput({
       <div
         id="manual-input"
         tabIndex={-1}
-        className="absolute top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-900/50 mt-0"
+        className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-900/50 mt-0"
       >
-        <div className="space-y-5">
-          <div className="flex bg-pep-blue-light opacity-100 px-8 py-5 gap-x-8 min-w-fit w-[90%] m-auto z-[70] text-center">
-            <div className="grow place-items-start space-y-5 mt-14 bg-white p-3 rounded-xl h-fit">
+        <div className="space-y-5 w-[90%] max-w-[90%] h-[70%] max-h-[70%]">
+          <div className="w-full h-full flex bg-pep-blue-light opacity-100 px-8 py-5 gap-x-8 m-auto z-[70] text-center">
+            <div className="flex-grow place-items-start space-y-5 mt-14 bg-white p-3 rounded-xl h-fit">
               <div className="flex space-x-3">
                 <Icon
                   icon="hugeicons:dna"
@@ -114,21 +123,14 @@ export function ManualInput({
                 />
                 <label className="font-light">Input:</label>
               </div>
-              <div className="">
+              <div className="grow w-full">
                 <Textarea
                   id="lab-result-manual"
-                  className={`!w-full !min-w-[500px] !min-h-[220px] ${
-                    !isError.isValidate ? "!border-error" : ""
-                  }`}
+                  className={`${!isError.isValidate ? "!border-error" : ""}`}
                   placeholder={`Protein Sequence, Score\nProtein Sequence, Score\nProtein Sequence, Score`}
-                  additionalValidation={{
-                    maxLength: {
-                      value: 50,
-                    },
-                  }}
                 />
                 {!isError.isValidate && (
-                  <span className="w-full flex text-right ml-auto text-sm font-light text-error">
+                  <span className="w-full flex text-left ml-auto text-sm font-light text-error break-all">
                     {isError.errorMessage}
                   </span>
                 )}
@@ -144,19 +146,21 @@ export function ManualInput({
                 <Icon icon="basil:add-outline" className="size-6" />
               </Button>
             </div>
-            <div className="space-y-8">
+            <div className="flex flex-col space-y-8">
               <div className="flex space-x-2">
                 <span className="text-pep-dark-gray font-normal">Total:</span>
                 <span className="font-light text-pep-blue">
                   {data.length} sequences
                 </span>
               </div>
-              <LabManualInputTable
-                setProteinVisible={setProteinVisible}
-                inputProtein={inputProtein}
-                data={data}
-                setData={setData}
-              />
+              <div className="flex-grow">
+                <LabManualInputTable
+                  setProteinVisible={setProteinVisible}
+                  inputProtein={inputProtein}
+                  data={data}
+                  setData={setData}
+                />
+              </div>
             </div>
           </div>
           <div className="flex py-5 space-x-16 place-self-center">
