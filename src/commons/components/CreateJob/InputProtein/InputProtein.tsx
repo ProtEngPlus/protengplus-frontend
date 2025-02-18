@@ -120,6 +120,8 @@ export default function InputProtein({
                       onBlur={() => {
                         if (inputMode === "prot_seq") {
                           trigger("input_protein_field");
+                        } else {
+                          getUniProt(inputProteinField);
                         }
                       }}
                       autoComplete="off"
@@ -171,8 +173,8 @@ export default function InputProtein({
                   buttonType={inputMode === "uniprot_id" ? "submit" : "cancel"}
                   type="button"
                   onClick={() => {
-                    setIsChange(true);
                     setValue("input_mode", "uniprot_id");
+                    getUniProt(inputProteinField);
                   }}
                   text="UniprotID"
                   className="!font-light !p-0 w-[100px] text-sm disabled:bg-white !disabled:text-black"
