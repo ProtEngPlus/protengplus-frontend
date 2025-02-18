@@ -2,6 +2,8 @@ export type RunType = "auto" | "one-step";
 
 export type State = "CREATED" | "PENDING" | "ONGOING" | "FAILED" | "COMPLETED";
 
+export type Order = "asc" | "desc";
+
 export const Steps = [
   "Protein Query",
   "Protein Representation",
@@ -49,5 +51,5 @@ export interface JobSearchParams {
   name?: string;
   state?: string | string[];
   sort?: string;
-  order?: string;
+  order?: Order;
 }
