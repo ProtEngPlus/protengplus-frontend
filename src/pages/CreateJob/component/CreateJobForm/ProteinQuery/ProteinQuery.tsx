@@ -118,6 +118,7 @@ export default function ProteinQuery({
 
           <Textarea
             id="description"
+            maxLength={50}
             placeholder="Job Description"
             additionalValidation={{
               maxLength: {
