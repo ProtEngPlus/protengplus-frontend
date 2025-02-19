@@ -1,9 +1,19 @@
 import Button from "../../../../commons/components/Button/Button";
 import { useEffect, useMemo, useState } from "react";
-import SelectInput from "../../../../commons/components/Input/SelectInput";
+import SelectInput, {
+  Option,
+} from "../../../../commons/components/Input/SelectInput";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { getAllConfigurationJobs } from "../../../../commons/api/job";
 import { JobConfiguration } from "../../../../commons/interfaces/CreateJob.interface";
+
+const createJobOptions: Option[] = [
+  { label: "Step 1 - Protein Query", value: "1" },
+  { label: "Step 2 - Protein Representation", value: "2" },
+  { label: "Step 3 - Upload Lab Input", value: "3" },
+  { label: "Step 2 - Top Model", value: "4" },
+  { label: "Step 5 - Mutation", value: "5" },
+];
 
 type FormValues = {
   selectConfigJob: string;
@@ -93,13 +103,7 @@ export default function CreateJobWithConfig({
               <SelectInput
                 id="selectStep"
                 defaultValue="3"
-                options={[
-                  { label: "Step 1 - Protein Query", value: "1" },
-                  { label: "Step 2 - Protein Representation", value: "2" },
-                  { label: "Step 3 - Upload Lab Input", value: "3" },
-                  { label: "Step 2 - Top Model", value: "4" },
-                  { label: "Step 5 - Mutation", value: "5" },
-                ]}
+                options={createJobOptions}
                 additionalValidation={{ required: { value: true } }}
               />
             </div>
