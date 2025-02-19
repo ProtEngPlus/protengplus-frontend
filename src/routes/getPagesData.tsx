@@ -10,7 +10,7 @@ import DashboardApp from "../pages/Dashboard/DashboardApp";
 import AccountManagementApp from "../pages/AccountManagement/AccountManagementApp";
 import ChangePasswordApp from "../pages/ChangePassword/ChangePasswordApp";
 import CreateJobApp from "../pages/CreateJob/CreateJobApp";
-import JobDetailApp from "../pages/JobDeatil/JobDetailApp";
+import JobDetailApp from "../pages/JobDetail/JobDetailApp";
 
 const pagesData = [
   {

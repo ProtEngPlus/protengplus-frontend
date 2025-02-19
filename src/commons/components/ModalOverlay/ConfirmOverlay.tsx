@@ -31,8 +31,6 @@ export function ConfirmOverlay({
         backdropClasses:
           "bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-10",
         closable: true,
-        onHide: () => console.log("Confirm modal is hidden"),
-        onShow: () => console.log("Confirm modal is shown"),
       };
 
       modal = new Modal($modalElement, modalOptions);
@@ -41,7 +39,7 @@ export function ConfirmOverlay({
 
     return () => {
       if (modal) {
-        modal.hide(); // Hide the modal if it was instantiated
+        modal.hide();
       }
     };
   }, [isVisible]);
@@ -51,18 +49,18 @@ export function ConfirmOverlay({
       <div
         id={`#confirm-modal-${id}`}
         tabIndex={-1}
-        aria-hidden="true"
-        className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-[calc(100%-1rem)] max-h-full bg-gray-900/50"
+        className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-900/50"
       >
-        <div className="modal-container bg-white opacity-100 border border-pep-gray-border rounded-lg px-8 py-5 space-y-11 w-fit m-auto shadow-dropShadow z-[100] text-center">
+        <div className="modal-container max-w-[530px] w-fit bg-white opacity-100 border border-pep-gray-border rounded-lg px-8 py-5 space-y-11 m-auto shadow-dropShadow z-[100] text-center">
           <div className="modal-content">
-            <h1 className="leading-loose">{title}</h1>
+            <h1 className="leading-loose ">{title}</h1>
             <div className="bg-pep-blue rounded-md w-[90px] h-[3px] mx-auto mb-6" />
             <label className="font-light text-sm leading-6">{message}</label>
           </div>
-          <div className="flex flex-row space-x-4">
+          <div className="flex flex-row justify-between space-x-4">
             <Button
               id="cancel"
+              type="button"
               buttonType="cancel"
               text="Cancel"
               className="w-[190px] min-w-fit"
@@ -70,6 +68,7 @@ export function ConfirmOverlay({
             />
             <Button
               id="confirm"
+              type="button"
               buttonType="submit"
               text="Confirm"
               className="w-[190px] min-w-fit"

@@ -126,11 +126,11 @@ export default function RootLayout({
 
       {/* Children */}
       <div
-        className={`min-w-fit  ${
+        className={`min-w-fit h-screen ${
           isSidebarVisible ? "pt-[4.5rem] pl-[299px]" : "pt-[4.5rem]"
         }`}
       >
-        <div className="px-9 py-12">{children}</div>
+        <div className="px-9 py-12 h-full">{children}</div>
       </div>
     </div>
   );
