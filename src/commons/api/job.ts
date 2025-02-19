@@ -8,6 +8,8 @@ import {
 } from "../interfaces/CreateJob.interface";
 
 const JOB_PATH = BACKEND_BASE_URL + "/proteng-conductor/jobs";
+const UNI_PROT_PATH = BACKEND_BASE_URL + "/proteng-conductor/uniProt";
+
 export const getAllJobs = async (params: JobSearchParams) => {
   const path = JOB_PATH;
   return await get<JobInterface[]>(path, true, params as Params);
@@ -29,6 +31,6 @@ export const getAllConfigurationJobs = async () => {
 };
 
 export const getUniProtId = async (uniProtId: string) => {
-  const path = BACKEND_BASE_URL + `/proteng-conductor/uniProt/${uniProtId}`;
+  const path = UNI_PROT_PATH + `/${uniProtId}`;
   return await get<string>(path, true);
 };
