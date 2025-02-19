@@ -10,7 +10,6 @@ import {
   InputProteinOverlay,
   InputProteinOverlayProps,
 } from "../../../../../commons/components/CreateJob/InputProteinOverlay/InputProteinOverlay";
-import { ExportToCsv } from "../../../../../commons/services/ExportToCSV";
 import { useFormContext } from "react-hook-form";
 import DownloadCSVButton from "../../../../../commons/components/Button/DownloadCSVButton";
 import { LabInputTable } from "../../../../../commons/components/CreateJob/UploadLabInput/LabInputTable";
@@ -22,8 +21,9 @@ import { stepsForCreateJob } from "../../../../../commons/interfaces/CreateJob.i
 import onEditIcon from "../../../../../assets/images/CreateJob/onEditIcon.svg";
 import editIcon from "../../../../../assets/images/CreateJob/editIcon.svg";
 import { ViewLabResult, ViewLabResultOverlayProps } from "./ViewLabResultModal";
+import { UploadInputTemplate } from "../../../services/UploadInputTemplate";
 
-const exampleLabResult = [
+export const exampleLabResult = [
   { sequence: "ASIQHFHW", score: 0.002914 },
   { sequence: "CSIQHFHW", score: 0.00302 },
   { sequence: "DSIQHFHW", score: 0.002219 },
@@ -207,7 +207,8 @@ export default function UploadLabInput({
                 onClick={() => setIsExpand(!isExpand)}
                 className="cursor-pointer text-pep-gray size-[30px]"
               />
-              <DownloadCSVButton onClick={() => ExportToCsv(labResultForm)} />
+              {/* <DownloadCSVButton onClick={() => ExportToCsv(labResultForm)} /> */}
+              <DownloadCSVButton onClick={() => UploadInputTemplate()} />
             </div>
             <div className="rounded-lg bg-pep-blue-light p-5 text-pep-dark-gray">
               {isExpand ? (
