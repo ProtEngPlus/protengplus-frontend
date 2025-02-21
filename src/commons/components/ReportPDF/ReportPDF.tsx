@@ -1,12 +1,4 @@
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  PDFViewer,
-  Image,
-  pdf,
-} from "@react-pdf/renderer";
+import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "./ReportStyle";
 import logo from "../../../assets/images/Report/protengplus-logo.png";
 import chart from "../../../assets/images/Report/mock-mutation-chart.png";
@@ -22,9 +14,9 @@ import UploadLabResultReport, {
 import QueryResultReport from "./StageReport/QueryResultReport/QueryResultReport";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { ReportInterface } from "../../interfaces/Report.interface";
 
-export default function ReportPDF() {
-  const [loading, setLoading] = useState(false);
+export default function ReportPDF({ jobData }: { jobData: ReportInterface }) {
   const [pageIndex, setPageIndex] = useState(1);
   const [paginatedLabResults, setPaginatedLabResults] = useState<labResult[]>(
     []
@@ -33,124 +25,9 @@ export default function ReportPDF() {
     Record<string, any>[]
   >([]);
 
-  const username = "John Doe";
-  const jobMockData = {
-    artifact: {
-      blast: {
-        bucket_name: "similar_protein",
-        path: "67a3a0487b6567267ca89b2b",
-      },
-      ridgecv: {
-        bucket_name: "ridgecv",
-        path: "67a3a0487b6567267ca89b2b.pkl",
-      },
-      unirep: {
-        bucket_name: "unirep",
-        path: "67a3a0487b6567267ca89b2b.pkl",
-      },
-    },
-    complete_at: "2025-02-05T17:55:05.317Z",
-    created_at: "2025-02-05T17:30:48.059Z",
-    description: "this is a job",
-    error_logs: [],
-    id: "67a3a0487b6567267ca89b2b",
-    input_protein:
-      "MSIQFFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRPEERFPMMSTFKVLLCGAVLSRVDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVRELCSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTMPAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGSRGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW",
-    is_notification_on: true,
-    lab_result: {
-      scores: [
-        0.002914, 0.00302, 0.002219, 0.004379, 0.002914, 0.00302, 0.002219,
-        0.004379, 0.002914, 0.00302, 0.002219, 0.004379, 0.002914, 0.00302,
-        0.002219, 0.004379, 0.002914, 0.00302, 0.002219, 0.004379, 0.002914,
-        0.00302, 0.002219, 0.004379,
-      ],
-      sequences: [
-        "ASIQHFHW",
-        "CSIQHFHW",
-        "DSIQHFHW",
-        "ESIQHFHW",
-        "FSIQHFHW",
-        "GSIQHFHW",
-        "HSIQHFHW",
-        "ISIQHFHW",
-        "JSIQHFHW",
-        "KSIQHFHW",
-        "LSIQHFHW",
-        "MSIQHFHW",
-        "NSIQHFHW",
-        "OSIQHFHW",
-        "PSIQHFHW",
-        "QSIQHFHW",
-        "RSIQHFHW",
-        "SSIQHFHW",
-        "TSIQHFHW",
-        "USIQHFHW",
-        "VSIQHFHW",
-        "WSIQHFHW",
-        "XSIQHFHW",
-        "YSIQHFHW",
-      ],
-      total: 24,
-    },
-    meta: ["blast", "unirep", "ridgecv", "mutation"],
-    name: "Test_runtime_job4",
-    options: {
-      blast: {
-        database: "nr",
-        expect: 10,
-        hitlist_size: 50,
-        hsp_cov: 50,
-        perc_ident: 85,
-        program: "blastp",
-        random_state: 50,
-        seq_length: 300,
-      },
-      mutation: {
-        mutate_pos_range: 8,
-        num_iterations: 25,
-        num_trajectories: 5,
-        temperature: 0.01,
-      },
-      ridgecv: {
-        alpha: 0.1,
-        n_batch: 20,
-        train_batch_sizes: [24, 64, 96],
-      },
-      unirep: {
-        learning_rate_config_high: 0.001,
-        learning_rate_config_low: 0.00001,
-        n_epochs_config_high: 1,
-        n_epochs_config_low: 1,
-        n_splits: 2,
-        n_trials: 2,
-      },
-    },
-    ref_job_id: "000000000000000000000000",
-    run_time: {
-      evotune: {
-        end_time: "2025-02-05T17:33:35.098Z",
-        start_time: "2025-02-05T17:33:01.501Z",
-      },
-      fittop: {
-        end_time: "2025-02-05T17:33:47.701Z",
-        start_time: "2025-02-05T17:33:35.275Z",
-      },
-      mutation: {
-        end_time: "0001-01-01T00:00:00Z",
-        start_time: "2025-02-05T17:33:48.301Z",
-      },
-      query: {
-        end_time: "2025-02-05T17:33:01.085Z",
-        start_time: "2025-02-05T17:30:55.531Z",
-      },
-    },
-    run_type: "auto",
-    stage_id: 3,
-    state: "COMPLETED",
-    updated_at: "2025-02-05T17:55:05.317Z",
-    user_id: "672850f8f90bb0327c9dc7d5",
-  };
+  const username = jobData.username;
 
+  // TODO: Unmock QueryResults
   const queryResultData = [
     {
       acc_len: 286,
@@ -1011,15 +888,12 @@ export default function ReportPDF() {
 
     for (
       let i = 0;
-      i < jobMockData.lab_result.scores.length;
+      i < jobData.lab_result.scores.length;
       i += labResultPerPage
     ) {
       paginatedLabResults.push({
-        scores: jobMockData.lab_result.scores.slice(i, i + labResultPerPage),
-        sequences: jobMockData.lab_result.sequences.slice(
-          i,
-          i + labResultPerPage
-        ),
+        scores: jobData.lab_result.scores.slice(i, i + labResultPerPage),
+        sequences: jobData.lab_result.sequences.slice(i, i + labResultPerPage),
       });
     }
     setPaginatedLabResults(paginatedLabResults);
@@ -1032,9 +906,18 @@ export default function ReportPDF() {
     }
     setPaginatedQueryResults(paginatedQueryResults);
 
-    setPageIndex(
-      1 + paginatedLabResults.length + paginatedQueryResults.length + 1
-    );
+    var pageCount = 1;
+    if (jobData.lab_result.scores.length > 0) {
+      pageCount += paginatedLabResults.length;
+    }
+    if (queryResultData.length > 0) {
+      pageCount += paginatedQueryResults.length;
+    }
+    if (jobData.run_time!.mutation) {
+      pageCount++;
+    }
+
+    setPageIndex(pageCount);
   }, []);
 
   const Header = () => (
@@ -1043,7 +926,7 @@ export default function ReportPDF() {
         <Image src={logo} style={{ width: 207, height: 47 }} />
       </View>
       <View style={styles.spaceY}>
-        <Text>{dayjs(jobMockData.created_at).format("D MMMM YYYY")}</Text>
+        <Text>{dayjs(jobData.created_at).format("D MMMM YYYY")}</Text>
         <Text>Created By: {username}</Text>
       </View>
     </View>
@@ -1057,54 +940,52 @@ export default function ReportPDF() {
     </View>
   );
 
-  const Report = () => (
+  return (
     <Document>
       <Page size="A4" style={styles.page}>
         <Header />
         <GeneralInfo
-          jobName={jobMockData.name}
-          jobDescription={jobMockData.description}
-          totalTime={formatTime({
-            start_time: jobMockData.run_time.query.end_time,
-            end_time: jobMockData.run_time.mutation.end_time,
-          })}
+          jobName={jobData.name}
+          jobDescription={jobData.description}
+          totalTime={
+            jobData.run_time
+              ? formatTime({
+                  start_time: jobData.run_time.query.end_time,
+                  end_time: jobData.run_time.mutation.end_time,
+                })
+              : ""
+          }
         />
         <ProteinQueryReport
-          tool={jobMockData.meta[0]}
+          tool={jobData.meta[0]}
           option={
-            jobMockData.options[
-              jobMockData.meta[0] as keyof typeof jobMockData.options
-            ]
+            jobData.options[jobData.meta[0] as keyof typeof jobData.options]
           }
-          inputProtein={jobMockData.input_protein}
-          runTime={formatTime(jobMockData.run_time.query)}
+          inputProtein={jobData.input_protein}
+          runTime={jobData.run_time ? formatTime(jobData.run_time.query) : ""}
         />
         <ProteinRepresentationReport
-          tool={jobMockData.meta[1]}
+          tool={jobData.meta[1]}
           option={
-            jobMockData.options[
-              jobMockData.meta[1] as keyof typeof jobMockData.options
-            ]
+            jobData.options[jobData.meta[1] as keyof typeof jobData.options]
           }
-          runTime={formatTime(jobMockData.run_time.evotune)}
+          runTime={jobData.run_time ? formatTime(jobData.run_time.evotune) : ""}
         />
         <TopModelReport
-          tool={jobMockData.meta[2]}
+          tool={jobData.meta[2]}
           option={
-            jobMockData.options[
-              jobMockData.meta[2] as keyof typeof jobMockData.options
-            ]
+            jobData.options[jobData.meta[2] as keyof typeof jobData.options]
           }
-          runTime={formatTime(jobMockData.run_time.fittop)}
+          runTime={jobData.run_time ? formatTime(jobData.run_time.fittop) : ""}
         />
         <MutationReport
-          tool={jobMockData.meta[3]}
+          tool={jobData.meta[3]}
           option={
-            jobMockData.options[
-              jobMockData.meta[3] as keyof typeof jobMockData.options
-            ]
+            jobData.options[jobData.meta[3] as keyof typeof jobData.options]
           }
-          runTime={formatTime(jobMockData.run_time.mutation)}
+          runTime={
+            jobData.run_time ? formatTime(jobData.run_time.mutation) : ""
+          }
         />
         <Footer index={1} total={pageIndex} />
       </Page>
@@ -1114,7 +995,7 @@ export default function ReportPDF() {
           <UploadLabResultReport
             labResult={chunk}
             countFrom={index * labResultPerPage}
-            totalCount={jobMockData.lab_result.total}
+            totalCount={jobData.lab_result.total}
           />
           <Footer index={index + 2} total={pageIndex} />
         </Page>
@@ -1133,60 +1014,31 @@ export default function ReportPDF() {
           />
         </Page>
       ))}
-      <Page size="A4" style={styles.page}>
-        <Header />
-        <View style={styles.stageInfoBox}>
-          <View style={styles.stageTitle}>
-            <View style={styles.infoBox}>
-              <Text style={styles.stageLabel}>
-                Mutation Result Distribution
-              </Text>
+      {jobData.run_time?.mutation ? (
+        <Page size="A4" style={styles.page}>
+          <Header />
+          <View style={styles.stageInfoBox}>
+            <View style={styles.stageTitle}>
+              <View style={styles.infoBox}>
+                <Text style={styles.stageLabel}>
+                  Mutation Result Distribution
+                </Text>
+              </View>
+            </View>
+            <View>
+              <Image src={chart} style={{ width: 500, height: 176 }} />
             </View>
           </View>
-          <View>
-            <Image src={chart} style={{ width: 500, height: 176 }} />
-          </View>
-        </View>
-        <Footer
-          index={
-            1 + paginatedLabResults.length + paginatedQueryResults.length + 1
-          }
-          total={pageIndex}
-        />
-      </Page>
+          <Footer
+            index={
+              1 + paginatedLabResults.length + paginatedQueryResults.length + 1
+            }
+            total={pageIndex}
+          />
+        </Page>
+      ) : (
+        <></>
+      )}
     </Document>
-  );
-
-  const handleDownload = async () => {
-    setLoading(true);
-    const blob = await pdf(<Report />).toBlob();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `Report_${jobMockData.id}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    setLoading(false);
-  };
-
-  return (
-    <div className="flex flex-col space-y-4">
-      <div className="flex space-x-4">
-        <button
-          onClick={handleDownload}
-          className="px-4 py-2 bg-pep-blue text-white rounded hover:bg-pep-blue-hover"
-          disabled={loading}
-        >
-          {loading ? "Downloading..." : "Download"}
-        </button>
-      </div>
-      <div className="w-full h-[750px] overflow-auto">
-        <PDFViewer width="100%" height="100%">
-          <Report />
-        </PDFViewer>
-      </div>
-    </div>
   );
 }
