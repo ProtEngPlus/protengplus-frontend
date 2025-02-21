@@ -1,42 +1,44 @@
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../commons/hooks/useAuth";
 import { useState } from "react";
 import {
   CreateJobInterface,
-  CreateJobDetailInterface,
+  CreateJobDetail,
+  CreateJobOption,
+  JobOption,
   PipelineItem,
-  CreateJobInfo,
+  stepsForCreateJob,
+  JobConfiguration,
 } from "../../commons/interfaces/CreateJob.interface";
 import {
   createJobConfig,
   defaultCreateJobDetail,
   defaultPipeline,
-  steps,
 } from "../../commons/configs/createJobConfig";
 import {
-  generateInitialJobConfig,
   generateInitialJob,
+  generateInitialJobConfig,
 } from "./services/CreateJobConfig";
-import { JobResponse } from "../../commons/interfaces/Job.interface";
-import CreateJob from "./components/CreateJobOptions/CreateJob";
-import CreateJobWithConfig from "./components/CreateJobOptions/CreateJobWithConfig";
-import ProteinQuery from "./components/CreateJobForm/ProteinQuery/ProteinQuery";
-import ProteinRepresentation from "./components/CreateJobForm/ProteinRepresentation/ProteinRepresentation";
-import UploadLabInput from "./components/CreateJobForm/UploadLabInput/UploadLabInput";
-import TopModel from "./components/CreateJobForm/TopModel/TopModel";
-import Mutation from "./components/CreateJobForm/Mutation/Mutation";
-import Stepper from "../../commons/components/CreateJob/Stepper/Stepper";
-import Button from "../../commons/components/Button/Button";
-import Conclusion from "./components/CreateJobForm/Conclusion/Conclusion";
 import { FormProvider, useForm } from "react-hook-form";
-import {
-  SuccessOverlay,
-  SuccessOverlayProps,
-} from "../../commons/components/ModalOverlay/SuccessOverlay";
+import CreateJobWithConfig from "./component/CreateJobOption/CreateJobWithConfig";
+import CreateJob from "./component/CreateJobOption/CreateJob";
+import Stepper from "../../commons/components/CreateJob/Stepper/Stepper";
+import ProteinQuery from "./component/CreateJobForm/ProteinQuery/ProteinQuery";
+import ProteinRepresentation from "./component/CreateJobForm/ProteinRepresentation/ProteinRepresentation";
+import TopModel from "./component/CreateJobForm/TopModel/TopModel";
+import Mutation from "./component/CreateJobForm/Mutation/Mutation";
+import Button from "../../commons/components/Button/Button";
+import Conclusion from "./component/CreateJobForm/Conclusion/Conclusion";
+import UploadLabInput from "./component/CreateJobForm/UploadLabInput/UploadLabInput";
 import {
   ConfirmOverlay,
   ConfirmOverlayProps,
 } from "../../commons/components/ModalOverlay/ConfirmOverlay";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../commons/hooks/useAuth";
+import {
+  SuccessOverlay,
+  SuccessOverlayProps,
+} from "../../commons/components/ModalOverlay/SuccessOverlay";
+import { createJob } from "../../commons/api/job";
 
 export default function CreateJobPage() {
   const navigate = useNavigate();
@@ -44,80 +46,79 @@ export default function CreateJobPage() {
 
   const [isWithConfig, setIsWithConfig] = useState(false);
   const [initialStep, setInitialStep] = useState(1);
-  const [state, setState] = useState(0);
+  const [step, setStep] = useState(0);
   const [pipeline, setPipeline] = useState<PipelineItem[]>(defaultPipeline);
-  const [jobDetail, setJobDetail] = useState<CreateJobDetailInterface>(
+  const [jobDetail, setJobDetail] = useState<CreateJobDetail>(
     defaultCreateJobDetail
   );
-  const [jobInfo, setJobInfo] = useState<CreateJobInterface>(
-    generateInitialJob()
-  );
+  const [jobOption, setJobOption] = useState<JobOption>(generateInitialJob());
 
   const form = useForm({
-    defaultValues: { file_name: "", ...jobDetail, ...jobInfo },
+    defaultValues: {
+      file_name: "",
+      input_protein_field: jobDetail.input_protein,
+      initial_input_protein: jobDetail.input_protein,
+      ...jobDetail,
+      ...jobOption,
+    },
   });
+  const { handleSubmit, reset } = form;
 
-  const {
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = form;
-
-  // initial job info (state 0)
-  const initialJobInfo = (job?: JobResponse, stepConfig?: number) => {
+  // generate initial job
+  const initialJobOption = (job?: JobConfiguration, stepConfig?: number) => {
     if (!isWithConfig) {
       setInitialStep(1);
-      setJobInfo(generateInitialJob());
+      setJobOption(generateInitialJob());
       setPipeline(defaultPipeline);
-      setState(1);
+      setInitialStep(1);
+      setStep(1);
     } else if (job && stepConfig) {
-      const data = generateInitialJobConfig(job);
+      const data = generateInitialJobConfig(job, stepConfig);
       reset({
-        ...data.initialInfo,
-        ...data.initialJob,
+        ...data.initialJobDetail,
+        ...data.initialJobOption,
+        input_protein_field: data.initialJobDetail.input_protein,
+        initial_input_protein: data.initialJobDetail.input_protein,
         file_name: job.lab_result.total > 0 ? "recent_lab_result" : "",
       });
 
-      setJobInfo(data.initialJob);
-      setJobDetail(data.initialInfo);
+      setJobOption(data.initialJobOption);
+      setJobDetail(data.initialJobDetail);
       setPipeline(data.pipelineItem);
-      setState(stepConfig);
+      setInitialStep(stepConfig);
+      setStep(stepConfig);
     }
   };
 
+  // for change step
   const handleBack = () => {
-    setState(state - 1);
+    setStep(step - 1);
   };
-
-  const changeState = (nextState: number) => {
-    handleSubmit(
-      (data: any) => {
-        console.log(data);
-        if (nextState <= steps.length) {
-          setState(nextState);
-        }
-      },
-      (errors) => {
-        console.log("Validation errors:", errors);
+  const changeStep = (nextStep: number) => {
+    handleSubmit((data: any) => {
+      if (nextStep <= stepsForCreateJob.length) {
+        setStep(nextStep);
       }
-    )();
+    })();
   };
 
   // update info after clicking confirm (conclusion)
   const updateInfo = (): Promise<{
-    detail: CreateJobDetailInterface;
-    info: CreateJobInfo;
+    detail: CreateJobDetail;
+    option: CreateJobOption;
     meta: string[];
   }> => {
     return new Promise((resolve, reject) => {
-      const newJobInfo = {} as CreateJobInfo;
+      const newJobOption = {} as CreateJobOption;
       const meta = [] as string[];
 
       handleSubmit(
         (data: any) => {
           try {
-            // Update jobDetail -> assign each key
-            const newJobDetail: CreateJobDetailInterface = {
+            // Update jobDetail
+            const newJobDetail: CreateJobDetail = {
+              artifact: data["artifact"],
+              ref_job_id: data["ref_job_id"],
               description: data["description"],
               input_protein: data["input_protein"],
               is_notification_on: data["is_notification_on"],
@@ -133,47 +134,67 @@ export default function CreateJobPage() {
                 subMethod,
               }: { method: string; subMethod: string } = step;
               meta.push(subMethod.toLowerCase());
-              newJobInfo[subMethod.toLowerCase()] = {};
+              newJobOption[subMethod.toLowerCase()] = {};
               const jobConfig =
                 createJobConfig[method].tool[subMethod].parameters;
 
               jobConfig.forEach((param) => {
-                newJobInfo[subMethod.toLowerCase()][param.id] =
-                  data[param.id] ?? data[method][subMethod][param.id];
+                if (param.type === "rangeNumber") {
+                  newJobOption[subMethod.toLowerCase()][`${param.id}_low`] =
+                    data[`${param.id}_low`];
+                  newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
+                    data[`${param.id}_high`];
+                } else {
+                  newJobOption[subMethod.toLowerCase()][param.id] =
+                    data[param.id];
+                }
               });
             }
 
-            resolve({ detail: newJobDetail, info: newJobInfo, meta: meta });
+            resolve({ detail: newJobDetail, option: newJobOption, meta: meta });
           } catch (error) {
             reject(error);
           }
         },
         (errors) => {
-          console.log("Validation errors:", errors);
           reject(errors);
         }
       )();
     });
   };
 
-  const [isConfirmVisible, setConfirmVisible] = useState(false);
+  // click confirm at conclusion step
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const ConfirmProps: ConfirmOverlayProps = {
     id: "confirm-create-job",
     onClose: () => {
-      setConfirmVisible(false);
+      setIsConfirmVisible(false);
     },
     onConfirm: async () => {
-      setConfirmVisible(false);
-      const { detail, info, meta } = await updateInfo();
-      console.log("confirm data", {
-        stage_id: 0,
-        user_id: user?.id,
-        option: { ...info },
-        ...detail,
-        meta,
-      });
+      setIsConfirmVisible(false);
+      const { detail, option, meta } = await updateInfo();
+      const { lab_result, ...otherDetails } = detail;
+      const labResult = lab_result.reduce(
+        (acc, item) => {
+          acc.sequences.push(item.sequence);
+          acc.scores.push(item.score);
+          acc.total++;
+          return acc;
+        },
+        { total: 0, sequences: [] as string[], scores: [] as number[] }
+      );
+
+      const newJob: CreateJobInterface = {
+        user_id: user?.id ?? "",
+        options: option,
+        lab_result: labResult,
+        ...otherDetails,
+        meta: meta,
+      };
+
       try {
-        setSuccessVisible(true);
+        await createJob(newJob);
+        setIsSuccessVisible(true);
       } catch (error) {
         console.error(error);
       }
@@ -182,11 +203,11 @@ export default function CreateJobPage() {
     message: "You can modify this setup later from the job detail page.",
   };
 
-  const [isSuccessVisible, setSuccessVisible] = useState(false);
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false);
   const SuccessProps: SuccessOverlayProps = {
     id: "success-create-job",
     onClose: () => {
-      setSuccessVisible(false);
+      setIsSuccessVisible(false);
       navigate("/dashboard");
     },
     title: "Job Successfully Created",
@@ -202,80 +223,80 @@ export default function CreateJobPage() {
         isVisible={isSuccessVisible}
         successProps={SuccessProps}
       />
-      {/* ------------------- Create job option ---------------------- */}
-      {state === 0 && !isWithConfig && (
+      {/*------------------------------------------- Create Job Option --------------------------------------------*/}
+      {step === 0 && !isWithConfig && (
         <CreateJob
-          createJob={() => initialJobInfo()}
+          createJob={() => initialJobOption()}
           createJobWithConfig={() => setIsWithConfig(true)}
         />
       )}
-      {/* ------------------- Create job with config's option ---------------------- */}
-      {state === 0 && isWithConfig && (
+      {step === 0 && isWithConfig && (
         <CreateJobWithConfig
           onCancel={() => setIsWithConfig(false)}
-          onConfirm={(job: JobResponse | undefined, step: string) => {
+          onConfirm={(job: JobConfiguration | undefined, step: string) => {
             setInitialStep(Number(step));
-            initialJobInfo(job, Number(step));
+            initialJobOption(job, Number(step));
           }}
         />
       )}
-      {state > 0 && (
+      {/*--------------------------------------------- Create Job Form -------------------------------------------*/}
+      {step > 0 && (
         <div>
-          <Stepper state={state} changeState={setState} />
-          {state < 6 && (
+          <Stepper step={step} changeStep={setStep} />
+          {step < 6 && (
             <h1 className="font-light text-pep-orange text-xl">
-              {steps[state - 1]}
+              {stepsForCreateJob[step - 1]}
             </h1>
           )}
           {/* ------------------- Context for each step ---------------------- */}
 
           <FormProvider {...form}>
             <form className="py-5 gap-5 min-w-fit min-h-fit">
-              {state < 6 && (
+              {step < 6 && (
                 <div className="rounded-lg border border-pep-gray-border px-6 py-8 space-y-2">
-                  {state === 1 && (
+                  {step === 1 && (
                     <ProteinQuery
                       isWithConfig={isWithConfig}
                       initialStep={initialStep}
-                      state={state}
-                      errors={errors}
                       pipeline={pipeline}
                       setPipeline={setPipeline}
+                      step={step}
                     />
                   )}
-                  {state === 2 && (
+                  {step === 2 && (
                     <ProteinRepresentation
                       initialStep={initialStep}
-                      state={state}
                       pipeline={pipeline}
                       setPipeline={setPipeline}
+                      step={step}
                     />
                   )}
-                  {state === 3 && (
-                    <UploadLabInput initialStep={initialStep} state={state} />
+                  {step === 3 && (
+                    <UploadLabInput initialStep={initialStep} step={step} />
                   )}
 
-                  {state === 4 && (
+                  {step === 4 && (
                     <TopModel
                       initialStep={initialStep}
-                      state={state}
                       pipeline={pipeline}
                       setPipeline={setPipeline}
+                      step={step}
                     />
                   )}
-                  {state === 5 && (
+                  {step === 5 && (
                     <Mutation
-                      state={state}
+                      initialStep={initialStep}
                       pipeline={pipeline}
                       setPipeline={setPipeline}
+                      step={step}
                     />
                   )}
                 </div>
               )}
-              {state === 6 && (
+              {step === 6 && (
                 <Conclusion
+                  isWithConfig={isWithConfig}
                   initialStep={initialStep}
-                  errors={errors}
                   pipeline={pipeline}
                   setPipeline={setPipeline}
                 />
@@ -290,13 +311,13 @@ export default function CreateJobPage() {
                   text="Cancel"
                   onClick={handleBack}
                 />
-                {state === 6 ? (
+                {step === 6 ? (
                   <Button
                     id="handleConfirm"
                     buttonType="submit"
                     type="button"
                     text="Confirm"
-                    onClick={() => setConfirmVisible(true)}
+                    onClick={() => setIsConfirmVisible(true)}
                   />
                 ) : (
                   <Button
@@ -304,7 +325,7 @@ export default function CreateJobPage() {
                     id="handleNext"
                     buttonType="next"
                     text="Next"
-                    onClick={() => changeState(state + 1)}
+                    onClick={() => changeStep(step + 1)}
                   />
                 )}
               </div>

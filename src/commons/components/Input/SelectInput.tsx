@@ -112,11 +112,19 @@ export default function SelectInput({
           </div>
 
           {isOpen && !disabled && (
-            <ul className="mt-2 absolute w-full bg-white rounded-md shadow-dropShadow z-10 py-2">
+            <ul
+              className={clsx(
+                "mt-2 absolute w-full bg-white rounded-md shadow-dropShadow z-10 py-2",
+                className
+              )}
+            >
               {options.map((option) => (
                 <li
                   key={option.value}
-                  className="px-5 py-2 font-light text-label hover:text-pep-blue hover:bg-blue-50 focus:bg-blue-100 cursor-pointer"
+                  className={clsx(
+                    "px-5 py-2 font-light text-label hover:text-pep-blue hover:bg-blue-50 focus:bg-blue-100 cursor-pointer",
+                    className
+                  )}
                   onClick={() => handleOptionClick(option.value)}
                 >
                   {option.label}

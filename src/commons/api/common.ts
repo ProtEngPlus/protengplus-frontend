@@ -11,17 +11,24 @@ export const get = async <T>(
   withHeader: boolean = false,
   params?: Params
 ) => {
-  const headers = withHeader ? getHeaderWithToken() : {};
-  const axios_response = await axios.get(path, {
-    headers,
-    params,
-    paramsSerializer: { indexes: null },
-  });
-  const res = axios_response.data as ApiResponse<T>;
-  if (!isResponseOk(res)) {
-    throwError(res.code, res.error);
+  try {
+    const headers = withHeader ? getHeaderWithToken() : {};
+    const axios_response = await axios.get(path, {
+      headers,
+      params,
+      paramsSerializer: { indexes: null },
+    });
+
+    const res = axios_response.data as ApiResponse<T>;
+
+    if (!isResponseOk(res)) {
+      throw new Error(res.message || "Unknown error from server");
+    }
+
+    return res;
+  } catch (error: any) {
+    return error.response.data;
   }
-  return res;
 };
 
 export const post = async <T>(

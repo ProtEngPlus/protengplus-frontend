@@ -1,14 +1,16 @@
-import { CreateJobDetailInterface, PipelineItem, PipelineItems } from "../interfaces/CreateJob.interface";
+import { CreateJobDetail, PipelineItem, PipelineItems } from "../interfaces/CreateJob.interface";
 import { RunType } from "../interfaces/Job.interface";
 
-export const steps = [
-    "Protein Query",
-    "Protein Representation",
-    "Upload Lab Input",
-    "Top Model",
-    "Mutation",
-    "Conclusion",
-];
+// default create job detail
+export const defaultCreateJobDetail: CreateJobDetail = {
+    name: "",
+    description: "",
+    input_protein: "",
+    lab_result: [],
+    run_type: "one-step",
+    is_notification_on: true,
+    artifact:null,
+}
 
 // all pipelines
 export const Pipelines: PipelineItems[] = [
@@ -20,71 +22,60 @@ export const Pipelines: PipelineItems[] = [
 
 // default pipeline
 export const defaultPipeline: PipelineItem[] = [
-  { method: "Protein Query", subMethod: "Blast" },
-  { method: "Protein Representation", subMethod: "Unirep" },
-  { method: "Top Model", subMethod: "RidgeCV" },
-  { method: "Mutation", subMethod: "Mutation" },
+    { method: "Protein Query", subMethod: "Blast" },
+    { method: "Protein Representation", subMethod: "Unirep" },
+    { method: "Top Model", subMethod: "RidgeCV" },
+    { method: "Mutation", subMethod: "Mutation" },
 ];
-
-// default create job detail
-export const defaultCreateJobDetail: CreateJobDetailInterface = {
-    name: "",
-    description: "",
-    run_type: "one-step",
-    is_notification_on: true,
-    input_protein: "",
-    lab_result: []
-}
 
 // format input and helper text
 export const formatInput: Record<
   number,
   { input: string; helperText: string; insideHelperText: (value: any) => string }
 > = {
-  1: {
-    input: "flex flex-row gap-x-[5%] gap-y-4 flex-wrap",
-    helperText: "flex flex-row gap-x-[5%] gap-y-4 flex-wrap",
-    insideHelperText: (value) =>
-        value.type === "dropdown" || value.type === "multiNumberDropdown"  ? "grid grid-cols-[1fr,5fr] w-[46%] gap-x-3" : "grid grid-cols-[2fr,3fr] w-[30%] gap-x-3",
-  },
+    1: {
+        input: "flex flex-row gap-x-[5%] gap-y-4 flex-wrap",
+        helperText: "flex flex-row gap-x-[5%] gap-y-4 flex-wrap",
+        insideHelperText: (value) =>
+            value.type === "dropdown" || value.type === "multiNumberDropdown"  ? "grid grid-cols-[1fr,5fr] w-[46%] gap-x-3" : "grid grid-cols-[2fr,3fr] w-[30%] gap-x-3",
+    },
+    2: {
+        input: "grid grid-cols-[1fr,1fr] gap-y-4 w-fit gap-x-[250px]",
+        helperText: "grid grid-cols-[1fr,1fr] gap-y-4 w-fit gap-x-[150px]",
+        insideHelperText: (value) =>
+            value.type === "rangeNumber" ? "flex flex-col space-y-2" : "grid grid-cols-[1fr,2fr] gap-x-3",
+    },
 
-  2: {
-    input: "grid grid-cols-[1fr,1fr] gap-y-4 w-fit gap-x-[250px]",
-    helperText: "grid grid-cols-[1fr,1fr] gap-y-4 w-fit gap-x-[150px]",
-    insideHelperText: (value) =>
-      value.type === "rangeNumber" ? "flex flex-col space-y-2" : "grid grid-cols-[1fr,2fr] gap-x-3",
-  },
-
-  3: {
-    input: "flex flex-col gap-y-4",
-    helperText: "space-y-5 w-fit",
-    insideHelperText: () => "grid grid-cols-[1fr,4fr] space-x-3 text-start",
-  },
+    3: {
+        input: "flex flex-col gap-y-4",
+        helperText: "space-y-5 w-fit",
+        insideHelperText: () => "grid grid-cols-[1fr,4fr] space-x-3 text-start",
+    },
 };
 
-export interface CreateJobConfigInterface {
-  [method: string]: {
-    description: string;
-    tool: {
-      [subMethod: string]: {
-        formatInput:number;
+export interface CreateJobConfig {
+    [method: string]: {
         description: string;
-        parameters: MethodParameter[];
-      };
+        tool: {
+            [subMethod: string]: {
+                formatInput:number;
+                description: string;
+                parameters: MethodParameter[];
+            };
+        };
     };
-  };
 }
 
 export interface MethodParameter {
-  name: string;
-  id: string;
-  type: "dropdown" | "string" | "number" | "rangeNumber" | "percent" | "multiNumberDropdown" | "boolean" | RunType
-  description: string;
-  default?: string | number | number[] | boolean | RunType,
-  low?: number;
-  high?: number;
-  dropdownItems?: string[] | number[];
-  additionalValidation?: ValidationRule;
+    name: string;
+    id: string;
+    type: "dropdown" | "string" | "number" | "rangeNumber" | "percent" | "multiNumberDropdown" | "boolean" | RunType
+    description: string;
+    default?: string | number | number[] | boolean | RunType
+    low?: number;
+    high?: number;
+    dropdownItems?: string[] | number[];
+    additionalValidation?: ValidationRule;
 }
 
 export interface ValidationRule {
@@ -99,7 +90,7 @@ export interface ValidationRule {
 }
   
 
-export const createJobConfig: CreateJobConfigInterface = {
+export const createJobConfig: CreateJobConfig = {
     "Protein Input":{
         description:"Protein sequence to be mutated and scored, provided in FASTA format or UniProt ID.",
         tool:{
@@ -112,6 +103,12 @@ export const createJobConfig: CreateJobConfigInterface = {
                         id: "prot_perc_ident",
                         type: "rangeNumber",
                         description: "The minimum percentage of sequence identity in the database required for a match to the query sequence to be considered significant",
+                        low: 1,
+                        high: 2,
+                        additionalValidation: {
+                            required: { value: true, message: "Percent Identity is required." },
+                            min: { value: 0, message: "Percent Identity must be at least 0." },
+                        },
                     },
                     {
                         name: "E Value",
@@ -119,6 +116,12 @@ export const createJobConfig: CreateJobConfigInterface = {
                         type: "rangeNumber",
                         description:
                         "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match.",
+                        low: 1,
+                        high: 2,
+                        additionalValidation: {
+                            required: { value: true, message: "E Value is required." },
+                            min: { value: 0, message: "E Value must be at least 0." },
+                        },
                     },
                     {
                         name: "Query Cover",
@@ -126,6 +129,12 @@ export const createJobConfig: CreateJobConfigInterface = {
                         type: "rangeNumber",
                         description:
                         "The percentage of the query sequence (your specimen) that overlaps with the database sequence",
+                        low: 1,
+                        high: 2,
+                        additionalValidation: {
+                            required: { value: true, message: "Query Cover is required." },
+                            min: { value: 0, message: "Query Cover must be at least 0." },
+                        },
                     },
 
                 ]

@@ -1,6 +1,15 @@
 export type RunType = "auto" | "one-step";
 
-export type State = "Created" | "Pending" | "Ongoing" | "Failed" | "Completed";
+export type State = "CREATED" | "PENDING" | "ONGOING" | "FAILED" | "COMPLETED";
+
+export type Order = "asc" | "desc";
+
+export const Steps = [
+  "Protein Query",
+  "Protein Representation",
+  "Top Model",
+  "Mutation",
+];
 
 export type LabResult = {
   total: number;
@@ -17,26 +26,30 @@ export type OptionValue =
   | undefined;
 
 export interface JobInterface {
-  ref_job_id?: string;
+  id: string;
   user_id: string;
   stage_id: number;
+  state: State;
+  ref_job_id?: string;
   name: string;
   description: string;
   input_protein: string;
-  run_type: RunType;
-  is_notification_on: boolean;
-  lab_result: LabResult;
   meta: string[];
+  lab_result: LabResult;
   options: Record<string, Record<string, OptionValue>>;
+  is_notification_on: boolean;
+  run_type: RunType;
   artifact: Record<string, object> | null;
-}
-
-export interface JobResponse extends JobInterface {
-  id: string;
-  state: State;
+  error_logs: string[];
+  run_time: {};
+  created_at: string;
+  updated_at: string;
+  complete_at?: string;
 }
 
 export interface JobSearchParams {
-  state?: string | string[];
   name?: string;
+  state?: string | string[];
+  sort?: string;
+  order?: Order;
 }
