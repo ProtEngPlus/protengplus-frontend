@@ -162,10 +162,20 @@ export default function UploadLabInput({
   const [isManualInputVisible, setManualInputVisible] = useState(false);
   const ManualInputProps: ManualInputOverlayProps = {
     onClose: () => setManualInputVisible(false),
-    onConfirm: (data) => {
+    onConfirm: async (data) => {
       const validation = checkValidate(data);
       setIsError(validation);
       if (validation.isValidate) {
+        const labResultData: LabResult = data.reduce(
+          (acc, item) => {
+            acc.sequences.push(item.sequence);
+            acc.scores.push(item.score);
+            acc.total++;
+            return acc;
+          },
+          { total: 0, sequences: [] as string[], scores: [] as number[] }
+        );
+        await updateJobDetail(id, { lab_result: labResultData });
         setLabResultForm(data);
       }
       setManualInputVisible(false);
