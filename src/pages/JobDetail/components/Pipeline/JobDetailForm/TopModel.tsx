@@ -8,11 +8,12 @@ import {
 import { Steps } from "../../../../../commons/interfaces/Job.interface";
 import HelperText from "../../../../../commons/components/CreateJob/InputField/HelperText";
 import InputFields from "../../../../../commons/components/CreateJob/InputField/InputFields";
+import { PipelineItem } from "../../../../../commons/interfaces/CreateJob.interface";
+import { useEffect } from "react";
 
 interface Props {
   isEdit: boolean;
   currentStep: number;
-  currentSubMethod: string;
   handleChange: () => void;
   disable: boolean;
   jobConfig: {
@@ -20,17 +21,30 @@ interface Props {
     description: string;
     parameters: MethodParameter[];
   };
+  pipeline: PipelineItem[];
+  setPipeline: (p: PipelineItem[]) => void;
 }
 
 export default function TopModel({
   isEdit,
   currentStep,
-  currentSubMethod,
   handleChange,
   disable,
   jobConfig,
+  pipeline,
+  setPipeline,
 }: Props) {
-  const { getValues } = useFormContext();
+  const { getValues, watch } = useFormContext();
+
+  const currentSubMethod =
+    watch(`tool_${Steps[currentStep]}`) ?? pipeline[currentStep].subMethod;
+
+  // update pipeline
+  useEffect(() => {
+    const updatedPipeline = [...pipeline];
+    updatedPipeline[currentStep].subMethod = currentSubMethod;
+    setPipeline(updatedPipeline);
+  }, [currentSubMethod]);
 
   const HelperTextMethod = (
     <HelperText

@@ -10,13 +10,13 @@ import {
 import { Steps } from "../../../../../commons/interfaces/Job.interface";
 import HelperText from "../../../../../commons/components/CreateJob/InputField/HelperText";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { PipelineItem } from "../../../../../commons/interfaces/CreateJob.interface";
 
 interface Props {
   isEdit: boolean;
   currentStep: number;
   stageId: number;
-  currentSubMethod: string;
   handleChange: () => void;
   disable: boolean;
   jobConfig: {
@@ -24,21 +24,34 @@ interface Props {
     description: string;
     parameters: MethodParameter[];
   };
+  pipeline: PipelineItem[];
+  setPipeline: (p: PipelineItem[]) => void;
 }
 
 export default function ProteinQuery({
   isEdit,
   currentStep,
   stageId,
-  currentSubMethod,
   handleChange,
   disable,
   jobConfig,
+  pipeline,
+  setPipeline,
 }: Props) {
-  const { getValues } = useFormContext();
+  const { getValues, watch } = useFormContext();
 
   // detect input change for display query result Table
   const [isChange, setIsChange] = useState(false);
+
+  const currentSubMethod =
+    watch(`tool_${Steps[currentStep]}`) ?? pipeline[currentStep].subMethod;
+
+  // update pipeline
+  useEffect(() => {
+    const updatedPipeline = [...pipeline];
+    updatedPipeline[currentStep].subMethod = currentSubMethod;
+    setPipeline(updatedPipeline);
+  }, [currentSubMethod]);
 
   const HelperTextWithInputProtein = (
     <HelperText
@@ -82,7 +95,6 @@ export default function ProteinQuery({
           />
 
           {/* SubMethod description */}
-          {/* {!isConclusion && ( */}
           <div className="space-y-2 text-pep-dark-gray">
             <h1 className="text-2xl font-normal ">{currentSubMethod}</h1>
             <span className="text-sm font-light ">
@@ -93,7 +105,6 @@ export default function ProteinQuery({
             </span>
             <hr />
           </div>
-          {/* )} */}
         </div>
 
         {/* SubMethod's input */}

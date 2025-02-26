@@ -7,7 +7,11 @@ import {
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Button from "../../../../commons/components/Button/Button";
 import { useFormContext } from "react-hook-form";
-import { createJobConfig } from "../../../../commons/configs/createJobConfig";
+import {
+  createJobConfig,
+  defaultPipeline,
+  Pipelines,
+} from "../../../../commons/configs/createJobConfig";
 import {
   ConfirmOverlay,
   ConfirmOverlayProps,
@@ -24,7 +28,12 @@ import {
   SaveConfigOverlay,
   SaveConfigProps,
 } from "../Overlay/SaveConfigOverlay";
-import { CreateJobConfiguration } from "../../../../commons/interfaces/CreateJob.interface";
+import {
+  CreateJobConfiguration,
+  CreateJobOption,
+  PipelineItem,
+} from "../../../../commons/interfaces/CreateJob.interface";
+import { updateJobDetail } from "../../../../commons/api/job";
 
 export default function Pipeline({
   job,
@@ -35,9 +44,26 @@ export default function Pipeline({
   isEditPipeline: boolean;
   setIsEditPipeline: (isEditPipeline: boolean) => void;
 }) {
-  const { setValue } = useFormContext();
+  const { setValue, watch } = useFormContext();
   const [currentStep, setCurrentStep] = useState(job.stage_id);
   const [isOpen, setIsOpen] = useState(false);
+  const [pipeline, setPipeline] = useState<PipelineItem[]>(defaultPipeline);
+
+  useEffect(() => {
+    const updatedPipeline = [...pipeline];
+
+    job.meta.forEach((subMethod, index) => {
+      Pipelines[index].subMethod.forEach((value) => {
+        if (value.toLowerCase() === subMethod) {
+          updatedPipeline[index] = {
+            ...updatedPipeline[index],
+            subMethod: value,
+          };
+        }
+      });
+    });
+    setPipeline(updatedPipeline);
+  }, [job.meta]);
 
   // handle click outside for ...'s button
   useEffect(() => {
@@ -57,21 +83,11 @@ export default function Pipeline({
     };
   });
 
-  const subMethod = useMemo(() => {
-    const tool = createJobConfig[Steps[currentStep]]?.tool;
-    if (tool) {
-      return (
-        Object.keys(tool).find(
-          (key) => key.toLocaleLowerCase() === job.meta[currentStep]
-        ) ?? ""
-      );
-    }
-    return "";
-  }, [currentStep]);
-
   const jobConfig = useMemo(() => {
-    return createJobConfig[Steps[currentStep]]?.tool[subMethod];
-  }, [currentStep, subMethod]);
+    return createJobConfig[Steps[currentStep]]?.tool[
+      pipeline[currentStep].subMethod
+    ];
+  }, [currentStep, pipeline]);
 
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const ConfirmProps: ConfirmOverlayProps = {
@@ -80,12 +96,41 @@ export default function Pipeline({
       setIsConfirmVisible(false);
     },
     onConfirm: async () => {
-      // update job
-      setIsConfirmVisible(false);
-      setIsSuccessVisible(true);
+      await handleJobUpdate();
     },
     title: "Do you want to confirm edit?",
     message: "You made changes to this job configuration.",
+  };
+
+  const handleJobUpdate = async () => {
+    try {
+      const data = watch();
+      const newJobOption = {} as CreateJobOption;
+      const meta = [] as string[];
+      for (const step of pipeline) {
+        const { method, subMethod }: { method: string; subMethod: string } =
+          step;
+        meta.push(subMethod.toLowerCase());
+        newJobOption[subMethod.toLowerCase()] = {};
+        const jobConfig = createJobConfig[method].tool[subMethod].parameters;
+
+        jobConfig.forEach((param) => {
+          if (param.type === "rangeNumber") {
+            newJobOption[subMethod.toLowerCase()][`${param.id}_low`] =
+              data[`${param.id}_low`];
+            newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
+              data[`${param.id}_high`];
+          } else {
+            newJobOption[subMethod.toLowerCase()][param.id] = data[param.id];
+          }
+        });
+      }
+      await updateJobDetail(job.id, { meta: meta, options: newJobOption });
+      setIsConfirmVisible(false);
+      setIsSuccessVisible(true);
+    } catch (error) {
+      console.error("Failed to update job:", error);
+    }
   };
 
   const [isSuccessVisible, setIsSuccessVisible] = useState(false);
@@ -95,7 +140,7 @@ export default function Pipeline({
       setIsSuccessVisible(false);
       setIsEditPipeline(false);
     },
-    title: "Job Successfull Updated",
+    title: "Job Successfully Updated",
   };
 
   const [isSaveConfigVisible, setIsSaveConfigVisible] = useState(false);
@@ -123,6 +168,21 @@ export default function Pipeline({
       //await create config
     },
   };
+
+  const runType = watch("run_type");
+  const isNotificationOn = watch("is_notification_on");
+
+  useEffect(() => {
+    const updateJob = async () => {
+      await updateJobDetail(job.id, {
+        run_type: runType,
+        is_notification_on: isNotificationOn,
+      });
+    };
+
+    updateJob();
+  }, [runType, isNotificationOn, job.id]);
+
   return (
     <div>
       <ConfirmOverlay
@@ -142,22 +202,20 @@ export default function Pipeline({
           <div className="flex space-x-6 items-center justify-end">
             <Icon
               icon={
-                job.is_notification_on
+                isNotificationOn
                   ? "carbon:notification-filled"
                   : "carbon:notification-off-filled"
               }
               className={` cursor-pointer size-[30px] ${
-                job.is_notification_on ? "text-pep-orange" : "text-error"
+                isNotificationOn ? "text-pep-orange" : "text-error"
               }`}
-              onClick={() =>
-                setValue("is_notification_on", !job.is_notification_on)
-              }
+              onClick={() => setValue("is_notification_on", !isNotificationOn)}
             />
             <div className="flex space-x-2 items-center">
               <Button
                 id="auto-run"
                 type="button"
-                buttonType={job.run_type === "auto" ? "next" : "cancel"}
+                buttonType={runType === "auto" ? "next" : "cancel"}
                 text="Auto Run"
                 className="inline-flex items-center whitespace-nowrap place-content-center text-center gap-2"
                 onClick={() => setValue("run_type", "auto")}
@@ -165,14 +223,14 @@ export default function Pipeline({
                 <Icon
                   icon="fa-solid:running"
                   className={`w-[20px] h-[25px] ${
-                    job.run_type === "auto" ? "text-white" : "text-pep-gray"
+                    runType === "auto" ? "text-white" : "text-pep-gray"
                   }`}
                 />
               </Button>
               <Button
                 id="one-step-run"
                 type="button"
-                buttonType={job.run_type === "one-step" ? "next" : "cancel"}
+                buttonType={runType === "one-step" ? "next" : "cancel"}
                 text="One-Step Run"
                 className="inline-flex items-center whitespace-nowrap place-content-center text-center gap-2"
                 onClick={() => setValue("run_type", "one-step")}
@@ -180,7 +238,7 @@ export default function Pipeline({
                 <Icon
                   icon="ic:baseline-checklist-rtl"
                   className={`size-[20px] ${
-                    job.run_type === "one-step" ? "text-white" : "text-pep-gray"
+                    runType === "one-step" ? "text-white" : "text-pep-gray"
                   }`}
                 />
               </Button>
@@ -248,7 +306,6 @@ export default function Pipeline({
             <ProteinQuery
               isEdit={isEditPipeline}
               currentStep={currentStep}
-              currentSubMethod={subMethod}
               disable={job.stage_id > 0}
               handleChange={() =>
                 isEditPipeline
@@ -257,13 +314,14 @@ export default function Pipeline({
               }
               jobConfig={jobConfig}
               stageId={job.stage_id}
+              pipeline={pipeline}
+              setPipeline={setPipeline}
             />
           )}
           {currentStep == 1 && (
             <ProteinRepresentation
               isEdit={isEditPipeline}
               currentStep={currentStep}
-              currentSubMethod={subMethod}
               disable={job.stage_id > 1}
               handleChange={() =>
                 isEditPipeline
@@ -271,13 +329,14 @@ export default function Pipeline({
                   : setIsEditPipeline(true)
               }
               jobConfig={jobConfig}
+              pipeline={pipeline}
+              setPipeline={setPipeline}
             />
           )}
           {currentStep == 2 && (
             <TopModel
               isEdit={isEditPipeline}
               currentStep={currentStep}
-              currentSubMethod={subMethod}
               disable={job.stage_id > 2}
               handleChange={() =>
                 isEditPipeline
@@ -285,13 +344,14 @@ export default function Pipeline({
                   : setIsEditPipeline(true)
               }
               jobConfig={jobConfig}
+              pipeline={pipeline}
+              setPipeline={setPipeline}
             />
           )}
           {currentStep == 3 && (
             <Mutation
               isEdit={isEditPipeline}
               currentStep={currentStep}
-              currentSubMethod={subMethod}
               disable={job.stage_id > 3}
               handleChange={() =>
                 isEditPipeline
@@ -299,6 +359,8 @@ export default function Pipeline({
                   : setIsEditPipeline(true)
               }
               jobConfig={jobConfig}
+              pipeline={pipeline}
+              setPipeline={setPipeline}
             />
           )}
         </div>
