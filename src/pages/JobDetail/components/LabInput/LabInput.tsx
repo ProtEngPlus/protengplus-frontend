@@ -19,6 +19,7 @@ import { UploadInputTemplate } from "../../../CreateJob/services/UploadInputTemp
 import { LabInputTable } from "../../../../commons/components/CreateJob/UploadLabInput/LabInputTable";
 import Button from "../../../../commons/components/Button/Button";
 import { LabResult } from "../../../../commons/interfaces/Job.interface";
+import { updateJobDetail } from "../../../../commons/api/job";
 
 export const exampleLabResult = [
   { sequence: "ASIQHFHW", score: 0.002914 },
@@ -27,14 +28,20 @@ export const exampleLabResult = [
   { sequence: "ESIQHFHW", score: 0.004379 },
 ];
 
-export default function UploadLabInput({ disable }: { disable: boolean }) {
+export default function UploadLabInput({
+  id,
+  disable,
+}: {
+  id: string;
+  disable: boolean;
+}) {
   const { getValues } = useFormContext();
-  const minimumSize = getValues(`options.RidgeCV`)?.[0];
+  const minimumSize = getValues(`options.ridgecv.train_batch_sizes`)?.[0];
   const labData: LabResult = getValues("lab_result");
   const inputProtein = getValues("input_protein");
-  const labResult = labData.sequences.map((sequence, index) => ({
+  const labResult = labData?.sequences?.map((sequence, index) => ({
     sequence,
-    score: labData.scores[index],
+    score: labData.scores?.[index],
   }));
 
   const [isExpand, setIsExpand] = useState(false);
@@ -96,22 +103,46 @@ export default function UploadLabInput({ disable }: { disable: boolean }) {
 
   useEffect(() => {
     if (file) {
-      Papa.parse(file, {
-        header: false,
-        skipEmptyLines: true,
-        delimiter: ",",
-        complete: (results: ParseResult<string[]>) => {
+      const parseFile = async () => {
+        try {
+          const results = await new Promise<ParseResult<string[]>>(
+            (resolve, reject) => {
+              Papa.parse(file, {
+                header: false,
+                skipEmptyLines: true,
+                delimiter: ",",
+                complete: resolve,
+                error: reject,
+              });
+            }
+          );
+
           const fileData = results.data.map((line: any) => {
-            return { sequence: line[1], score: line[2] };
+            return { sequence: line[0].trim(), score: Number(line[1]) };
           });
+
           const validation = checkValidate(fileData);
           setIsError(validation);
 
           if (validation.isValidate) {
+            const data: LabResult = fileData.reduce(
+              (acc, item) => {
+                acc.sequences.push(item.sequence);
+                acc.scores.push(item.score);
+                acc.total++;
+                return acc;
+              },
+              { total: 0, sequences: [] as string[], scores: [] as number[] }
+            );
+            await updateJobDetail(id, { lab_result: data });
             setLabResultForm(fileData);
           }
-        },
-      });
+        } catch (error) {
+          console.error("Error during file parsing or job update:", error);
+        }
+      };
+
+      parseFile();
     }
   }, [file]);
 
@@ -166,7 +197,7 @@ export default function UploadLabInput({ disable }: { disable: boolean }) {
       />
       <div className="space-y-11 rounded-lg border border-pep-gray-border px-6 py-8">
         {/*------------------------------------ Lab Input Template ----------------------------------*/}
-        {labResult.length == 0 && (
+        {labResultForm.length == 0 && (
           <div className="space-y-6 font-light">
             <div className="flex border-l-4 border-pep-orange px-6 text-xl">
               Lab Input Template
@@ -223,7 +254,7 @@ export default function UploadLabInput({ disable }: { disable: boolean }) {
                     }}
                   ></div>
                 </div>
-              ) : labResult.length === 0 ? (
+              ) : labResultForm.length === 0 ? (
                 <div>Please upload your lab input</div>
               ) : undefined}
 
@@ -271,17 +302,17 @@ export default function UploadLabInput({ disable }: { disable: boolean }) {
 
           <div className="relative rounded-lg bg-pep-blue-light place-items-center">
             {/*----------------------------------- Lab Input Table --------------------------------------------*/}
-            {labResult.length > 0 && isError.isValidate && (
+            {labResultForm.length > 0 && (
               <div className="w-[738px] space-y-8 p-5 min-w-fit">
                 <div className="flex space-x-2 text-start">
                   <span className="text-pep-dark-gray font-normal">Total:</span>
                   <span className="font-light text-pep-blue">
-                    {labResult.length} sequences
+                    {labResultForm.length} sequences
                   </span>
                 </div>
                 <div>
                   <LabInputTable
-                    data={labResult}
+                    data={labResultForm}
                     isExample={false}
                     inputProtein={inputProtein}
                     setProteinVisible={setProteinVisible}
