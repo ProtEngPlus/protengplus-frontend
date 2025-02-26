@@ -39,7 +39,7 @@ export default function SelectInput({
   } = useFormContext();
 
   const [isOpen, setIsOpen] = useState(false);
-  const currentValue = watch(id);
+  const currentValue = watch(id) ?? defaultValue;
 
   const handleOptionClick = (optionValue: string) => {
     setValue(id, optionValue);
