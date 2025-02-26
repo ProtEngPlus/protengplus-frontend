@@ -34,3 +34,16 @@ export const getUniProtId = async (uniProtId: string) => {
   const path = UNI_PROT_PATH + `/${uniProtId}`;
   return await get<string>(path, true);
 };
+
+export const updateJobDetail = async (
+  id: string,
+  updateData: Partial<JobInterface>
+) => {
+  const path = JOB_PATH + `/${id}`;
+  return await put<JobInterface>(path, updateData, true);
+};
+
+export const deleteJob = async (id: string) => {
+  const path = JOB_PATH + `/${id}`;
+  return await del(path, true);
+};
