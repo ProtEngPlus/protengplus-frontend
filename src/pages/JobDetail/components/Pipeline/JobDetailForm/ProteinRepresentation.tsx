@@ -43,7 +43,7 @@ export default function ProteinRepresentation({
   return (
     <div className="space-y-11">
       <ContextWithHelperText
-        title={Steps[currentStep - 1]}
+        title={Steps[currentStep]}
         helperText={HelperTextMethod}
         isConclusion={true}
         onEdit={isEdit}
@@ -52,30 +52,27 @@ export default function ProteinRepresentation({
         <div className="space-y-4">
           {/* Select SubMethod's Tool */}
           <DropdownInput
-            id={`tool_${Steps[currentStep - 1]}`}
+            id={`tool_${Steps[currentStep]}`}
             label="Tool"
             defaultValue={currentSubMethod}
             options={Object.keys(
-              createJobConfig[Steps[currentStep - 1]]?.tool ?? {}
+              createJobConfig[Steps[currentStep]]?.tool ?? {}
             )}
             onEdit={isEdit}
             disabled={disable}
           />
 
           {/* SubMethod description */}
-          {/* {!isConclusion && ( */}
           <div className="space-y-2 text-pep-dark-gray">
             <h1 className="text-2xl font-normal ">{currentSubMethod}</h1>
             <span className="text-sm font-light ">
-              {createJobConfig[Steps[currentStep - 1]]?.tool[currentSubMethod]
-                ? createJobConfig[Steps[currentStep - 1]]?.tool[
-                    currentSubMethod
-                  ].description
+              {createJobConfig[Steps[currentStep]]?.tool[currentSubMethod]
+                ? createJobConfig[Steps[currentStep]]?.tool[currentSubMethod]
+                    .description
                 : ""}
             </span>
             <hr />
           </div>
-          {/* )} */}
         </div>
 
         {/* SubMethod's input */}

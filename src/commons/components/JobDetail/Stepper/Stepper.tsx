@@ -26,12 +26,13 @@ export default function Stepper({
         case "PENDING":
           return "bg-white border-pep-orange";
         case "ONGOING":
-          return "bg-pep-light-gray text-black";
+          return " bg-pep-gray-light text-black";
         default:
-          return "bg-pep-light-gray text-black";
+          return "bg-white text-black";
       }
+    } else {
+      return " bg-pep-gray-light text-black border-pep-gray-border";
     }
-    return "bg-pep-light-gray text-black border-pep-gray-border";
   };
 
   const handleIcon = (n: number) => {
@@ -40,7 +41,7 @@ export default function Stepper({
       return <Icon icon="famicons:play" className="size-5 text-pep-orange" />;
     if (n === stageId && state === "ONGOING")
       return (
-        <Icon icon="pepicons-pencil:dots-x" className="size-5 text-pep-green" />
+        <Icon icon="pepicons-pencil:dots-x" className="size-5 text-pep-gree" />
       );
     return n + 1;
   };
@@ -51,7 +52,7 @@ export default function Stepper({
         src={previousButton}
         alt="previos"
         onClick={() =>
-          handleChange() && currentStep > 1 && setCurrentStep(currentStep - 1)
+          handleChange() && currentStep > 0 && setCurrentStep(currentStep - 1)
         }
         className="cursor-pointer"
       />
@@ -64,7 +65,7 @@ export default function Stepper({
                 ? "flex w-full relative text-black after:content-[''] after:w-full after:h-0.5 after:inline-block after:absolute lg:after:top-5 after:top-3 after:left-10"
                 : "flex relative text-gray-900"
             } ${
-              index < currentStep - 1
+              index < currentStep
                 ? "after:bg-pep-blue"
                 : "after:bg-pep-gray-border"
             }`}
@@ -73,10 +74,10 @@ export default function Stepper({
               <span
                 className={`w-6 h-6 border-2 rounded-full flex justify-center items-center mx-auto mb-3 text-sm lg:w-10 lg:h-10 cursor-pointer 
                     ${handleStepStyle(index)}
-                    ${currentStep - 1 == index && "!border-pep-blue"}
+                    ${currentStep == index && "!border-pep-blue"}
                     
                 `}
-                onClick={() => handleChange() && setCurrentStep(index + 1)}
+                onClick={() => handleChange() && setCurrentStep(index)}
               >
                 {handleIcon(index)}
               </span>
@@ -95,7 +96,7 @@ export default function Stepper({
         src={nextButton}
         alt="next"
         onClick={() =>
-          handleChange() && currentStep < 4 && setCurrentStep(currentStep + 1)
+          handleChange() && currentStep < 3 && setCurrentStep(currentStep + 1)
         }
         className="cursor-pointer"
       />

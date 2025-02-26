@@ -58,16 +58,19 @@ export default function Pipeline({
   });
 
   const subMethod = useMemo(() => {
-    const tool = createJobConfig[Steps[currentStep - 1]].tool;
-    return (
-      Object.keys(tool).find(
-        (key) => key.toLocaleLowerCase() === job.meta[currentStep - 1]
-      ) ?? ""
-    );
+    const tool = createJobConfig[Steps[currentStep]]?.tool;
+    if (tool) {
+      return (
+        Object.keys(tool).find(
+          (key) => key.toLocaleLowerCase() === job.meta[currentStep]
+        ) ?? ""
+      );
+    }
+    return "";
   }, [currentStep]);
 
   const jobConfig = useMemo(() => {
-    return createJobConfig[Steps[currentStep - 1]].tool[subMethod];
+    return createJobConfig[Steps[currentStep]]?.tool[subMethod];
   }, [currentStep, subMethod]);
 
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
@@ -241,12 +244,12 @@ export default function Pipeline({
           />
         </div>
         <div className="rounded-lg border border-pep-gray-border px-6 py-8">
-          {currentStep == 1 && (
+          {currentStep == 0 && (
             <ProteinQuery
               isEdit={isEditPipeline}
               currentStep={currentStep}
               currentSubMethod={subMethod}
-              disable={job.stage_id > 1}
+              disable={job.stage_id > 0}
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)
@@ -256,7 +259,7 @@ export default function Pipeline({
               stageId={job.stage_id}
             />
           )}
-          {currentStep == 2 && (
+          {currentStep == 1 && (
             <ProteinRepresentation
               isEdit={isEditPipeline}
               currentStep={currentStep}
@@ -270,12 +273,12 @@ export default function Pipeline({
               jobConfig={jobConfig}
             />
           )}
-          {currentStep == 3 && (
+          {currentStep == 2 && (
             <TopModel
               isEdit={isEditPipeline}
               currentStep={currentStep}
               currentSubMethod={subMethod}
-              disable={job.stage_id > 1}
+              disable={job.stage_id > 2}
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)
@@ -284,12 +287,12 @@ export default function Pipeline({
               jobConfig={jobConfig}
             />
           )}
-          {currentStep == 4 && (
+          {currentStep == 3 && (
             <Mutation
               isEdit={isEditPipeline}
               currentStep={currentStep}
               currentSubMethod={subMethod}
-              disable={job.stage_id > 1}
+              disable={job.stage_id > 3}
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)

@@ -1,12 +1,11 @@
 import { TabItem, Tabs, TabsInterface, TabsOptions } from "flowbite";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { JobInterface } from "../../commons/interfaces/Job.interface";
-import { FormProvider, useForm } from "react-hook-form";
-import { getJob } from "../../commons/api/job";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { deleteJob, getJob, updateJobDetail } from "../../commons/api/job";
 import Pipeline from "./components/Pipeline/Pipeline";
 import LabInput from "./components/LabInput/LabInput";
-import MutationResults from "./components/MutationResults/MutationResults";
 import JobRunTypeIcon from "../../commons/components/Job/JobRunTypeIcon/JobRunTypeIcon";
 import JobState from "../../commons/components/Job/JobState/JobState";
 import onEditIcon from "../../assets/images/CreateJob/onEditIcon.svg";
@@ -23,25 +22,31 @@ import {
   DeleteOverlay,
   DeleteOverlayProps,
 } from "../../commons/components/ModalOverlay/DeleteOverlay";
+import { defaultCreateJobDetail } from "../../commons/configs/createJobConfig";
 
 export default function JobDetailPage() {
+  const navigate = useNavigate();
   const { jobid } = useParams<{ jobid: string }>();
   const [job, setJob] = useState<JobInterface>();
   const [isEditDescription, setEditDescription] = useState(false);
   const [isEditPipeline, setIsEditPipeline] = useState(false);
 
   const form = useForm();
+  const { watch } = form;
+  const name = watch("name") ?? "";
+  const description = watch("description") ?? "";
 
   useEffect(() => {
     const fetchJob = async () => {
       if (jobid) {
         const data = await getJob(jobid);
-        if (data) {
-          setJob(data);
+        console.log(data.data);
+        if (data.data) {
+          setJob(data.data);
           form.reset({
-            ...data,
-            input_protein_field: data.input_protein,
-            initial_input_protein: data.input_protein,
+            ...data.data,
+            input_protein_field: data.data.input_protein,
+            initial_input_protein: data.data.input_protein,
           });
         }
       }
@@ -50,8 +55,8 @@ export default function JobDetailPage() {
   }, [jobid]);
 
   const handleEditDescription = async () => {
-    if (isEditDescription) {
-      // await update description
+    if (isEditDescription && job) {
+      await updateJobDetail(job.id, { name: name, description: description });
       setEditDescription(false);
     } else {
       setEditDescription(true);
@@ -105,9 +110,11 @@ export default function JobDetailPage() {
       setIsDeleteVisible(false);
     },
     onDelete: async () => {
-      // await delete
-      setIsDeleteVisible(false);
-      setIsDeleteSuccessVisible(true);
+      if (job) {
+        await deleteJob(job.id);
+        setIsDeleteVisible(false);
+        setIsDeleteSuccessVisible(true);
+      }
     },
     title: "Do you want to delete this mutate collection ?",
     children: (
@@ -125,6 +132,7 @@ export default function JobDetailPage() {
     id: "success-update-job",
     onClose: () => {
       setIsDeleteSuccessVisible(false);
+      navigate("/dashboard");
     },
     title: "The Mutates Delete Successfully",
   };
@@ -163,9 +171,9 @@ export default function JobDetailPage() {
                   ) : (
                     <div className="flex flex-col space-y-2">
                       <label className="text-black font-normal text-2xl">
-                        {job.name}
+                        {name}
                       </label>
-                      <label className="text-sm">{job.description}</label>
+                      <label className="text-sm">{description}</label>
                     </div>
                   )}
                   <img
@@ -281,14 +289,17 @@ export default function JobDetailPage() {
               role="tabpanel"
               aria-labelledby="lab-input-tab"
             >
-              <LabInput disable={job.state == "ONGOING" || job.stage_id > 2} />
+              <LabInput
+                id={job.id}
+                disable={job.state == "ONGOING" || job.stage_id > 2}
+              />
             </div>
             <div
               id="mutaion-results-content"
               role="tabpanel"
               aria-labelledby="mutaion-results-tab"
             >
-              <MutationResults />
+              <div>Mutation</div>
             </div>
           </div>
         </div>

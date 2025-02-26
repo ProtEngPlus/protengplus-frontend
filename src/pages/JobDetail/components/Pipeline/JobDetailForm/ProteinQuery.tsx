@@ -62,7 +62,7 @@ export default function ProteinQuery({
   return (
     <div className="space-y-11">
       <ContextWithHelperText
-        title={Steps[currentStep - 1]}
+        title={Steps[currentStep]}
         helperText={HelperTextWithInputProtein}
         isConclusion={true}
         onEdit={isEdit}
@@ -71,11 +71,11 @@ export default function ProteinQuery({
         <div className="space-y-4">
           {/* Select SubMethod's Tool */}
           <DropdownInput
-            id={`tool_${Steps[currentStep - 1]}`}
+            id={`tool_${Steps[currentStep]}`}
             label="Tool"
             defaultValue={currentSubMethod}
             options={Object.keys(
-              createJobConfig[Steps[currentStep - 1]]?.tool ?? {}
+              createJobConfig[Steps[currentStep]]?.tool ?? {}
             )}
             onEdit={isEdit}
             disabled={disable}
@@ -86,10 +86,9 @@ export default function ProteinQuery({
           <div className="space-y-2 text-pep-dark-gray">
             <h1 className="text-2xl font-normal ">{currentSubMethod}</h1>
             <span className="text-sm font-light ">
-              {createJobConfig[Steps[currentStep - 1]]?.tool[currentSubMethod]
-                ? createJobConfig[Steps[currentStep - 1]]?.tool[
-                    currentSubMethod
-                  ].description
+              {createJobConfig[Steps[currentStep]]?.tool[currentSubMethod]
+                ? createJobConfig[Steps[currentStep]]?.tool[currentSubMethod]
+                    .description
                 : ""}
             </span>
             <hr />
@@ -112,7 +111,7 @@ export default function ProteinQuery({
             isChange={isChange}
             setIsChange={setIsChange}
             onEdit={isEdit}
-            jobWithConfig={stageId > 1}
+            jobWithConfig={stageId > 0}
             initialStep={stageId}
             isConclusion={true}
           />
@@ -124,7 +123,7 @@ export default function ProteinQuery({
           isChange={isChange}
           setIsChange={setIsChange}
           onEdit={isEdit}
-          jobWithConfig={stageId > 1}
+          jobWithConfig={stageId > 0}
           initialStep={stageId}
           isConclusion={true}
         />
