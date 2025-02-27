@@ -30,7 +30,6 @@ export function SaveConfigOverlay({
 
   useEffect(() => {
     const $modalElement = document.querySelector("#save-config-modal");
-
     let modal: ModalInterface | null = null;
 
     if ($modalElement instanceof HTMLElement && isVisible) {
@@ -56,7 +55,7 @@ export function SaveConfigOverlay({
   return (
     isVisible && (
       <div
-        id="save-config-modal"
+        id="#save-config-modal"
         className="fixed top-0 right-0 left-0 z-[90] flex justify-center items-center w-full h-full bg-gray-900/50 mt-0"
       >
         <div className="space-y-5 place-items-center place-self-center w-[55%] place-content-center text-center">
