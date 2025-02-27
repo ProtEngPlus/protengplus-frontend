@@ -87,7 +87,7 @@ export default function FitnessDistributionChartData({
     });
 
     useEffect(() => {
-        setOptions((prevOptions) => ({
+        setOptions((prevOptions: any) => ({
             ...prevOptions,
             xaxis: {
                 type: "category",
