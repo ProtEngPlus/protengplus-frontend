@@ -1,4 +1,4 @@
-import { get, post, put, del } from "./common";
+import { get, post } from "./common";
 import { BACKEND_BASE_URL } from "../configs/apiConfig";
 import { JobInterface, JobSearchParams } from "../interfaces/Job.interface";
 import { Params } from "../interfaces/ApiResponse.interface";
