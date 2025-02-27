@@ -2,8 +2,13 @@ import { TabItem, Tabs, TabsInterface, TabsOptions } from "flowbite";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { JobInterface } from "../../commons/interfaces/Job.interface";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { deleteJob, getJob, updateJobDetail } from "../../commons/api/job";
+import { FormProvider, useForm } from "react-hook-form";
+import {
+  deleteJob,
+  getJob,
+  runJob,
+  updateJobDetail,
+} from "../../commons/api/job";
 import Pipeline from "./components/Pipeline/Pipeline";
 import LabInput from "./components/LabInput/LabInput";
 import JobRunTypeIcon from "../../commons/components/Job/JobRunTypeIcon/JobRunTypeIcon";
@@ -22,7 +27,6 @@ import {
   DeleteOverlay,
   DeleteOverlayProps,
 } from "../../commons/components/ModalOverlay/DeleteOverlay";
-import { defaultCreateJobDetail } from "../../commons/configs/createJobConfig";
 
 export default function JobDetailPage() {
   const navigate = useNavigate();
@@ -36,21 +40,24 @@ export default function JobDetailPage() {
   const name = watch("name") ?? "";
   const description = watch("description") ?? "";
 
-  useEffect(() => {
-    const fetchJob = async () => {
-      if (jobid) {
-        const data = await getJob(jobid);
-        console.log(data.data);
-        if (data.data) {
-          setJob(data.data);
-          form.reset({
-            ...data.data,
-            input_protein_field: data.data.input_protein,
-            initial_input_protein: data.data.input_protein,
-          });
-        }
+  const fetchJob = async () => {
+    if (jobid) {
+      const data = await getJob(jobid);
+      console.log(data.data);
+      if (data.data) {
+        setJob(data.data);
+        form.reset({
+          ...data.data,
+          input_protein_field: data.data.input_protein,
+          initial_input_protein: data.data.input_protein,
+        });
+      } else {
+        navigate("/dashboard");
       }
-    };
+    }
+  };
+
+  useEffect(() => {
     fetchJob();
   }, [jobid]);
 
@@ -136,6 +143,13 @@ export default function JobDetailPage() {
     },
     title: "The Mutates Delete Successfully",
   };
+
+  const handleRunJob = async () => {
+    if (job) {
+      await runJob(job.id);
+      fetchJob();
+    }
+  };
   return (
     <FormProvider {...form}>
       <DeleteOverlay deleteProps={DeleteProps} isVisible={isDeleteVisible} />
@@ -149,7 +163,9 @@ export default function JobDetailPage() {
             <div className="flex justify-between items-center space-x-8">
               <div className="flex space-x-8 items-center">
                 <JobRunTypeIcon
-                  onClick={() => { }}
+                  onClick={() => {
+                    job.state !== "FAILED" && handleRunJob();
+                  }}
                   runType={job.run_type}
                   state={job.state}
                 />
@@ -188,7 +204,13 @@ export default function JobDetailPage() {
               <div className="flex space-x-1 items-center">
                 <Icon
                   icon="ic:round-refresh"
-                  className="text-pep-gray cursor-pointer size-7"
+                  className={`size-7 ${job.state === "FAILED"
+                      ? "text-pep-gray cursor-pointer"
+                      : "text-pep-gray-border cursor-not-allowed"
+                    }`}
+                  onClick={() => {
+                    job.state === "FAILED" && handleRunJob();
+                  }}
                 />
                 <Icon
                   icon="streamline:delete-1-solid"
@@ -282,6 +304,7 @@ export default function JobDetailPage() {
                 job={job}
                 setIsEditPipeline={setIsEditPipeline}
                 isEditPipeline={isEditPipeline}
+                fetchJob={fetchJob}
               />
             </div>
             <div

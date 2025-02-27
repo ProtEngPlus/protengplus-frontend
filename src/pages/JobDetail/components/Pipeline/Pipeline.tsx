@@ -33,16 +33,21 @@ import {
   CreateJobOption,
   PipelineItem,
 } from "../../../../commons/interfaces/CreateJob.interface";
-import { updateJobDetail } from "../../../../commons/api/job";
+import {
+  createJobConfiguration,
+  updateJobDetail,
+} from "../../../../commons/api/job";
 
 export default function Pipeline({
   job,
   isEditPipeline,
   setIsEditPipeline,
+  fetchJob,
 }: {
   job: JobInterface;
   isEditPipeline: boolean;
   setIsEditPipeline: (isEditPipeline: boolean) => void;
+  fetchJob: () => void;
 }) {
   const { setValue, watch } = useFormContext();
   const [currentStep, setCurrentStep] = useState(job.stage_id);
@@ -97,6 +102,7 @@ export default function Pipeline({
     },
     onConfirm: async () => {
       await handleJobUpdate();
+      fetchJob();
     },
     title: "Do you want to confirm edit?",
     message: "You made changes to this job configuration.",
@@ -148,7 +154,7 @@ export default function Pipeline({
     onClose: () => {
       setIsSaveConfigVisible(false);
     },
-    onConfirm: (name, description) => {
+    onConfirm: async (name, description) => {
       setIsSaveConfigVisible(false);
       const jobConfig: CreateJobConfiguration = {
         name: name,
@@ -165,7 +171,8 @@ export default function Pipeline({
         is_notification_on: job.is_notification_on,
         user_id: job.user_id,
       };
-      //await create config
+
+      await createJobConfiguration(jobConfig);
     },
   };
 
@@ -271,12 +278,16 @@ export default function Pipeline({
                 </li>
                 <li
                   key="save-config"
-                  className={`px-5 py-2 font-light text-label hover:text-pep-blue hover:bg-pep-blue-light cursor-pointer`}
+                  className={`px-5 py-2 font-light text-label ${
+                    job.state === "COMPLETED"
+                      ? "cursor-pointer hover:text-pep-blue hover:bg-pep-blue-light"
+                      : "cursor-not-allowed"
+                  }`}
                   onClick={() => {
                     if (isEditPipeline) {
                       setIsOpen(false);
                       setIsConfirmVisible(true);
-                    } else {
+                    } else if (job.state === "COMPLETED") {
                       setIsOpen(false);
                       setIsSaveConfigVisible(true);
                     }
@@ -322,7 +333,7 @@ export default function Pipeline({
             <ProteinRepresentation
               isEdit={isEditPipeline}
               currentStep={currentStep}
-              disable={job.stage_id > 1}
+              disable={job.stage_id >= 1}
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)
@@ -337,7 +348,7 @@ export default function Pipeline({
             <TopModel
               isEdit={isEditPipeline}
               currentStep={currentStep}
-              disable={job.stage_id > 2}
+              disable={job.stage_id >= 2}
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)
@@ -352,7 +363,7 @@ export default function Pipeline({
             <Mutation
               isEdit={isEditPipeline}
               currentStep={currentStep}
-              disable={job.stage_id > 3}
+              disable={job.stage_id >= 3}
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)

@@ -62,6 +62,7 @@ export default function TopModel({
         isConclusion={true}
         onEdit={isEdit}
         onEditChange={handleChange}
+        disabled={disable}
       >
         <div className="space-y-4">
           {/* Select SubMethod's Tool */}
