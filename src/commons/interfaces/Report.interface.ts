@@ -21,3 +21,20 @@ export interface ReportInterface {
     run_time?: Record<string, RunTime> | null;
     created_at?: Date | null;
 }
+
+export interface QueryResultInterface {
+    acc_len: number;
+    accession: string;
+    description: string;
+    e_values: number;
+    hsp_query_from: number;
+    hsp_query_to: number;
+    id: string;
+    is_selected: boolean;
+    max_score: number;
+    organisms: string;
+    percent_identity: number;
+    query_cover: number;
+    score: number;
+    sequences: string;
+}
