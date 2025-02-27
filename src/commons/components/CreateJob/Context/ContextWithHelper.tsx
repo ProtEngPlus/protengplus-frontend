@@ -7,6 +7,8 @@ export default function ContextWithHelperText({
   title,
   children,
   helperText,
+  isJobDetail = false,
+  runTime,
   isConclusion = false,
   onEdit = true,
   onEditChange,
@@ -15,6 +17,8 @@ export default function ContextWithHelperText({
   title: string;
   children?: React.ReactNode;
   helperText: React.ReactNode;
+  isJobDetail?: boolean;
+  runTime?: number;
   isConclusion?: boolean; // for conclusion step
   onEdit?: boolean; // for conclusion step
   onEditChange?: () => void; // for conclusion step
@@ -46,6 +50,11 @@ export default function ContextWithHelperText({
               }
             }}
           />
+        )}
+        {isJobDetail && runTime && (
+          <div className="text-label font-light">
+            Run Time: {runTime} Minutes
+          </div>
         )}
       </div>
       <hr />
