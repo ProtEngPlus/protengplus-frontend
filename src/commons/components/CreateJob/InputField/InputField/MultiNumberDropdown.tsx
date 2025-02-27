@@ -24,7 +24,6 @@ export default function MultiNumberDropdown({
   additionalValidation,
   onEdit = true,
   onChange,
-  formatInput = 2,
 }: DropdownProps) {
   const {
     register,
