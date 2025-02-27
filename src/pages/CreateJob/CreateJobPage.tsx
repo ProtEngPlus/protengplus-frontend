@@ -95,7 +95,7 @@ export default function CreateJobPage() {
     setStep(step - 1);
   };
   const changeStep = (nextStep: number) => {
-    handleSubmit((data: any) => {
+    handleSubmit(() => {
       if (nextStep <= stepsForCreateJob.length) {
         setStep(nextStep);
       }
