@@ -892,7 +892,9 @@ export default function ReportPDF({ jobData }: { jobData: ReportInterface }) {
       i += labResultPerPage
     ) {
       paginatedLabResults.push({
-        scores: jobData.lab_result.scores.slice(i, i + labResultPerPage),
+        scores: jobData.lab_result.scores
+          .slice(i, i + labResultPerPage)
+          .map((score) => Number(score.toFixed(3))),
         sequences: jobData.lab_result.sequences.slice(i, i + labResultPerPage),
       });
     }
@@ -901,7 +903,21 @@ export default function ReportPDF({ jobData }: { jobData: ReportInterface }) {
     const paginatedQueryResults: Record<string, any>[] = [];
     for (let i = 0; i < queryResultData.length; i += queryResultPerPage) {
       paginatedQueryResults.push({
-        queryResult: queryResultData.slice(i, i + queryResultPerPage),
+        queryResult: queryResultData
+          .slice(i, i + queryResultPerPage)
+          .map((result) => {
+            return {
+              ...result,
+              acc_len: Number(result.acc_len.toFixed(3)),
+              e_values: Number(result.e_values.toFixed(3)),
+              hsp_query_from: Number(result.hsp_query_from.toFixed(3)),
+              hsp_query_to: Number(result.hsp_query_to.toFixed(3)),
+              max_score: Number(result.max_score.toFixed(3)),
+              percent_identity: Number(result.percent_identity.toFixed(3)),
+              query_cover: Number(result.query_cover.toFixed(3)),
+              score: Number(result.score.toFixed(3)),
+            };
+          }),
       });
     }
     setPaginatedQueryResults(paginatedQueryResults);
@@ -913,7 +929,7 @@ export default function ReportPDF({ jobData }: { jobData: ReportInterface }) {
     if (queryResultData.length > 0) {
       pageCount += paginatedQueryResults.length;
     }
-    if (jobData.run_time!.mutation) {
+    if (jobData.run_time?.mutation) {
       pageCount++;
     }
 
