@@ -15,6 +15,7 @@ import {
 import { deleteJob, runJob } from "../../../../commons/api/job";
 import Stepper from "./Stepper";
 import { useNavigate } from "react-router-dom";
+import { getTotalTime } from "../../service/getTotalTime";
 
 const headers = [
   "Job Name",
@@ -186,9 +187,12 @@ export default function JobTable({
                     </td>
                     <td className="px-3 py-3 text-center">
                       <JobState state={job.state} className="mx-auto" />
-                      {/* {job. && (
-                        <label>Total Time: {job.totalTime} Min</label>
-                      )} */}
+                      {job.state === "COMPLETED" && job.complete_at && (
+                        <label>
+                          Total Time:{" "}
+                          {getTotalTime(job.created_at, job.complete_at)} Min
+                        </label>
+                      )}
                     </td>
                     <td className="place-items-center px-3 py-3">
                       <Stepper stageId={job.stage_id} state={job.state} />
