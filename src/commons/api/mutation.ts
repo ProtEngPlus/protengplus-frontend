@@ -6,6 +6,7 @@ import {
   Mutation,
   MutationHistogram,
   MutationResult,
+  MutationResultSearchParams,
   MutationSearchParams,
 } from "../interfaces/Mutation.interface";
 
@@ -31,7 +32,9 @@ export const getAllMutations = async (params: MutationSearchParams) => {
   return await get<Mutation[]>(path, true, params as Params);
 };
 
-export const getAllMutationResult = async (params: MutationSearchParams) => {
-  const path = BACKEND_BASE_URL + "/proteng-conductor/query_results";
-  return await get<MutationResult>(path, true, params as Params);
+export const getAllMutationResult = async (
+  params: MutationResultSearchParams
+) => {
+  const path = BACKEND_BASE_URL + "/proteng-conductor/mutations/results";
+  return await get<MutationResult[]>(path, true, params as Params);
 };
