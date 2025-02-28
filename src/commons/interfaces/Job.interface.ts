@@ -50,4 +50,6 @@ export interface JobInterface {
 export interface JobSearchParams {
   name?: string;
   state?: State | State[];
+  created_at_from?: string;
+  created_at_to?: string;
 }

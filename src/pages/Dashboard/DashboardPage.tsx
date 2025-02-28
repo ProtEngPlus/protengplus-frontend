@@ -43,6 +43,7 @@ export default function DashboardPage() {
     startDate: null,
     endDate: null,
   });
+
   // to refresh getJob
   const [fetchJob, setFetchJob] = useState(false);
   const refresh = () => {
@@ -66,6 +67,8 @@ export default function DashboardPage() {
     const params: JobSearchParams = {
       state: state.length === 0 ? allState : state,
       name: name,
+      created_at_from: date.startDate?.toISOString() ?? undefined,
+      created_at_to: date.endDate?.toISOString() ?? undefined,
     };
     getAllJobs(params)
       .then((response) => {
@@ -75,7 +78,7 @@ export default function DashboardPage() {
         console.error(error);
       });
     setFetchJob(false);
-  }, [state, name, fetchJob]);
+  }, [state, name, fetchJob, date]);
 
   return (
     <div className="space-y-[3%] py-5">
