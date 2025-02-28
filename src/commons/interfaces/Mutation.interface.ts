@@ -40,23 +40,23 @@ export interface Result {
 }
 
 export interface MutationResultSearchParams {
+  mutation_id?: string;
   job_id?: string;
-  is_selected?: boolean;
-  organisms?: string;
-  percent_identity_from?: number;
-  percent_identity_to?: number;
-  e_values_from?: number;
-  e_values_to?: number;
-  query_cover_from?: number;
-  query_cover_to?: number;
+  is_bookmark?: boolean;
   sort?: string;
-  order?: Order;
+  min_value?: boolean;
+  max_value?: boolean;
 }
 
 export interface MutationResult {
-  input_protein: string;
+  assay_score: number;
+  id: string;
+  is_bookmark: boolean;
+  mutation_id: string;
+  mutation_positions: null;
+  protein_sequence: string;
+  user_id: string;
   job_id: string;
-  result: Result[];
 }
 
 export interface MutationSearchParams {
