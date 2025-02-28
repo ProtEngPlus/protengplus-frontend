@@ -213,6 +213,7 @@ const MutationResultTable = ({
                   onClick={() => handleViewSequence(result.protein_sequence)}
                 >
                   <span className="text-pep-blue underline">View Sequence</span>
+                  <Icon icon="carbon:view" className="size-5 text-pep-blue" />
                 </button>
               </td>
             </tr>
