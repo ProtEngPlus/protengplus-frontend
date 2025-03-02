@@ -27,6 +27,8 @@ import {
   DeleteOverlay,
   DeleteOverlayProps,
 } from "../../commons/components/ModalOverlay/DeleteOverlay";
+import MutationResults from "./components/MutationResults/MutationResults";
+import { defaultPipeline } from "../../commons/configs/createJobConfig";
 
 export default function JobDetailPage() {
   const navigate = useNavigate();
@@ -322,7 +324,12 @@ export default function JobDetailPage() {
               role="tabpanel"
               aria-labelledby="mutaion-results-tab"
             >
-              <div>Mutation</div>
+              <MutationResults
+                jobid={job.id}
+                inputProtein={job.input_protein}
+                currentStep={job.stage_id}
+                pipeline={defaultPipeline}
+              />
             </div>
           </div>
         </div>
