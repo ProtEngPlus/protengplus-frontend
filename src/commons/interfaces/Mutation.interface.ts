@@ -28,3 +28,8 @@ export interface CreateMutationInterface {
     options: Record<string, OptionValue>;
     tool: string,
 }
+
+export interface MutationSearchParams {
+่    job_id?: string,
+    is_bookmark?: boolean,
+}

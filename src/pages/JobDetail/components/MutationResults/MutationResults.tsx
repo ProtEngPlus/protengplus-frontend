@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { CreateMutationInterface, MutationHistogram } from "../../../../commons/interfaces/Mutation.interface";
-import { createMutation, getMutationHistogram } from "../../../../commons/api/mutation";
+import { CreateMutationInterface, Mutation, MutationHistogram, MutationSearchParams } from "../../../../commons/interfaces/Mutation.interface";
+import { createMutation, getAllMutations, getMutationHistogram } from "../../../../commons/api/mutation";
 import FitnessDistributionChartData from "./FitnessDistributionChart";
 import Button from "../../../../commons/components/Button/Button";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -11,6 +11,8 @@ import {
 import { PipelineItem } from "../../../../commons/interfaces/CreateJob.interface";
 import { useFormContext } from "react-hook-form";
 import { createJobConfig } from "../../../../commons/configs/createJobConfig";
+import MutationTable from "./MutationTable";
+import MutationParameterSetup from "../../../../commons/components/Mutation/MutationParameterSetup/MutationParameterSetup";
 
 export default function MutationResults({
     jobid,
@@ -24,7 +26,18 @@ export default function MutationResults({
     pipeline: PipelineItem[],
 }) {
     const { watch } = useFormContext();
+    const chartLabels = ["-2.0", "-1.9", "-1.8", "-1.7", "-1.6", "-1.5", "-1.4", "-1.3", "-1.2", "-1.1", "-1.0", "-0.9", "-0.8", "-0.7", "-0.6", "-0.5", "-0.4", "-0.3", "-0.2", "-0.1", "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9"];
+    const [chartSeries, setChartSeries] = useState<MutationHistogram[]>([]);
+    const [mutations, setMutations] = useState<Mutation[]>([]);
+    const [currentMutation, setCurrentMutation] = useState<Mutation | null>(null);
+    const [fetchMutation, setFetchMutation] = useState(false);
     const [isNewMutationVisible, setIsNewMutationVisible] = useState(false);
+    const [isBookmarkOnly, setIsBookmarkOnly] = useState(false);
+
+    const refresh = () => {
+        setFetchMutation(true);
+    };
+
     const NewMutationProps: NewMutationProps = {
         onClose: () => {
             setIsNewMutationVisible(false);
@@ -65,11 +78,9 @@ export default function MutationResults({
         }
     };
 
-    const chartLabels = ["-2.0", "-1.9", "-1.8", "-1.7", "-1.6", "-1.5", "-1.4", "-1.3", "-1.2", "-1.1", "-1.0", "-0.9", "-0.8", "-0.7", "-0.6", "-0.5", "-0.4", "-0.3", "-0.2", "-0.1", "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9"];
-    const [chartSeries, setChartSeries] = useState<MutationHistogram[]>([]);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchChartData = async () => {
             // Call the API to get FitnessDistributionChart data
             if (jobid) {
                 const { data } = await getMutationHistogram(jobid);
@@ -78,8 +89,21 @@ export default function MutationResults({
                 }
             }
         };
-        fetchData();
+        fetchChartData();
     }, []);
+
+    useEffect(() => {
+        const params: MutationSearchParams = isBookmarkOnly
+            ? { job_id: jobid, is_bookmark: true }
+            : { job_id: jobid };
+
+        getAllMutations(params)
+            .then((response) => setMutations(response.data || []))
+            .catch(console.error);
+
+        setFetchMutation(false);
+        setCurrentMutation(null);
+    }, [fetchMutation, isBookmarkOnly]);
 
     return (
         <div>
@@ -107,6 +131,23 @@ export default function MutationResults({
                     <hr />
 
                     <FitnessDistributionChartData chartLabels={chartLabels} chartSeries={chartSeries} />
+
+
+                    <div className="flex justify-start items-center py-2">
+                        <div className="flex items-center gap-3">
+                            <input type="checkbox" className="w-5 h-5 rounded-md border-pep-blue border" checked={isBookmarkOnly} onChange={() => setIsBookmarkOnly((prev) => !prev)} />
+                            <div className="text-md font-normal text-gray-500">show bookmark only</div>
+                        </div>
+                    </div>
+
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <MutationTable mutations={mutations} refresh={refresh} currentMutation={currentMutation} setCurrentMutation={setCurrentMutation} />
+
+                        {currentMutation &&
+                            <MutationParameterSetup mutation={currentMutation} />
+                        }
+                    </div>
                 </div>
             </div>
         </div>
