@@ -32,6 +32,6 @@ export interface CreateMutationInterface {
 }
 
 export interface MutationSearchParams {
-่    job_id?: string,
+    job_id?: string,
     is_bookmark?: boolean,
 }
