@@ -62,7 +62,24 @@ export interface JobOption {
 
 export interface JobConfiguration {
   state: State;
+  stage_id: number;
   id: string;
+  user_id: string;
+  ref_job_id: string;
+  name: string;
+  description: string;
+  input_protein: string;
+  meta: string[];
+  lab_result: LabResult;
+  options: Record<string, Record<string, OptionValue>>;
+  is_notification_on: boolean;
+  run_type: RunType;
+  artifact: Record<string, object>;
+}
+
+export interface CreateJobConfiguration {
+  state: State;
+  stage_id: number;
   user_id: string;
   ref_job_id: string;
   name: string;
