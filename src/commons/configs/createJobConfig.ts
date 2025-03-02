@@ -51,6 +51,11 @@ export const formatInput: Record<
         helperText: "space-y-5 w-fit",
         insideHelperText: () => "grid grid-cols-[1fr,4fr] space-x-3 text-start",
     },
+    4: {
+        input: "flex flex-col gap-y-4",
+        helperText: "space-y-5 w-fit",
+        insideHelperText: () => "grid grid-cols-[1fr,2fr] space-x-3 text-start",
+    },
 };
 
 export interface CreateJobConfig {
