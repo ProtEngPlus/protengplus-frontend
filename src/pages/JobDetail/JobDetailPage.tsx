@@ -123,7 +123,7 @@ export default function JobDetailPage() {
         setIsDeleteSuccessVisible(true);
       }
     },
-    title: "Do you want to delete this mutate collection ?",
+    title: "Do you want to delete this mutate collection?",
     children: (
       <div className="text-center flex flex-col font-light">
         <label>Collection name: {job?.name}</label>
@@ -204,11 +204,10 @@ export default function JobDetailPage() {
               <div className="flex space-x-1 items-center">
                 <Icon
                   icon="ic:round-refresh"
-                  className={`size-7 ${
-                    job.state === "FAILED"
-                      ? "text-pep-gray cursor-pointer"
-                      : "text-pep-gray-border cursor-not-allowed"
-                  }`}
+                  className={`size-7 ${job.state === "FAILED"
+                    ? "text-pep-gray cursor-pointer"
+                    : "text-pep-gray-border cursor-not-allowed"
+                    }`}
                   onClick={() => {
                     job.state === "FAILED" && handleRunJob();
                   }}
@@ -315,7 +314,7 @@ export default function JobDetailPage() {
             >
               <LabInput
                 id={job.id}
-                disable={job.state == "ONGOING" || job.stage_id > 2}
+                disable={job.state === "ONGOING" || job.stage_id > 2}
               />
             </div>
             <div
