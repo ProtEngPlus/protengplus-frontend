@@ -207,7 +207,7 @@ export default function UploadLabInput({
       />
       <div className="space-y-11 rounded-lg border border-pep-gray-border px-6 py-8">
         {/*------------------------------------ Lab Input Template ----------------------------------*/}
-        {labResultForm.length == 0 && (
+        {labResultForm.length === 0 && (
           <div className="space-y-6 font-light">
             <div className="flex border-l-4 border-pep-orange px-6 text-xl">
               Lab Input Template
@@ -237,9 +237,8 @@ export default function UploadLabInput({
             Upload Lab Input
             <Icon
               icon="material-symbols:info-outline"
-              className={`size-8 cursor-pointer ${
-                isRead ? "text-pep-blue" : "text-pep-gray"
-              }
+              className={`size-8 cursor-pointer ${isRead ? "text-pep-blue" : "text-pep-gray"
+                }
            
             `}
               onClick={() => setRead(!isRead)}
@@ -248,11 +247,10 @@ export default function UploadLabInput({
           <hr />
           <div className="relative space-y-8">
             <div
-              className={`flex space-x-5  ${
-                !isError.isValidate || labResultForm.length == 0
+              className={`flex space-x-5  ${!isError.isValidate || labResultForm.length === 0
                   ? "justify-between items-center"
                   : "justify-end"
-              }`}
+                }`}
             >
               {!isError.isValidate ? (
                 <div className="text-error flex flex-row items-center space-x-[10px]">

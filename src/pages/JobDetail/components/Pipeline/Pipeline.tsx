@@ -213,9 +213,8 @@ export default function Pipeline({
                   ? "carbon:notification-filled"
                   : "carbon:notification-off-filled"
               }
-              className={` cursor-pointer size-[30px] ${
-                isNotificationOn ? "text-pep-orange" : "text-error"
-              }`}
+              className={` cursor-pointer size-[30px] ${isNotificationOn ? "text-pep-orange" : "text-error"
+                }`}
               onClick={() => setValue("is_notification_on", !isNotificationOn)}
             />
             <div className="flex space-x-2 items-center">
@@ -229,9 +228,8 @@ export default function Pipeline({
               >
                 <Icon
                   icon="fa-solid:running"
-                  className={`w-[20px] h-[25px] ${
-                    runType === "auto" ? "text-white" : "text-pep-gray"
-                  }`}
+                  className={`w-[20px] h-[25px] ${runType === "auto" ? "text-white" : "text-pep-gray"
+                    }`}
                 />
               </Button>
               <Button
@@ -244,9 +242,8 @@ export default function Pipeline({
               >
                 <Icon
                   icon="ic:baseline-checklist-rtl"
-                  className={`size-[20px] ${
-                    runType === "one-step" ? "text-white" : "text-pep-gray"
-                  }`}
+                  className={`size-[20px] ${runType === "one-step" ? "text-white" : "text-pep-gray"
+                    }`}
                 />
               </Button>
             </div>
@@ -278,11 +275,10 @@ export default function Pipeline({
                 </li>
                 <li
                   key="save-config"
-                  className={`px-5 py-2 font-light text-label ${
-                    job.state === "COMPLETED"
+                  className={`px-5 py-2 font-light text-label ${job.state === "COMPLETED"
                       ? "cursor-pointer hover:text-pep-blue hover:bg-pep-blue-light"
                       : "cursor-not-allowed"
-                  }`}
+                    }`}
                   onClick={() => {
                     if (isEditPipeline) {
                       setIsOpen(false);
@@ -313,7 +309,7 @@ export default function Pipeline({
           />
         </div>
         <div className="rounded-lg border border-pep-gray-border px-6 py-8">
-          {currentStep == 0 && (
+          {currentStep === 0 && (
             <ProteinQuery
               isEdit={isEditPipeline}
               currentStep={currentStep}
@@ -329,7 +325,7 @@ export default function Pipeline({
               setPipeline={setPipeline}
             />
           )}
-          {currentStep == 1 && (
+          {currentStep === 1 && (
             <ProteinRepresentation
               isEdit={isEditPipeline}
               currentStep={currentStep}
@@ -344,7 +340,7 @@ export default function Pipeline({
               setPipeline={setPipeline}
             />
           )}
-          {currentStep == 2 && (
+          {currentStep === 2 && (
             <TopModel
               isEdit={isEditPipeline}
               currentStep={currentStep}
@@ -359,7 +355,7 @@ export default function Pipeline({
               setPipeline={setPipeline}
             />
           )}
-          {currentStep == 3 && (
+          {currentStep === 3 && (
             <Mutation
               isEdit={isEditPipeline}
               currentStep={currentStep}

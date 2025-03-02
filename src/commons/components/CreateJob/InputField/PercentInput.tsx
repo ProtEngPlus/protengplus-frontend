@@ -1,8 +1,8 @@
-import { ValidationProps } from "../../../Input/InputPropsType";
+import { ValidationProps } from "../../Input/InputPropsType";
 import { NumberInputProps } from "./NumberInput";
 import { useFormContext } from "react-hook-form";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Icon } from "@iconify/react";
 
 export type RangeNumberInputProps = {
@@ -13,7 +13,6 @@ export type RangeNumberInputProps = {
   disabled?: boolean;
   additionalValidation?: Record<string, ValidationProps>;
   onEdit?: boolean;
-  formatInput?: number;
 };
 
 export default function PercentInput({
@@ -24,7 +23,6 @@ export default function PercentInput({
   disabled,
   additionalValidation,
   onEdit = true,
-  formatInput = 2,
 }: NumberInputProps) {
   const {
     register,
@@ -33,12 +31,8 @@ export default function PercentInput({
     watch,
   } = useFormContext();
 
-  useEffect(() => {
-    setValue(id, defaultValue);
-  }, []);
-
   const currentValue = (() => {
-    const watchedValue = parseFloat(watch(id)) ?? defaultValue;
+    const watchedValue = parseFloat(watch(id));
     if (!isNaN(watchedValue)) return watchedValue;
     return defaultValue ?? 0;
   })();
@@ -68,8 +62,8 @@ export default function PercentInput({
       !inputValue.includes(".")
     ) {
       inputValue = inputValue.slice(0, 2) + "." + inputValue.slice(2, 3);
-    } else if (inputValue.length === 5) {
-      if (inputValue.indexOf(".") === 1)
+    } else if (inputValue.length == 5) {
+      if (inputValue.indexOf(".") == 1)
         inputValue =
           inputValue.slice(0, 1) +
           inputValue.slice(2, 3) +
@@ -132,16 +126,7 @@ export default function PercentInput({
   };
 
   return (
-    <div
-      className={`
-        ${formatInput === 1
-          ? "grid grid-cols-2 w-[22%] place-items-start"
-          : formatInput === 2
-            ? "flex flex-row justify-between max-w-[1000px]"
-            : "grid grid-cols-[1fr,4fr] max-w-[1000px]"
-        }
-         min-w-fit space-x-3 items-center`}
-    >
+    <div className="w-[22%] min-w-fit flex flex-row justify-between space-x-3 text-center items-center">
       <label className="font-light">{label}:</label>
       {!onEdit ? (
         <div className="w-24 text-start">{localValue}</div>

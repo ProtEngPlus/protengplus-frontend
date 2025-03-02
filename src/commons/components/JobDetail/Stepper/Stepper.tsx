@@ -16,7 +16,7 @@ export default function Stepper({
   handleChange: () => boolean;
 }) {
   const handleStepStyle = (n: number) => {
-    if (state == "COMPLETED")
+    if (state === "COMPLETED")
       return "bg-pep-gray text-white border-pep-gray-border";
     if (n < stageId) return "bg-pep-green text-white border-pep-gray-border";
     if (n === stageId) {
@@ -50,7 +50,7 @@ export default function Stepper({
     <div className="flex space-x-10 mb-5 place-items-center">
       <img
         src={previousButton}
-        alt="previos"
+        alt="previous"
         onClick={() =>
           handleChange() && currentStep > 0 && setCurrentStep(currentStep - 1)
         }
@@ -60,21 +60,19 @@ export default function Stepper({
         {Steps.map((step, index) => (
           <li
             key={index}
-            className={`${
-              index < Steps.length - 1
-                ? "flex w-full relative text-black after:content-[''] after:w-full after:h-0.5 after:inline-block after:absolute lg:after:top-5 after:top-3 after:left-10"
-                : "flex relative text-gray-900"
-            } ${
-              index < currentStep
+            className={`${index < Steps.length - 1
+              ? "flex w-full relative text-black after:content-[''] after:w-full after:h-0.5 after:inline-block after:absolute lg:after:top-5 after:top-3 after:left-10"
+              : "flex relative text-gray-900"
+              } ${index < currentStep
                 ? "after:bg-pep-blue"
                 : "after:bg-pep-gray-border"
-            }`}
+              }`}
           >
             <div className="block whitespace-nowrap z-10">
               <span
                 className={`w-6 h-6 border-2 rounded-full flex justify-center items-center mx-auto mb-3 text-sm lg:w-10 lg:h-10 cursor-pointer 
                     ${handleStepStyle(index)}
-                    ${currentStep == index && "!border-pep-blue"}
+                    ${currentStep === index && "!border-pep-blue"}
                     
                 `}
                 onClick={() => handleChange() && setCurrentStep(index)}

@@ -53,7 +53,7 @@ export const deleteJob = async (id: string) => {
 
 export const runJob = async (id: string) => {
   const path = JOB_PATH + `/${id}/run`;
-  return await post(path, true);
+  return await post(path, null, true);
 };
 
 export const createJobConfiguration = async (job: CreateJobConfiguration) => {
