@@ -1,5 +1,7 @@
 import { OptionValue } from "./Job.interface";
 
+export type MutationStateType = "PENDING" | "ONGOING" | "FAILED" | "COMPLETED";
+
 export interface MutationHistogram {
     name: string,
     data: number[]

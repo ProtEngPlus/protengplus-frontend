@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mutation } from "../../../../commons/interfaces/Mutation.interface";
+import { Mutation, MutationStateType } from "../../../../commons/interfaces/Mutation.interface";
 import {
     DeleteOverlay,
     DeleteOverlayProps,
@@ -9,6 +9,8 @@ import { deleteMutation, runMutation, updateMutationDetail } from "../../../../c
 import { useNavigate } from "react-router-dom";
 import editIcon from "../../../../assets/images/CreateJob/editIcon.svg";
 import { RenameMutationOverlay, RenameMutationProps } from "../Overlay/RenameMutationOverlay";
+import MutationState from "../../../../commons/components/Mutation/MutationState/MutationState";
+import { getTotalTime } from "../../../Dashboard/service/getTotalTime";
 
 const headers = [
     "Collection Name",
@@ -86,6 +88,11 @@ export default function MutationTable({
         refresh();
     };
 
+    const handleBookmark = async (mutation: Mutation) => {
+        await updateMutationDetail(mutation.id, { is_bookmark: !mutation.is_bookmark });
+        refresh();
+    };
+
     return (
         <div>
             <DeleteOverlay isVisible={isDeleteVisible} deleteProps={DeleteProps} />
@@ -105,7 +112,7 @@ export default function MutationTable({
                     {/* Mutation Table */}
                     <div className="overflow-auto rounded-xl border border-[#DFE4EA] shadow-table w-full max-h-[500px] overflow-y-scroll">
                         <table className="w-full text-xs text-left rtl:text-right">
-                            <thead className="leading-6 bg-[#F9FAFB] text-left border-b sticky top-0 h-[60px]">
+                            <thead className="leading-6 bg-[#F9FAFB] text-left border-b sticky top-0 h-[60px] z-20">
                                 <tr>
                                     <th
                                         className="font-normal px-6 py-3 text-base"
@@ -132,16 +139,20 @@ export default function MutationTable({
                                     >
                                         <td className="px-3 py-3 place-items-center">
                                             <div className="flex space-x-4 items-center">
-                                                <Icon
-                                                    icon="ic:round-refresh"
-                                                    className={`size-7 ${mutation.state === "FAILED"
-                                                        ? "text-pep-gray cursor-pointer"
-                                                        : "text-pep-gray-border cursor-not-allowed"
-                                                        }`}
-                                                    onClick={() => {
-                                                        mutation.state === "FAILED" && handleRunMutation(mutation);
-                                                    }}
-                                                />
+                                                {mutation.is_bookmark ?
+                                                    <Icon
+                                                        icon="fa-solid:bookmark"
+                                                        className={`text-pep-orange text-xl`}
+                                                        onClick={() => {
+                                                            handleBookmark(mutation);
+                                                        }} /> :
+                                                    <Icon
+                                                        icon="cil:bookmark"
+                                                        className={`text-pep-orange text-xl`}
+                                                        onClick={() => {
+                                                            handleBookmark(mutation);
+                                                        }} />}
+
                                                 <img
                                                     src={editIcon}
                                                     alt="edit"
@@ -161,10 +172,13 @@ export default function MutationTable({
                                             </label>
                                         </td>
                                         <td className="px-3 py-3 text-center">
-                                            {/* <MutationState state={mutation.state} className="mx-auto" /> */}
-                                            {/* {mutation. && (
-                        <label>Total Time: {mutation.totalTime} Min</label>
-                      )} */}
+                                            <MutationState state={mutation.state as MutationStateType} className="mx-auto" />
+                                            {mutation.state === "COMPLETED" && mutation.complete_at && (
+                                                <label>
+                                                    Total Time:{" "}
+                                                    {getTotalTime(mutation.created_at, mutation.complete_at)} Min
+                                                </label>
+                                            )}
                                         </td>
                                         <td className="px-3 py-3 place-items-center">
                                             <div className="flex space-x-4 items-center">
