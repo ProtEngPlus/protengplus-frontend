@@ -36,7 +36,7 @@ export default function FitnessDistributionChartData({
                 enabled: false,
             },
         },
-        colors: ["#76C280", "#F58634", "#2578D3"],
+        colors: ["#2578D3", "#76C280", "#F58634"],
         plotOptions: {
             bar: {
                 horizontal: false,

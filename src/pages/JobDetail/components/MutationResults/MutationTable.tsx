@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { Mutation, MutationStateType } from "../../../../commons/interfaces/Mutation.interface";
-import {
-    DeleteOverlay,
-    DeleteOverlayProps,
-} from "../../../../commons/components/ModalOverlay/DeleteOverlay";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { deleteMutation, runMutation, updateMutationDetail } from "../../../../commons/api/mutation";
-import { useNavigate } from "react-router-dom";
+import { updateMutationDetail } from "../../../../commons/api/mutation";
 import editIcon from "../../../../assets/images/CreateJob/editIcon.svg";
 import { RenameMutationOverlay, RenameMutationProps } from "../Overlay/RenameMutationOverlay";
 import MutationState from "../../../../commons/components/Mutation/MutationState/MutationState";
@@ -22,15 +17,19 @@ export default function MutationTable({
     refresh,
     currentMutation,
     setCurrentMutation,
+    setIsSelectCollection,
+    handleRunMutation,
+    handleDelete,
+
 }: {
     mutations: Mutation[];
     refresh: () => void;
     currentMutation: Mutation | null;
     setCurrentMutation: (mutation: Mutation) => void;
+    setIsSelectCollection: (value: boolean) => void;
+    handleRunMutation: (mutation: Mutation) => void;
+    handleDelete: (mutation: Mutation) => void;
 }) {
-    const navigate = useNavigate();
-    const [isDeleteVisible, setDeleteVisible] = useState(false);
-
     const [isRenameMutationVisible, setIsRenameMutationVisible] = useState(false);
 
     const handleRename = (mutation: Mutation) => {
@@ -54,48 +53,18 @@ export default function MutationTable({
         }
     };
 
-    const handleDelete = (mutation: Mutation) => {
-        setCurrentMutation(mutation);
-        setDeleteVisible(true);
-    };
-    const DeleteProps: DeleteOverlayProps = {
-        id: "delete-job",
-        onClose: () => {
-            setDeleteVisible(false);
-        },
-        onDelete: async () => {
-            if (currentMutation) {
-                await deleteMutation(currentMutation.id);
-            }
-            setDeleteVisible(false);
-            refresh();
-        },
-        title: "Do you want to delete this mutation collection?",
-        children: (
-            <div className="flex flex-col font-light mt-4 gap-y-2">
-                <label>
-                    Collection name: {currentMutation?.name} <br />
-                </label>
-                <label className="text-red-500">
-                    Delete the mutate will delete all this mutate's bookmark
-                </label>
-            </div>
-        ),
-    };
-
-    const handleRunMutation = async (mutation: Mutation) => {
-        await runMutation(mutation.id);
-        refresh();
-    };
-
     const handleBookmark = async (mutation: Mutation) => {
         await updateMutationDetail(mutation.id, { is_bookmark: !mutation.is_bookmark });
         refresh();
     };
 
+    const handleSelectMutation = (mutation: Mutation) => {
+        setCurrentMutation(mutation);
+        setIsSelectCollection(true);
+    }
+
     return (
         <div>
-            <DeleteOverlay isVisible={isDeleteVisible} deleteProps={DeleteProps} />
             <RenameMutationOverlay
                 renameMutationProps={renameMutationProps}
                 isVisible={isRenameMutationVisible}
@@ -165,7 +134,7 @@ export default function MutationTable({
                                             <label
                                                 className="truncate text-blue-500 font-normal text-sm leading-5 underline cursor-pointer"
                                                 onClick={() =>
-                                                    navigate(`/dashboard/job-detail/${mutation.id}`)
+                                                    handleSelectMutation(mutation)
                                                 }
                                             >
                                                 {mutation.name}
@@ -205,7 +174,6 @@ export default function MutationTable({
                         </table>
                     </div>
                 </div>
-
             )}
         </div>
     );
