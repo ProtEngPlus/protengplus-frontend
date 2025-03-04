@@ -10,7 +10,7 @@ export default function CreateJob({
 }) {
   return (
     <div className="h-full place-content-center">
-      <div className="p-16 rounded-lg border border-pep-gray-border place-self-center space-y-16">
+      <div className="p-16 rounded-lg border border-pep-gray-border place-self-center space-y-16 w-fit mx-auto">
         <h1 className="text-pep-blue text-4xl leading-8 text-center">
           Create Job
         </h1>

@@ -237,8 +237,9 @@ export default function UploadLabInput({
             Upload Lab Input
             <Icon
               icon="material-symbols:info-outline"
-              className={`size-8 cursor-pointer ${isRead ? "text-pep-blue" : "text-pep-gray"
-                }
+              className={`size-8 cursor-pointer ${
+                isRead ? "text-pep-blue" : "text-pep-gray"
+              }
            
             `}
               onClick={() => setRead(!isRead)}
@@ -247,10 +248,11 @@ export default function UploadLabInput({
           <hr />
           <div className="relative space-y-8">
             <div
-              className={`flex space-x-5  ${!isError.isValidate || labResultForm.length === 0
+              className={`flex space-x-5  ${
+                !isError.isValidate || labResultForm.length === 0
                   ? "justify-between items-center"
                   : "justify-end"
-                }`}
+              }`}
             >
               {!isError.isValidate ? (
                 <div className="text-error flex flex-row items-center space-x-[10px]">
@@ -311,7 +313,7 @@ export default function UploadLabInput({
           <div className="relative rounded-lg bg-pep-blue-light place-items-center">
             {/*----------------------------------- Lab Input Table --------------------------------------------*/}
             {labResultForm.length > 0 && (
-              <div className="w-[738px] space-y-8 p-5 min-w-fit">
+              <div className="w-[738px] space-y-8 p-5 min-w-fit mx-auto">
                 <div className="flex space-x-2 text-start">
                   <span className="text-pep-dark-gray font-normal">Total:</span>
                   <span className="font-light text-pep-blue">
