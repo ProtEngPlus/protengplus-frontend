@@ -58,7 +58,7 @@ export function DeleteOverlay({
             <h1 className="leading-loose">{title}</h1>
             {children}
           </div>
-          <div className="flex flex-row space-x-4">
+          <div className="flex flex-row space-x-4 place-content-center">
             <Button
               id="cancel"
               buttonType="cancel"

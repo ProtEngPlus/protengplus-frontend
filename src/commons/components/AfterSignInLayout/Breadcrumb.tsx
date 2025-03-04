@@ -20,6 +20,7 @@ export default function Breadcrumb() {
   const pathArray = pathNameArray.reduce((acc, path) => {
     const newPath =
       acc.length > 0 ? acc[acc.length - 1]?.path + "/" + path : "/" + path;
+    if(!nameMapping[path]) return acc;
     acc.push({ name: nameMapping[path] || path, path: newPath });
     return acc;
   }, [] as PathInfo[]);

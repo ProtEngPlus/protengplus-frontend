@@ -3,7 +3,10 @@ export function getTotalTime(startTime: string, endTime: string): number {
   const end = new Date(endTime);
 
   // Time diff in minutes
-  const totalTime = Math.floor((end.getTime() - start.getTime()) / 60000);
+  const totalTime = Math.max(
+    0,
+    Math.floor((end.getTime() - start.getTime()) / 60000)
+  );
 
   return totalTime;
 }

@@ -57,7 +57,7 @@ export function ConfirmOverlay({
             <div className="bg-pep-blue rounded-md w-[90px] h-[3px] mx-auto mb-6" />
             <label className="font-light text-sm leading-6">{message}</label>
           </div>
-          <div className="flex flex-row justify-between space-x-4">
+          <div className="flex flex-row space-x-4 place-content-center">
             <Button
               id="cancel"
               type="button"

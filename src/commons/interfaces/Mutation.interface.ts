@@ -1,5 +1,7 @@
 import { OptionValue, Order, State } from "./Job.interface";
 
+export type MutationStateType = "PENDING" | "ONGOING" | "FAILED" | "COMPLETED";
+
 export interface MutationHistogram {
   name: string;
   data: number[];
@@ -25,10 +27,7 @@ export interface Mutation {
 
 export interface MutationSearchParams {
   job_id?: string;
-  name?: string;
   is_bookmark?: boolean;
-  sort?: string;
-  order?: Order;
 }
 
 export interface MutationResult {
@@ -46,7 +45,15 @@ export interface MutationResultSearchParams {
   mutation_id?: string;
   job_id?: string;
   is_bookmark?: boolean;
-  sort?: string;
+  sort?: Order;
   min_value?: boolean;
   max_value?: boolean;
+}
+
+export interface CreateMutationInterface {
+  name: string;
+  job_id: string;
+  input_protein: string;
+  options: Record<string, OptionValue>;
+  tool: string;
 }
