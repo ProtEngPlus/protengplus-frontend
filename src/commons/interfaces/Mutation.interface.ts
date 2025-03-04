@@ -1,4 +1,4 @@
-import { Order, State } from "./Job.interface";
+import { OptionValue, Order, State } from "./Job.interface";
 
 export interface MutationHistogram {
   name: string;
@@ -6,37 +6,40 @@ export interface MutationHistogram {
 }
 
 export interface Mutation {
-  id: string;
-  name: string;
-  job_name: string;
-  job_id: string;
-  run_id: string;
-  input_protein: string;
-  options: string;
-  tool: string;
-  state: State;
-  is_bookmark: boolean;
-  user_id: string;
-  histogram_data: number[];
-  created_at: string;
   complete_at: string;
+  created_at: string;
+  histogram_data: number[];
+  id: string;
+  input_protein: string;
+  is_bookmark: boolean;
+  job_id: string;
+  name: string;
+  options: Record<string, OptionValue>;
+  state: State;
+  tool: string;
+  run_id: number;
+  user_id: string;
+  job_description: string;
+  job_name: string;
 }
 
-export interface Result {
-  acc_len: number;
-  accession: string;
-  description: string;
-  e_values: number;
-  hsp_query_from: number;
-  hsp_query_to: number;
+export interface MutationSearchParams {
+  job_id?: string;
+  name?: string;
+  is_bookmark?: boolean;
+  sort?: string;
+  order?: Order;
+}
+
+export interface MutationResult {
+  assay_score: number;
   id: string;
-  is_selected: boolean;
-  max_score: number;
-  organisms: string;
-  percent_identity: number;
-  query_cover: number;
-  score: number;
-  sequences: string;
+  is_bookmark: boolean;
+  job_id: string;
+  mutation_id: string;
+  mutation_positions: string[];
+  protein_sequence: string;
+  user_id: string;
 }
 
 export interface MutationResultSearchParams {
@@ -46,23 +49,4 @@ export interface MutationResultSearchParams {
   sort?: string;
   min_value?: boolean;
   max_value?: boolean;
-}
-
-export interface MutationResult {
-  assay_score: number;
-  id: string;
-  is_bookmark: boolean;
-  mutation_id: string;
-  mutation_positions: null;
-  protein_sequence: string;
-  user_id: string;
-  job_id: string;
-}
-
-export interface MutationSearchParams {
-  job_id?: string;
-  name?: string;
-  is_bookmark?: boolean;
-  sort?: string;
-  order?: Order;
 }

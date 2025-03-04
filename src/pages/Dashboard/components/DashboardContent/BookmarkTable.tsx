@@ -1,7 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import JobState from "../../../../commons/components/Job/JobState/JobState";
 import { useEffect, useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 import {
   Mutation,
@@ -30,7 +29,9 @@ export default function BookmarkTable() {
   useEffect(() => {
     const fetchMutations = async () => {
       try {
-        const data = await getAllMutations({ is_bookmark: true });
+        const data = await getAllMutations({
+          is_bookmark: true,
+        });
         if (data.data) {
           setMutations(data.data);
         }
@@ -202,8 +203,11 @@ const MutationResultTable = ({
         {mutationResult.length > 0 &&
           mutationResult.map((result, index) => (
             <tr key={index} className="bg-white border-b align-text-top">
-              <td colSpan={2} className="px-6 py-4 text-left">
-                xx
+              <td
+                colSpan={2}
+                className="px-6 py-4 text-left truncate max-w-[300px]"
+              >
+                {result.mutation_positions.join(", ")}
               </td>
               <td className="px-6 py-4 text-left">{result.assay_score}</td>
               <td className="px-5 place-items-center">
