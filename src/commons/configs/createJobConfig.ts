@@ -5,12 +5,15 @@ import { RunType } from "../interfaces/Job.interface";
 export const defaultCreateJobDetail: CreateJobDetail = {
     name: "",
     description: "",
-    input_protein: "",
+    input_protein: "BSIQHFHW",
     lab_result: [],
     run_type: "one-step",
     is_notification_on: true,
     artifact:null,
 }
+// default for inputProtein
+export const inputProteinProtSeq = "BSIQHFHW"
+export const inputProteinUniprotId = "P69905"
 
 // all pipelines
 export const Pipelines: PipelineItems[] = [
@@ -74,7 +77,7 @@ export interface CreateJobConfig {
 export interface MethodParameter {
     name: string;
     id: string;
-    type: "dropdown" | "string" | "number" | "rangeNumber" | "percent" | "multiNumberDropdown" | "boolean" | RunType
+    type: "dropdown" | "string" | "number" | "rangeNumber" | "percent" | "multiNumberDropdown" | "boolean" | RunType | "rangePercent"
     description: string;
     default?: string | number | number[] | boolean | RunType
     low?: number;
@@ -105,39 +108,30 @@ export const createJobConfig: CreateJobConfig = {
                 parameters:[
                     {
                         name: "Percent Identity",
-                        id: "prot_perc_ident",
-                        type: "rangeNumber",
+                        id: "percent_identity",
+                        type: "rangePercent",
                         description: "The minimum percentage of sequence identity in the database required for a match to the query sequence to be considered significant",
-                        low: 1,
-                        high: 2,
                         additionalValidation: {
-                            required: { value: true, message: "Percent Identity is required." },
                             min: { value: 0, message: "Percent Identity must be at least 0." },
                         },
                     },
                     {
                         name: "E Value",
-                        id: "prot_expect",
+                        id: "e_values",
                         type: "rangeNumber",
                         description:
                         "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match.",
-                        low: 1,
-                        high: 2,
                         additionalValidation: {
-                            required: { value: true, message: "E Value is required." },
                             min: { value: 0, message: "E Value must be at least 0." },
                         },
                     },
                     {
                         name: "Query Cover",
-                        id: "prot_query_cover",
-                        type: "rangeNumber",
+                        id: "query_cover",
+                        type: "rangePercent",
                         description:
                         "The percentage of the query sequence (your specimen) that overlaps with the database sequence",
-                        low: 1,
-                        high: 2,
                         additionalValidation: {
-                            required: { value: true, message: "Query Cover is required." },
                             min: { value: 0, message: "Query Cover must be at least 0." },
                         },
                     },
@@ -166,7 +160,7 @@ export const createJobConfig: CreateJobConfig = {
                         id: "database",
                         type: "dropdown",
                         description: "Database targeted for protein query",
-                        dropdownItems: ["nr","other"],
+                        dropdownItems: ["nr"],
                         default: "nr",
                         additionalValidation: {
                             required: { value: true, message: "Database is required." },
