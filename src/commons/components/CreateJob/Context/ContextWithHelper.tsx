@@ -18,7 +18,7 @@ export default function ContextWithHelperText({
   children?: React.ReactNode;
   helperText: React.ReactNode;
   isJobDetail?: boolean;
-  runTime?: number;
+  runTime?: string;
   isConclusion?: boolean; // for conclusion step
   onEdit?: boolean; // for conclusion step
   onEditChange?: () => void; // for conclusion step
@@ -28,7 +28,7 @@ export default function ContextWithHelperText({
 
   return (
     <div className="space-y-6 font-light">
-      <div className="w-[353px] min-w-fit flex justify-between border-l-4 border-pep-orange px-6 font-light text-xl gap-x-5">
+      <div className="min-w-fit flex border-l-4 border-pep-orange px-6 font-light text-xl gap-x-5">
         {title}
         <Icon
           icon="material-symbols:info-outline"
