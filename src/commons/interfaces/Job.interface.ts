@@ -41,7 +41,7 @@ export interface JobInterface {
   run_type: RunType;
   artifact: Record<string, object> | null;
   error_logs: string[];
-  run_time?: {};
+  run_time?: Record<string, { start_time: string; end_time: string }>;
   created_at: string;
   updated_at: string;
   complete_at?: string;
