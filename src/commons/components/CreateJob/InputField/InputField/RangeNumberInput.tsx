@@ -18,8 +18,8 @@ export type RangeNumberInputProps = {
 export default function RangeNumberInput({
   id,
   label,
-  defaultLow,
-  defaultHigh,
+  defaultLow = undefined,
+  defaultHigh = undefined,
   className,
   disabled,
   additionalValidation,
@@ -33,8 +33,8 @@ export default function RangeNumberInput({
     getValues,
   } = useFormContext();
   useEffect(() => {
-    setValue(`${id}_low`, defaultLow);
-    setValue(`${id}_high`, defaultHigh);
+    setValue(`${id}_low`, defaultLow || undefined);
+    setValue(`${id}_high`, defaultHigh || undefined);
   }, []);
   const currentValueLow = watch(`${id}_low`) ?? defaultLow;
   const currentValueHigh = watch(`${id}_high`) ?? defaultHigh;
@@ -52,7 +52,7 @@ export default function RangeNumberInput({
   const handleBlur = (field: string, defaultValue: number | undefined) => {
     const currentValue = parseFloat(getValues(field));
     if (isNaN(currentValue)) {
-      setValue(field, Number(defaultValue));
+      setValue(field, Number(defaultValue) || undefined);
     }
   };
 
@@ -70,17 +70,18 @@ export default function RangeNumberInput({
           <label className="font-light leading-loose">{label}</label>
           <div className="flex gap-3 items-center">
             {/*----------------------------------- Min Input ------------------------------------------*/}
+
             <div className="relative w-fit min-w-fit">
               <input
                 id={`${id}_low`}
                 type="text"
-                defaultValue={defaultLow}
+                defaultValue={defaultLow ?? ""}
                 {...register(`${id}_low`, {
                   ...(additionalValidation || {}),
                   onBlur: () => handleBlur(`${id}_low`, defaultLow),
                 })}
                 className={clsx(
-                  "h-[46px] w-[80px] p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
+                  "h-[40px] w-24 p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
                   {
                     "border-error": !!errors[`${id}_low`],
                     "border-gray-border": !errors[`${id}_low`],
@@ -112,11 +113,11 @@ export default function RangeNumberInput({
               <input
                 id={`${id}_high`}
                 type="text"
-                defaultValue={defaultHigh}
+                defaultValue={defaultHigh ?? ""}
                 {...register(`${id}_high`, {
                   ...(additionalValidation || {}),
                   validate: (value: string) => {
-                    const min = parseFloat(watch(`${id}_high`)) || 0;
+                    const min = parseFloat(watch(`${id}_low`)) || 0;
                     const max = parseFloat(value) || 0;
                     if (min > max) {
                       return "Max value should be greater than min value.";
@@ -126,7 +127,7 @@ export default function RangeNumberInput({
                   onBlur: () => handleBlur(`${id}_high`, defaultHigh),
                 })}
                 className={clsx(
-                  "h-[46px] w-[80px] p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
+                  "h-[40px] w-24 p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
                   {
                     "border-error": !!errors[`${id}_high`],
                     "border-gray-border": !errors[`${id}_high`],
