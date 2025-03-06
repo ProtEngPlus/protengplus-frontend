@@ -45,7 +45,6 @@ export default function JobDetailPage() {
   const fetchJob = async () => {
     if (jobid) {
       const data = await getJob(jobid);
-      console.log(data.data);
       if (data.data) {
         setJob(data.data);
         form.reset({
@@ -206,10 +205,11 @@ export default function JobDetailPage() {
               <div className="flex space-x-1 items-center">
                 <Icon
                   icon="ic:round-refresh"
-                  className={`size-7 ${job.state === "FAILED"
-                    ? "text-pep-gray cursor-pointer"
-                    : "text-pep-gray-border cursor-not-allowed"
-                    }`}
+                  className={`size-7 ${
+                    job.state === "FAILED"
+                      ? "text-pep-gray cursor-pointer"
+                      : "text-pep-gray-border cursor-not-allowed"
+                  }`}
                   onClick={() => {
                     job.state === "FAILED" && handleRunJob();
                   }}
