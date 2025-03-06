@@ -68,15 +68,7 @@ export default function Conclusion({
     }
 
     const { lab_result, ...otherDetails } = newJobDetail;
-    const labResult = lab_result.reduce(
-      (acc, item) => {
-        acc.sequences.push(item.sequence);
-        acc.scores.push(item.score);
-        acc.total++;
-        return acc;
-      },
-      { total: 0, sequences: [] as string[], scores: [] as number[] }
-    );
+    const labResult = lab_result;
 
     const newJob: ReportInterface = {
       user_id: user?.id ?? "",

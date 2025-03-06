@@ -1,4 +1,5 @@
 import { LabResult, OptionValue, RunType, State } from "./Job.interface";
+import { RunTime } from "./Report.interface";
 
 export const stepsForCreateJob = [
   "Protein Query",
@@ -37,8 +38,9 @@ export interface CreateJobDetail {
   name: string;
   description: string;
   input_protein: string;
-  lab_result: { sequence: string; score: number }[]; // to add in table and export csv easier
+  lab_result: LabResult;
   run_type: RunType;
+  run_time?: Record<string, RunTime> | null;
   is_notification_on: boolean;
   ref_job_id?: string;
   artifact: Record<string, object> | null;

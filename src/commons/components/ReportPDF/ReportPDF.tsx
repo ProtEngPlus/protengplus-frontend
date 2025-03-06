@@ -1,7 +1,6 @@
 import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "./ReportStyle";
 import logo from "../../../assets/images/Report/protengplus-logo.png";
-import chart from "../../../assets/images/Report/mock-mutation-chart.png";
 import GeneralInfo from "./StageReport/GeneralInfo/GeneralInfo";
 import ProteinQueryReport from "./StageReport/ProteinQueryReport/ProteinQueryReport";
 import ProteinRepresentationReport from "./StageReport/ProteinRepresentationReport/ProteinRepresentationReport";
@@ -16,7 +15,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { ReportInterface } from "../../interfaces/Report.interface";
 
-export default function ReportPDF({ jobData }: { jobData: ReportInterface }) {
+export default function ReportPDF({ jobData, chart }: { jobData: ReportInterface, chart?: string }) {
   const [pageIndex, setPageIndex] = useState(1);
   const [paginatedLabResults, setPaginatedLabResults] = useState<labResult[]>(
     []
@@ -966,8 +965,8 @@ export default function ReportPDF({ jobData }: { jobData: ReportInterface }) {
           totalTime={
             jobData.run_time
               ? formatTime({
-                  start_time: jobData.run_time.query.end_time,
-                  end_time: jobData.run_time.mutation.end_time,
+                  start_time: jobData.run_time.query?.end_time,
+                  end_time: jobData.run_time.mutation?.end_time,
                 })
               : ""
           }
@@ -978,21 +977,21 @@ export default function ReportPDF({ jobData }: { jobData: ReportInterface }) {
             jobData.options[jobData.meta[0] as keyof typeof jobData.options]
           }
           inputProtein={jobData.input_protein}
-          runTime={jobData.run_time ? formatTime(jobData.run_time.query) : ""}
+          runTime={jobData.run_time?.query ? formatTime(jobData.run_time.query) : ""}
         />
         <ProteinRepresentationReport
           tool={jobData.meta[1]}
           option={
             jobData.options[jobData.meta[1] as keyof typeof jobData.options]
           }
-          runTime={jobData.run_time ? formatTime(jobData.run_time.evotune) : ""}
+          runTime={jobData.run_time?.evotune ? formatTime(jobData.run_time.evotune) : ""}
         />
         <TopModelReport
           tool={jobData.meta[2]}
           option={
             jobData.options[jobData.meta[2] as keyof typeof jobData.options]
           }
-          runTime={jobData.run_time ? formatTime(jobData.run_time.fittop) : ""}
+          runTime={jobData.run_time?.fittop ? formatTime(jobData.run_time.fittop) : ""}
         />
         <MutationReport
           tool={jobData.meta[3]}
@@ -1000,7 +999,7 @@ export default function ReportPDF({ jobData }: { jobData: ReportInterface }) {
             jobData.options[jobData.meta[3] as keyof typeof jobData.options]
           }
           runTime={
-            jobData.run_time ? formatTime(jobData.run_time.mutation) : ""
+            jobData.run_time?.mutation ? formatTime(jobData.run_time.mutation) : ""
           }
         />
         <Footer index={1} total={pageIndex} />

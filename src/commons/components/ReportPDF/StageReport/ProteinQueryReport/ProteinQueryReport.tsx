@@ -16,10 +16,10 @@ export default function ProteinQueryReport({
   const Blast = () => (
     <View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"Program"} text={option.program} isSmall limit={145} />
+        <InfoBox label={"Program"} text={option.program || "-" } isSmall limit={145} />
         <InfoBox
           label={"Database"}
-          text={option.database}
+          text={option.database || "-" }
           isSmall
           limit={145}
         />
@@ -27,14 +27,14 @@ export default function ProteinQueryReport({
       <View style={styles.inlineInfoBox}>
         <InfoBox
           label={"Hit Size"}
-          text={option.hitlist_size}
+          text={option.hitlist_size || "-" }
           isSmall
           limit={145}
         />
-        <InfoBox label={"E Value"} text={option.expect} isSmall limit={145} />
+        <InfoBox label={"E Value"} text={option.expect || "-" } isSmall limit={145} />
         <InfoBox
           label={"Sequence Length"}
-          text={option.seq_length}
+          text={option.seq_length || "-" }
           isSmall
           limit={145}
         />
@@ -42,19 +42,19 @@ export default function ProteinQueryReport({
       <View style={styles.inlineInfoBox}>
         <InfoBox
           label={"Percent Identity"}
-          text={option.perc_ident}
+          text={option.perc_ident || "-"}
           isSmall
           limit={145}
         />
         <InfoBox
           label={"Random State"}
-          text={option.random_state}
+          text={option.random_state || "-"}
           isSmall
           limit={145}
         />
         <InfoBox
           label={"HSP Coverage"}
-          text={option.hsp_cov}
+          text={option.hsp_cov || "-"}
           isSmall
           limit={145}
         />
@@ -83,9 +83,9 @@ export default function ProteinQueryReport({
         </View>
       </View>
       <View>
-        <InfoBox label={"Tool"} text={tool} isSmall />
+        <InfoBox label={"Tool"} text={tool || "-" } isSmall />
         <ToolSelection />
-        <InfoBox label={"Input Protein"} text={inputProtein} isSmall />
+        <InfoBox label={"Input Protein"} text={inputProtein || "-" } isSmall />
       </View>
     </View>
   );
