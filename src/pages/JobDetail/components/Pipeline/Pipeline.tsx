@@ -113,24 +113,29 @@ export default function Pipeline({
       const data = watch();
       const newJobOption = {} as CreateJobOption;
       const meta = [] as string[];
+      // Update newJobInfo
       for (const step of pipeline) {
         const { method, subMethod }: { method: string; subMethod: string } =
           step;
         meta.push(subMethod.toLowerCase());
         newJobOption[subMethod.toLowerCase()] = {};
         const jobConfig = createJobConfig[method].tool[subMethod].parameters;
+        const jobOptions = job["options"][subMethod.toLowerCase()] || {};
 
         jobConfig.forEach((param) => {
           if (param.type === "rangeNumber") {
             newJobOption[subMethod.toLowerCase()][`${param.id}_low`] =
-              data[`${param.id}_low`];
+              data[`${param.id}_low`] ?? jobOptions[`${param.id}_low`];
+
             newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
-              data[`${param.id}_high`];
+              data[`${param.id}_high`] ?? jobOptions[`${param.id}_high`];
           } else {
-            newJobOption[subMethod.toLowerCase()][param.id] = data[param.id];
+            newJobOption[subMethod.toLowerCase()][param.id] =
+              data[param.id] ?? jobOptions[param.id];
           }
         });
       }
+
       await updateJobDetail(job.id, { meta: meta, options: newJobOption });
       setIsConfirmVisible(false);
       setIsSuccessVisible(true);
