@@ -14,16 +14,16 @@ export default function ProteinRepresentationReport({
   const Unirep = () => (
     <View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"N Trial"} text={option.n_trials} limit={185} />
-        <InfoBox label={"N Split"} text={option.n_splits} limit={185} />
+        <InfoBox label={"N Trial"} text={option.n_trials || "-" } limit={185} />
+        <InfoBox label={"N Split"} text={option.n_splits || "-" } limit={185} />
       </View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"N Epoch - low"} text={option.n_epochs_config_low} limit={185} />
-        <InfoBox label={"N Epoch - high"} text={option.n_epochs_config_high} limit={185} />
+        <InfoBox label={"N Epoch - low"} text={option.n_epochs_config_low || "-" } limit={185} />
+        <InfoBox label={"N Epoch - high"} text={option.n_epochs_config_high || "-" } limit={185} />
       </View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"Learning Rate - low"} text={option.learning_rate_config_low} limit={185} />
-        <InfoBox label={"Learning Rate - high"} text={option.learning_rate_config_high} limit={185} />
+        <InfoBox label={"Learning Rate - low"} text={option.learning_rate_config_low || "-" } limit={185} />
+        <InfoBox label={"Learning Rate - high"} text={option.learning_rate_config_high || "-" } limit={185} />
       </View>
     </View>
   );
@@ -49,7 +49,7 @@ export default function ProteinRepresentationReport({
         </View>
       </View>
       <View>
-        <InfoBox label={"Tool"} text={tool} />
+        <InfoBox label={"Tool"} text={tool || "-" } />
         <ToolSelection />
       </View>
     </View>
