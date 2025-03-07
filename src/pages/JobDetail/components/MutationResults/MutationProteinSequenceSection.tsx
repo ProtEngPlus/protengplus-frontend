@@ -3,6 +3,7 @@ import { MutationResultInterface, MutationResultSearchParams } from "../../../..
 import MutationResultTable from "./MutationResultTable";
 import { getAllMutationResults } from "../../../../commons/api/mutation";
 import PageNumberDropDown from "./PageNumberDropDown";
+import { ProteinSequenceOverlay, ProteinSequenceProps } from "../Overlay/ProteinSequenceOverlay";
 
 export default function MutationProteinSequenceSection({
     mutationId,
@@ -10,6 +11,8 @@ export default function MutationProteinSequenceSection({
     mutationId: string;
 }) {
     const [mutationResults, setMutationResults] = useState<MutationResultInterface[]>([]);
+    const [isProteinSequenceVisible, setIsProteinSequenceVisible] = useState(false);
+    const [currentMutationResult, setCurrentMutationResult] = useState<MutationResultInterface>();
     const [fetchMutationResults, setFetchMutationResults] = useState(false);
     const [isBookmarkOnly, setIsBookmarkOnly] = useState(false);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -23,6 +26,12 @@ export default function MutationProteinSequenceSection({
         setIsBookmarkOnly((prev) => !prev)
         setCurrentPage(1);
     }
+
+    const proteinSequenceProps: ProteinSequenceProps = {
+        onClose: () => {
+            setIsProteinSequenceVisible(false);
+        }
+    };
 
     useEffect(() => {
         const params: MutationResultSearchParams = isBookmarkOnly
@@ -38,13 +47,18 @@ export default function MutationProteinSequenceSection({
 
     return (
         <div className="space-y-6 relative">
+            <ProteinSequenceOverlay
+                isVisible={isProteinSequenceVisible}
+                proteinSequenceProps={proteinSequenceProps}
+                proteinSequence={currentMutationResult?.protein_sequence || ""}
+                mutationPositions={currentMutationResult?.mutation_positions || []} />
             <div className="space-y-6 px-5 py-6 font-light rounded-lg h-fit bg-gray-50 drop-shadow-md w-full flex justify-center">
                 <div className="w-4/5 space-y-4">
                     <div className="flex justify-between items-center py-2">
                         <div className="flex items-center gap-3">
                             <input
                                 type="checkbox"
-                                className="w-5 h-5 rounded-md border-pep-blue border"
+                                className="w-5 h-5 rounded-md border-pep-blue border cursor-pointer"
                                 checked={isBookmarkOnly}
                                 onChange={handleBookmark} />
                             <div className="text-md font-normal text-gray-500">show bookmark only</div>
@@ -56,7 +70,10 @@ export default function MutationProteinSequenceSection({
                         refresh={refreshMutationResults}
                         itemsPerPage={itemsPerPage}
                         currentPage={currentPage}
-                        setCurrentPage={setCurrentPage} />
+                        setCurrentPage={setCurrentPage}
+                        setIsProteinSequenceVisible={setIsProteinSequenceVisible}
+                        setCurrentMutationResult={setCurrentMutationResult}
+                    />
                 </div>
             </div>
         </div>

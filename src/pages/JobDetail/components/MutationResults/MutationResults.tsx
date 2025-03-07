@@ -178,7 +178,7 @@ export default function MutationResults({
                             <div className="flex items-center gap-3">
                                 <input
                                     type="checkbox"
-                                    className="w-5 h-5 rounded-md border-pep-blue border"
+                                    className="w-5 h-5 rounded-md border-pep-blue border cursor-pointer"
                                     checked={isBookmarkOnly}
                                     onChange={() => setIsBookmarkOnly((prev) => !prev)} />
                                 <div className="text-md font-normal text-gray-500">show bookmark only</div>

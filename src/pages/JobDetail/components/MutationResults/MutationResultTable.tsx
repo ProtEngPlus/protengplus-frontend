@@ -12,17 +12,26 @@ export default function MutationResultTable({
     refresh,
     itemsPerPage,
     currentPage,
-    setCurrentPage
+    setCurrentPage,
+    setIsProteinSequenceVisible,
+    setCurrentMutationResult,
 }: {
     mutationResults: MutationResultInterface[];
     refresh: () => void;
     itemsPerPage: number;
     currentPage: number;
     setCurrentPage: (page: number) => void;
+    setIsProteinSequenceVisible: (isVisible: boolean) => void;
+    setCurrentMutationResult: (mutationResult: MutationResultInterface) => void;
 }) {
     const handleBookmark = async (mutationResult: MutationResultInterface) => {
         await updateMutationResultDetail(mutationResult.id, { is_bookmark: !mutationResult.is_bookmark });
         refresh();
+    };
+
+    const handleViewSequence = (mutationResult: MutationResultInterface) => {
+        setIsProteinSequenceVisible(true);
+        setCurrentMutationResult(mutationResult);
     };
 
     //for pagination
@@ -46,6 +55,7 @@ export default function MutationResultTable({
     const handlePageClick = (page: number) => {
         setCurrentPage(page);
     };
+
     return (
         <div>
             {mutationResults.length == 0 ? (
@@ -70,7 +80,7 @@ export default function MutationResultTable({
                                         <th
                                             key={index}
                                             scope="col"
-                                            className="font-normal px-6 py-3 text-base"
+                                            className="font-normal px-3 py-3 text-base"
                                         >
                                             {header}
                                         </th>
@@ -95,16 +105,18 @@ export default function MutationResultTable({
                                                     handleBookmark(mutationResult);
                                                 }} />
                                         </td>
-                                        <td className="px-3 py-3 text-center truncate overflow-hidden max-w-[420px]">
-                                            {mutationResult.protein_sequence}
+                                        <td className="px-3 py-3 text-left truncate overflow-hidden max-w-[420px]">
+                                            {mutationResult.mutation_positions.join(", ")}
                                         </td>
-                                        <td className="px-3 py-3 text-center">
+                                        <td className="px-3 py-3 text-left">
                                             {mutationResult.assay_score}
                                         </td>
-                                        <td className="pl-3 pr-12 py-3 place-items-center">
-                                            <div className="flex gap-1">
+                                        <td className="pl-3 pr-12 py-3 place-items-center text-pep-blue">
+                                            <div
+                                                className="flex gap-1 underline items-center cursor-pointer"
+                                                onClick={() => handleViewSequence(mutationResult)}>
                                                 View Sequence
-                                                <Icon icon="iconamoon:eye-thin" width="24" height="24" />
+                                                <Icon icon="iconamoon:eye-thin" width="20" height="20" />
                                             </div>
                                         </td>
                                     </tr>
