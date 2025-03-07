@@ -15,6 +15,7 @@ import MutationTable from "./MutationTable";
 import MutationParameterSetup from "../../../../commons/components/Mutation/MutationParameterSetup/MutationParameterSetup";
 import { getTotalTime } from "../../../Dashboard/service/getTotalTime";
 import { DeleteOverlay, DeleteOverlayProps } from "../../../../commons/components/ModalOverlay/DeleteOverlay";
+import MutationProteinSequenceSection from "./MutationProteinSequenceSection";
 
 export default function MutationResults({
     jobid,
@@ -237,6 +238,8 @@ export default function MutationResults({
                         </div>
 
                         <MutationParameterSetup mutation={currentMutation} isShowChart={true} chartLabels={chartLabels} currentStep={currentStep} pipeline={pipeline} />
+
+                        <MutationProteinSequenceSection mutationId={currentMutation.id} />
                     </div>
                 )}
             </div>

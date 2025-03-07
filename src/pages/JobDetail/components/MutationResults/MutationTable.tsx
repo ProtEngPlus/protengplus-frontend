@@ -107,19 +107,12 @@ export default function MutationTable({
                                         onClick={() => setCurrentMutation(mutation)}
                                     >
                                         <td className="pl-3 py-3 place-items-center">
-                                            {mutation.is_bookmark ?
-                                                <Icon
-                                                    icon="fa-solid:bookmark"
-                                                    className={`text-pep-orange text-xl`}
-                                                    onClick={() => {
-                                                        handleBookmark(mutation);
-                                                    }} /> :
-                                                <Icon
-                                                    icon="cil:bookmark"
-                                                    className={`text-pep-orange text-xl`}
-                                                    onClick={() => {
-                                                        handleBookmark(mutation);
-                                                    }} />}
+                                            <Icon
+                                                icon="cil:bookmark"
+                                                className={`${mutation.is_bookmark ? "text-pep-orange" : "text-pep-gray"}  text-xl cursor-pointer`}
+                                                onClick={() => {
+                                                    handleBookmark(mutation);
+                                                }} />
                                         </td>
                                         <td className="px-3 py-3">
                                             <div className="flex items-center space-x-4">

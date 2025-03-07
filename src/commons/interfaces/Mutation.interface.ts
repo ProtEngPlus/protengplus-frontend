@@ -35,3 +35,19 @@ export interface MutationSearchParams {
     job_id?: string,
     is_bookmark?: boolean,
 }
+
+export interface MutationResultInterface {
+    id: string,
+    mutation_id: string,
+    job_id: string,
+    user_id: string,
+    protein_sequence: string,
+    mutation_positions: string[],
+    assay_score: number,
+    is_bookmark: boolean,
+}
+
+export interface MutationResultSearchParams {
+    mutation_id?: string,
+    is_bookmark?: boolean,
+}
