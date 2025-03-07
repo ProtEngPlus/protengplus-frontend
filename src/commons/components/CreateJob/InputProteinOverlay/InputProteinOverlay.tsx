@@ -42,6 +42,19 @@ export function InputProteinOverlay({
     };
   }, [isVisible]);
 
+  useEffect(() => {
+    if (isVisible) {
+      const handleWheel = (event: WheelEvent) => {
+        event.preventDefault(); // Prevent scrolling
+      };
+      window.addEventListener("wheel", handleWheel, { passive: false });
+
+      return () => {
+        window.removeEventListener("wheel", handleWheel);
+      };
+    }
+  }, [isVisible]);
+
   return (
     isVisible && (
       <div
