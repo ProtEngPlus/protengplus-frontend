@@ -1,6 +1,6 @@
 import { del, get, post, put } from "./common";
 import { BACKEND_BASE_URL } from "../configs/apiConfig";
-import { CreateMutationInterface, Mutation, MutationHistogram, MutationSearchParams } from "../interfaces/Mutation.interface";
+import { CreateMutationInterface, MutationInterface, MutationHistogram, MutationSearchParams } from "../interfaces/Mutation.interface";
 import { Params } from "../interfaces/ApiResponse.interface";
 
 const MUTATION_PATH = BACKEND_BASE_URL + "/proteng-conductor/mutations";
@@ -19,7 +19,7 @@ export const createMutation = async (mutation: CreateMutationInterface) => {
 
 export const getAllMutations = async (params: MutationSearchParams) => {
     const path = MUTATION_PATH;
-    return await get<Mutation[]>(path, true, params as Params);
+    return await get<MutationInterface[]>(path, true, params as Params);
 }
 
 export const deleteMutation = async (mutationId: string) => {
@@ -32,14 +32,14 @@ export const runMutation = async (mutationId: string) => {
     return await post(path, {}, true);
 }
 
-export const updateMutationDetail = async (mutationId: string, updateData: Partial<Mutation>) => {
+export const updateMutationDetail = async (mutationId: string, updateData: Partial<MutationInterface>) => {
     const path = MUTATION_PATH + `/${mutationId}`;
-    return await put<Mutation>(path, updateData, true);
+    return await put<MutationInterface>(path, updateData, true);
 }
 
 /*------------------------- mutation detail section -------------------------------------*/
 
 export const getMutation = async (mutationId: string) => {
     const path = MUTATION_PATH + `/${mutationId}`;
-    return await get<Mutation>(path, true);
+    return await get<MutationInterface>(path, true);
 };

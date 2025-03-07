@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CreateMutationInterface, Mutation, MutationHistogram, MutationSearchParams } from "../../../../commons/interfaces/Mutation.interface";
+import { CreateMutationInterface, MutationInterface, MutationHistogram, MutationSearchParams } from "../../../../commons/interfaces/Mutation.interface";
 import { createMutation, deleteMutation, getAllMutations, getMutationHistogram, runMutation } from "../../../../commons/api/mutation";
 import FitnessDistributionChartData from "./FitnessDistributionChart";
 import Button from "../../../../commons/components/Button/Button";
@@ -30,8 +30,8 @@ export default function MutationResults({
     const { watch } = useFormContext();
     const chartLabels = ["-2.0", "-1.9", "-1.8", "-1.7", "-1.6", "-1.5", "-1.4", "-1.3", "-1.2", "-1.1", "-1.0", "-0.9", "-0.8", "-0.7", "-0.6", "-0.5", "-0.4", "-0.3", "-0.2", "-0.1", "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9"];
     const [chartSeries, setChartSeries] = useState<MutationHistogram[]>([]);
-    const [mutations, setMutations] = useState<Mutation[]>([]);
-    const [currentMutation, setCurrentMutation] = useState<Mutation | null>(null);
+    const [mutations, setMutations] = useState<MutationInterface[]>([]);
+    const [currentMutation, setCurrentMutation] = useState<MutationInterface | null>(null);
     const [fetchMutation, setFetchMutation] = useState(false);
     const [isNewMutationVisible, setIsNewMutationVisible] = useState(false);
     const [isBookmarkOnly, setIsBookmarkOnly] = useState(false);
@@ -83,12 +83,12 @@ export default function MutationResults({
         }
     };
 
-    const handleRunMutation = async (mutation: Mutation) => {
+    const handleRunMutation = async (mutation: MutationInterface) => {
         await runMutation(mutation.id);
         refresh();
     };
 
-    const handleDelete = (mutation: Mutation) => {
+    const handleDelete = (mutation: MutationInterface) => {
         setCurrentMutation(mutation);
         setDeleteVisible(true);
     };

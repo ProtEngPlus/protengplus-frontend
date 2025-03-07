@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Mutation } from "../../../interfaces/Mutation.interface";
+import { MutationInterface } from "../../../interfaces/Mutation.interface";
 import FitnessDistributionChartData from "../../../../pages/JobDetail/components/MutationResults/FitnessDistributionChart";
 import { useState } from "react";
 import HelperText from "../../CreateJob/InputField/HelperText";
@@ -13,7 +13,7 @@ export default function MutationParameterSetup({
     currentStep = 3,
     pipeline = defaultPipeline,
 }: {
-    mutation: Mutation;
+    mutation: MutationInterface;
     isShowChart?: boolean;
     chartLabels?: string[];
     currentStep?: number,

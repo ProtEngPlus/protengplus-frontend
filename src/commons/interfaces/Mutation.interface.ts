@@ -7,7 +7,7 @@ export interface MutationHistogram {
     data: number[]
 }
 
-export interface Mutation {
+export interface MutationInterface {
     id: string,
     name: string,
     job_id: string,

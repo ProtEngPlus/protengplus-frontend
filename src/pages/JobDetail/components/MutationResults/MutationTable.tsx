@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mutation, MutationStateType } from "../../../../commons/interfaces/Mutation.interface";
+import { MutationInterface, MutationStateType } from "../../../../commons/interfaces/Mutation.interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { updateMutationDetail } from "../../../../commons/api/mutation";
 import editIcon from "../../../../assets/images/CreateJob/editIcon.svg";
@@ -22,17 +22,17 @@ export default function MutationTable({
     handleDelete,
 
 }: {
-    mutations: Mutation[];
+    mutations: MutationInterface[];
     refresh: () => void;
-    currentMutation: Mutation | null;
-    setCurrentMutation: (mutation: Mutation) => void;
+    currentMutation: MutationInterface | null;
+    setCurrentMutation: (mutation: MutationInterface) => void;
     setIsSelectCollection: (value: boolean) => void;
-    handleRunMutation: (mutation: Mutation) => void;
-    handleDelete: (mutation: Mutation) => void;
+    handleRunMutation: (mutation: MutationInterface) => void;
+    handleDelete: (mutation: MutationInterface) => void;
 }) {
     const [isRenameMutationVisible, setIsRenameMutationVisible] = useState(false);
 
-    const handleRename = (mutation: Mutation) => {
+    const handleRename = (mutation: MutationInterface) => {
         setCurrentMutation(mutation);
         setIsRenameMutationVisible(true);
     }
@@ -53,12 +53,12 @@ export default function MutationTable({
         }
     };
 
-    const handleBookmark = async (mutation: Mutation) => {
+    const handleBookmark = async (mutation: MutationInterface) => {
         await updateMutationDetail(mutation.id, { is_bookmark: !mutation.is_bookmark });
         refresh();
     };
 
-    const handleSelectMutation = (mutation: Mutation) => {
+    const handleSelectMutation = (mutation: MutationInterface) => {
         setCurrentMutation(mutation);
         setIsSelectCollection(true);
     }
