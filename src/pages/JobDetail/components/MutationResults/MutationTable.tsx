@@ -89,7 +89,7 @@ export default function MutationTable({
                                     {headers.map((header, index) => (
                                         <th
                                             key={index}
-                                            className="font-normal px-3 py-3 text-base"
+                                            className="font-normal px-6 py-3 text-base"
                                         >
                                             {header}
                                         </th>
@@ -106,48 +106,49 @@ export default function MutationTable({
                                         className={`font-light border-b h-[80px] w-full ${mutation.id === currentMutation?.id ? "bg-blue-50" : "bg-white"}`}
                                         onClick={() => setCurrentMutation(mutation)}
                                     >
-                                        <td className="px-3 py-3 place-items-center">
-                                            <div className="flex space-x-4 items-center">
-                                                {mutation.is_bookmark ?
-                                                    <Icon
-                                                        icon="fa-solid:bookmark"
-                                                        className={`text-pep-orange text-xl`}
-                                                        onClick={() => {
-                                                            handleBookmark(mutation);
-                                                        }} /> :
-                                                    <Icon
-                                                        icon="cil:bookmark"
-                                                        className={`text-pep-orange text-xl`}
-                                                        onClick={() => {
-                                                            handleBookmark(mutation);
-                                                        }} />}
-
+                                        <td className="pl-3 py-3 place-items-center">
+                                            {mutation.is_bookmark ?
+                                                <Icon
+                                                    icon="fa-solid:bookmark"
+                                                    className={`text-pep-orange text-xl`}
+                                                    onClick={() => {
+                                                        handleBookmark(mutation);
+                                                    }} /> :
+                                                <Icon
+                                                    icon="cil:bookmark"
+                                                    className={`text-pep-orange text-xl`}
+                                                    onClick={() => {
+                                                        handleBookmark(mutation);
+                                                    }} />}
+                                        </td>
+                                        <td className="px-3 py-3">
+                                            <div className="flex items-center space-x-4">
                                                 <img
                                                     src={editIcon}
                                                     alt="edit"
                                                     className="text-pep-gray size-5 min-w-5 cursor-pointer"
                                                     onClick={() => handleRename(mutation)}
                                                 />
+                                                <label
+                                                    className="truncate text-blue-500 font-normal text-sm leading-5 underline cursor-pointer"
+                                                    onClick={() =>
+                                                        handleSelectMutation(mutation)
+                                                    }
+                                                >
+                                                    {mutation.name}
+                                                </label>
                                             </div>
                                         </td>
-                                        <td className="flex px-3 py-3 items-center h-[80px]">
-                                            <label
-                                                className="truncate text-blue-500 font-normal text-sm leading-5 underline cursor-pointer"
-                                                onClick={() =>
-                                                    handleSelectMutation(mutation)
-                                                }
-                                            >
-                                                {mutation.name}
-                                            </label>
-                                        </td>
-                                        <td className="px-3 py-3 text-center">
-                                            <MutationState state={mutation.state as MutationStateType} className="mx-auto" />
-                                            {mutation.state === "COMPLETED" && mutation.complete_at && (
-                                                <label>
-                                                    Total Time:{" "}
-                                                    {getTotalTime(mutation.created_at, mutation.complete_at)} Min
-                                                </label>
-                                            )}
+                                        <td className="px-3 py-3">
+                                            <div className="flex flex-col items-center w-fit">
+                                                <MutationState state={mutation.state as MutationStateType} className="mx-auto" />
+                                                {mutation.state === "COMPLETED" && mutation.complete_at && (
+                                                    <label>
+                                                        Total Time:{" "}
+                                                        {getTotalTime(mutation.created_at, mutation.complete_at)} Min
+                                                    </label>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-3 py-3 place-items-center">
                                             <div className="flex space-x-4 items-center">

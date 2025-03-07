@@ -76,12 +76,10 @@ export default function MutationParameterSetup({
             )}
             {/* Helper Text */}
             {isRead && (
-                <div className="absolute inset-0 rounded-lg p-5 z-10 !my-20 bg-pep-blue-light min-h-fit">
-                    <div className="flex space-x-3">
-                        <Icon icon="ep:setting" className="text-pep-gray size-6" />
-                        <label>Parameter Setup</label>
+                <div className="absolute inset-0 z-10 min-h-fit !my-16 space-y-6">
+                    <div className="bg-pep-blue-light rounded-lg px-5 pt-2 pb-5 min-h-fit mb-6">
+                        {HelperTextMethod}
                     </div>
-                    {HelperTextMethod}
                 </div>
             )}
         </div>
