@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-export default function FilterDropdown({
+export default function PageNumberDropdown({
     itemsPerPage,
     setItemsPerPage,
     setCurrentPage
@@ -47,12 +47,12 @@ export default function FilterDropdown({
     }, []);
 
     return (
-        <div ref={dropdownRef} className="relative flex space-x-2 items-center text-pep-gray">
-            <div className="text-light ">Show: </div>
+        <div ref={dropdownRef} className="relative flex space-x-2 items-center font-light text-pep-gray">
+            <div className="text-pep-gray">Show: </div>
             <button
                 id="dropdown-mutation-page-number"
                 onClick={toggleDropdown}
-                className={`inline-flex items-center font-light text-pep-gray border bg-white px-3 py-1.5 rounded-lg h-[30px] border-${isDropdownOpen ? "pep-blue" : "pep-gray-border"
+                className={`inline-flex items-center font-light border bg-white px-3 py-1.5 rounded-lg h-[30px] border-${isDropdownOpen ? "pep-blue" : "pep-gray-border"
                     }`}
                 type="button"
             >

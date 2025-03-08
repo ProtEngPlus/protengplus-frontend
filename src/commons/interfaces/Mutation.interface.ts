@@ -50,4 +50,8 @@ export interface MutationResultInterface {
 export interface MutationResultSearchParams {
     mutation_id?: string,
     is_bookmark?: boolean,
+    sort?: string,
+    min_value?: number,
+    max_value?: number,
+    order?: string,
 }
