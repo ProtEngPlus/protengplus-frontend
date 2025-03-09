@@ -46,7 +46,6 @@ export default function JobDetailPage() {
     if (jobid) {
       const data = await getJob(jobid);
       if (data.data) {
-        console.log(data.data);
         setJob(data.data);
         form.reset({
           ...data.data,
