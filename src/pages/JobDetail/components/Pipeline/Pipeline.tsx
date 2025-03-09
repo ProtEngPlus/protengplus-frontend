@@ -340,7 +340,10 @@ export default function Pipeline({
               isEdit={isEditPipeline}
               stageId={job.stage_id}
               currentStep={currentStep}
-              disable={job.stage_id >= 1}
+              disable={
+                job.stage_id > 1 ||
+                (job.state === "ONGOING" && job.stage_id === 1)
+              }
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)
@@ -356,7 +359,10 @@ export default function Pipeline({
               isEdit={isEditPipeline}
               stageId={job.stage_id}
               currentStep={currentStep}
-              disable={job.stage_id >= 2}
+              disable={
+                job.stage_id > 2 ||
+                (job.state === "ONGOING" && job.stage_id === 2)
+              }
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)
@@ -372,7 +378,10 @@ export default function Pipeline({
               isEdit={isEditPipeline}
               stageId={job.stage_id}
               currentStep={currentStep}
-              disable={job.stage_id >= 3}
+              disable={
+                job.stage_id === 3 &&
+                (job.state === "COMPLETED" || job.state === "ONGOING")
+              }
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)
