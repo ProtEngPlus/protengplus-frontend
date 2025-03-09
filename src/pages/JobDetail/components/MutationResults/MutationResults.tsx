@@ -78,6 +78,7 @@ export default function MutationResults({
                     tool: subMethod.toLowerCase(),
                 };
                 await createMutation(newMutation);
+                refresh();
             } catch (error) {
                 console.error("Failed to create new mutation:", error);
             }
@@ -129,7 +130,8 @@ export default function MutationResults({
             }
         };
         fetchChartData();
-    }, []);
+        setFetchMutation(false);
+    }, [fetchMutation]);
 
     useEffect(() => {
         const params: MutationSearchParams = isBookmarkOnly
@@ -172,7 +174,6 @@ export default function MutationResults({
                         <hr />
 
                         <FitnessDistributionChartData chartLabels={chartLabels} chartSeries={chartSeries} />
-
 
                         <div className="flex justify-start items-center py-2">
                             <div className="flex items-center gap-3">

@@ -102,6 +102,7 @@ export default function MutationProteinSequenceSection({
                 mutationPositions={currentMutationResult?.mutation_positions || []} />
             <ExportMutationResultOverlay
                 isVisible={isExportMutationResultVisible}
+                setIsVisible={setIsExportMutationResultVisible}
                 exportProps={{
                     id: "export_" + mutationId,
                     title: "Do you want to export mutation results",

@@ -110,6 +110,7 @@ export default function FitnessDistributionChartData({
         <div className="p-4 border border-pep-light-gray rounded-md font-light">
             <div className="flex flex-col gap-2">
                 <div className="text-pep-blue text-2xl font-medium">Result Characteristics</div>
+                <div className="text-pep-dark-blue text-xl">Position Scan {numberOfDataPoints}</div>
                 <div>
                     Fitness distribution of {numberOfDataPoints} sequences from Position_scan step
                     {isShowLegend === true ? ` in ${series.length} collections` : ""}

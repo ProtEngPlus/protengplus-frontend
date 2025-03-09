@@ -13,9 +13,11 @@ export type ExportMutationResultOverlayProps = {
 
 export function ExportMutationResultOverlay({
     isVisible,
+    setIsVisible,
     exportProps,
 }: {
     isVisible: boolean;
+    setIsVisible: (isVisible: boolean) => void;
     exportProps: ExportMutationResultOverlayProps;
 }) {
     const { id, title, message, mutationId } = exportProps;
@@ -36,6 +38,8 @@ export function ExportMutationResultOverlay({
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
+
+            setIsVisible(false);
         } catch (error) {
             console.error("Error downloading CSV:", error);
         }
