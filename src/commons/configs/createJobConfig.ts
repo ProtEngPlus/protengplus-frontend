@@ -39,8 +39,7 @@ export const formatInput: Record<
     1: {
         input: "flex flex-row gap-x-[5%] gap-y-4 flex-wrap",
         helperText: "flex flex-row gap-x-[5%] gap-y-4 flex-wrap",
-        insideHelperText: (value) =>
-            value.type === "dropdown" || value.type === "multiNumberDropdown"  ? "grid grid-cols-[1fr,5fr] w-[46%] gap-x-3" : "grid grid-cols-[2fr,3fr] w-[30%] gap-x-3",
+        insideHelperText: () =>  "grid grid-cols-[2fr,3fr] w-[30%] gap-x-3",
     },
     2: {
         input: "grid grid-cols-[1fr,1fr] gap-y-4 w-fit gap-x-[250px]",
@@ -102,13 +101,19 @@ export const createJobConfig: CreateJobConfig = {
     "Protein Input":{
         description:"Protein sequence to be mutated and scored, provided in FASTA format or UniProt ID.",
         tool:{
-            "Protein Input Config":{
+            "Query Result":{
                 formatInput:1,
                 description:"",
                 parameters:[
                     {
+                        name:"organism",
+                        id: "organism",
+                        type: "string",
+                        description: "The specific species or biological entity from which the protein sequence originates",
+                    },
+                    {
                         name: "Percent Identity",
-                        id: "percent_identity",
+                        id: "percent_identity_result",
                         type: "rangePercent",
                         description: "The minimum percentage of sequence identity in the database required for a match to the query sequence to be considered significant",
                         additionalValidation: {
@@ -117,7 +122,7 @@ export const createJobConfig: CreateJobConfig = {
                     },
                     {
                         name: "E Value",
-                        id: "e_values",
+                        id: "e_values_result",
                         type: "rangeNumber",
                         description:
                         "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match.",
@@ -127,7 +132,7 @@ export const createJobConfig: CreateJobConfig = {
                     },
                     {
                         name: "Query Cover",
-                        id: "query_cover",
+                        id: "query_cover_result",
                         type: "rangePercent",
                         description:
                         "The percentage of the query sequence (your specimen) that overlaps with the database sequence",
@@ -147,6 +152,7 @@ export const createJobConfig: CreateJobConfig = {
                 formatInput:1,
                 description: "Tool used to compare a query protein sequence against a database of sequences by aligning sequences based on local matches.",
                 parameters: [
+                  
                     {
                         name: "Program",
                         id: "program",
