@@ -308,141 +308,148 @@ export default function QueryResultTable({
           </div>
         </div>
 
-        <div className="space-y-5">
-          {/* Job Table */}
-          <div className="relative overflow-auto rounded-xl border border-pep-gray-border shadow-table">
-            <table className="w-full text-xs text-left rtl:text-right">
-              <thead className="leading-6 bg-pep-gray-light text-center border-b">
-                <tr>
-                  <th className="font-normal px-6 py-2 text-base"></th>
-                  {headers.map((header, index) => (
-                    <th
-                      key={index}
-                      className={`font-normal px-6 py-3 text-base ${
-                        !disable && header.value === sort
-                          ? "text-pep-orange cursor-pointer"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        !disable &&
-                        header.value === sort &&
-                        setOrder(order === "asc" ? "desc" : "asc")
-                      }
-                    >
-                      {header.name}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="font-light leading-7">
-                {currentQueries &&
-                  currentQueries.map((query) => (
-                    <tr
-                      key={query.id}
-                      className="font-light text-pep-dark-gray bg-white border-b h-[45px] text-center"
-                    >
-                      <td className="px-3 py-3">
-                        <input
-                          id={`select-input-protein-${query.id}`}
-                          type="checkbox"
-                          checked={query.is_selected}
-                          onChange={() =>
-                            !disable &&
-                            !isSelected &&
-                            handleCheckboxChange(query.id)
-                          }
-                          className={`size-5 checked:bg-selected border border-pep-gray-border rounded ${
-                            isSelected || disable
-                              ? "cursor-not-allowed checked:bg-pep-gray"
-                              : "cursor-pointer"
-                          }`}
-                        />
-                      </td>
-                      <td className="px-3 py-3 text-start">
-                        {query.description}
-                      </td>
-                      <td className="px-3 py-3 text-start">
-                        {query.organisms}
-                      </td>
-                      <td className="px-3 py-3">{query.max_score}</td>
-                      <td className="px-3 py-3">{query.score}</td>
-                      <td className="px-3 py-3">{query.query_cover}</td>
-                      <td className="px-3 py-3">{query.e_values}</td>
-                      <td className="px-3 py-3">{query.percent_identity}</td>
-                      <td className="px-3 py-3">{query.acc_len}</td>
-                      <td className="px-3 py-3">{query.accession}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+        {/* Query Result Table */}
+        {currentQueries.length == 0 ? (
+          <div className="text-center">
+            <div className="text-label text-xl">No query result was found</div>
+            <div className="font-light text-pep-gray">Change the filter</div>
           </div>
+        ) : (
+          <div className="space-y-5">
+            <div className="relative overflow-auto rounded-xl border border-pep-gray-border shadow-table">
+              <table className="w-full text-xs text-left rtl:text-right">
+                <thead className="leading-6 bg-pep-gray-light text-center border-b">
+                  <tr>
+                    <th className="font-normal px-6 py-2 text-base"></th>
+                    {headers.map((header, index) => (
+                      <th
+                        key={index}
+                        className={`font-normal px-6 py-3 text-base ${
+                          !disable && header.value === sort
+                            ? "text-pep-orange cursor-pointer"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          !disable &&
+                          header.value === sort &&
+                          setOrder(order === "asc" ? "desc" : "asc")
+                        }
+                      >
+                        {header.name}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="font-light leading-7">
+                  {currentQueries &&
+                    currentQueries.map((query) => (
+                      <tr
+                        key={query.id}
+                        className="font-light text-pep-dark-gray bg-white border-b h-[45px] text-center"
+                      >
+                        <td className="px-3 py-3">
+                          <input
+                            id={`select-input-protein-${query.id}`}
+                            type="checkbox"
+                            checked={query.is_selected}
+                            onChange={() =>
+                              !disable &&
+                              !isSelected &&
+                              handleCheckboxChange(query.id)
+                            }
+                            className={`size-5 checked:bg-selected border border-pep-gray-border rounded ${
+                              isSelected || disable
+                                ? "cursor-not-allowed checked:bg-pep-gray"
+                                : "cursor-pointer"
+                            }`}
+                          />
+                        </td>
+                        <td className="px-3 py-3 text-start">
+                          {query.description}
+                        </td>
+                        <td className="px-3 py-3 text-start">
+                          {query.organisms}
+                        </td>
+                        <td className="px-3 py-3">{query.max_score}</td>
+                        <td className="px-3 py-3">{query.score}</td>
+                        <td className="px-3 py-3">{query.query_cover}</td>
+                        <td className="px-3 py-3">{query.e_values}</td>
+                        <td className="px-3 py-3">{query.percent_identity}</td>
+                        <td className="px-3 py-3">{query.acc_len}</td>
+                        <td className="px-3 py-3">{query.accession}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
 
-          <nav className="px-3 py-2 w-fit rounded-[45px] bg-white">
-            <ul className="flex items-center space-x-2 h-8 text-sm">
-              <li>
-                <button
-                  className="flex items-center justify-center size-[35px] text-label border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray hover:bg-pep-light-gray disabled:cursor-not-allowed"
-                  onClick={handlePrevPage}
-                  disabled={currentPage === 1}
-                >
-                  <svg
-                    className="w-3.5 h-3.5 rtl:rotate-180"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 14 10"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1"
-                      d="M13 5H1m0 0 4 4M1 5l4-4"
-                    />
-                  </svg>
-                </button>
-              </li>
-              {[...Array(totalPages)].map((_, index) => (
-                <li key={index}>
+            <nav className="px-3 py-2 w-fit rounded-[45px] bg-white">
+              <ul className="flex items-center space-x-2 h-8 text-sm">
+                <li>
                   <button
-                    className={`size-[35px] text-pep-dark-gray border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray ${
-                      currentPage === index + 1
-                        ? "bg-pep-gray border-none text-white"
-                        : "hover:bg-pep-light-gray"
-                    }`}
-                    onClick={() => handlePageClick(index + 1)}
-                    type="button"
+                    className="flex items-center justify-center size-[35px] text-label border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray hover:bg-pep-light-gray disabled:cursor-not-allowed"
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
                   >
-                    {index + 1}
+                    <svg
+                      className="w-3.5 h-3.5 rtl:rotate-180"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 10"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
+                        d="M13 5H1m0 0 4 4M1 5l4-4"
+                      />
+                    </svg>
                   </button>
                 </li>
-              ))}
-              <li>
-                <button
-                  className="flex items-center justify-center size-[35px] text-label border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray hover:bg-pep-light-gray disabled:cursor-not-allowed"
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
-                >
-                  <svg
-                    className="w-3.5 h-3.5 rtl:rotate-180"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 14 10"
+                {[...Array(totalPages)].map((_, index) => (
+                  <li key={index}>
+                    <button
+                      className={`size-[35px] text-pep-dark-gray border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray ${
+                        currentPage === index + 1
+                          ? "bg-pep-gray border-none text-white"
+                          : "hover:bg-pep-light-gray"
+                      }`}
+                      onClick={() => handlePageClick(index + 1)}
+                      type="button"
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+                <li>
+                  <button
+                    className="flex items-center justify-center size-[35px] text-label border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray hover:bg-pep-light-gray disabled:cursor-not-allowed"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
                   >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1"
-                      d="M1 5h12m0 0L9 1m4 4L9 9"
-                    />
-                  </svg>
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
+                    <svg
+                      className="w-3.5 h-3.5 rtl:rotate-180"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 10"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
+                        d="M1 5h12m0 0L9 1m4 4L9 9"
+                      />
+                    </svg>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        )}
       </div>
     </div>
   );
