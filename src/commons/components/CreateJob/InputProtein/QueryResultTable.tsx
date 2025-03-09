@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import SelectInput, { Option } from "../../Input/SelectInput";
 import { Icon } from "@iconify/react";
 import {
+  QueryResult,
   QueryResultSearchParams,
   Result,
 } from "../../../interfaces/QueryResult.interface";
@@ -43,11 +44,15 @@ export default function QueryResultTable({
   jobId,
   disable = false,
   isOverlay = false,
+  queryResult,
+  setQueryResult,
 }: {
   isJobDetail: boolean;
   jobId: string;
   disable?: boolean;
   isOverlay?: boolean;
+  queryResult?: QueryResult;
+  setQueryResult?: (queryResult: QueryResult) => void;
 }) {
   const { getValues, watch, setValue } = useFormContext();
   const [queryResults, setQueryResults] = useState<Result[]>([]);
@@ -134,6 +139,8 @@ export default function QueryResultTable({
         const results: Result[] = (
           response.data ? response.data[0].result : []
         ) as Result[];
+        if (setQueryResult)
+          setQueryResult(response.data ? response.data[0] : []);
         setQueryResults(results);
 
         const allOrganisms: string[] = [
@@ -207,6 +214,23 @@ export default function QueryResultTable({
   // count selected query result
   const selectedCount =
     queryResults?.filter((item) => item.is_selected).length || 0;
+
+  // set queryresult for adding to create job page
+  useEffect(() => {
+    if (setQueryResult && queryResult) {
+      console.log("in");
+      setQueryResult({
+        complete_at: queryResult.complete_at,
+        created_at: queryResult.created_at,
+        id: queryResult.id,
+        job_id: queryResult.job_id,
+        input_protein: queryResult.input_protein,
+        run_id: queryResult.run_id,
+        state: queryResult.state,
+        result: queryResults.filter((item) => item.is_selected),
+      });
+    }
+  }, [queryResults, selectedCount]);
 
   return (
     <div>
