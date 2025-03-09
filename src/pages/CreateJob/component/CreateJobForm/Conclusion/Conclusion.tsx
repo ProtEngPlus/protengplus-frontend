@@ -7,9 +7,9 @@ import UploadLabInput from "../UploadLabInput/UploadLabInput";
 import TopModel from "../TopModel/TopModel";
 import Mutation from "../Mutation/Mutation";
 import {
-  CreateJobDetail,
   CreateJobOption,
   PipelineItem,
+  ReportJobDetail,
 } from "../../../../../commons/interfaces/CreateJob.interface";
 import { useFormContext } from "react-hook-form";
 import ReportPDF from "../../../../../commons/components/ReportPDF/ReportPDF";
@@ -35,7 +35,7 @@ export default function Conclusion({
   const { user } = useAuth();
 
   const getReportData = () => {
-    const newJobDetail: CreateJobDetail = {
+    const newJobDetail: ReportJobDetail = {
       artifact: formData["artifact"],
       ref_job_id: formData["ref_job_id"],
       description: formData["description"],

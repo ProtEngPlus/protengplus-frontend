@@ -32,9 +32,9 @@ import {
 } from "../Overlay/SaveConfigOverlay";
 import {
   CreateJobConfiguration,
-  CreateJobDetail,
   CreateJobOption,
   PipelineItem,
+  ReportJobDetail,
 } from "../../../../commons/interfaces/CreateJob.interface";
 import {
   createJobConfiguration,
@@ -44,7 +44,6 @@ import { ReportInterface } from "../../../../commons/interfaces/Report.interface
 import { useAuth } from "../../../../commons/hooks/useAuth";
 import ReportPDF from "../../../../commons/components/ReportPDF/ReportPDF";
 import FitnessDistributionChartData from "../MutationResults/FitnessDistributionChart";
-import { MutationHistogram } from "../../../../commons/interfaces/Mutation.interface";
 import { getMutationHistogram } from "../../../../commons/api/mutation";
 import { createRoot } from "react-dom/client";
 
@@ -203,7 +202,7 @@ export default function Pipeline({
   }, [runType, isNotificationOn, job.id]);
 
   const getReportData = () => {
-    const newJobDetail: CreateJobDetail = {
+    const newJobDetail: ReportJobDetail = {
       artifact: formData["artifact"],
       ref_job_id: formData["ref_job_id"],
       description: formData["description"],
