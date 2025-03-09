@@ -53,7 +53,7 @@ export default function Mutation({
     <HelperText
       currentSubMethod={currentSubMethod}
       jobConfig={jobConfig}
-      step={currentStep}
+      step={currentStep + 1}
       stepsFormat={Steps}
     />
   );
