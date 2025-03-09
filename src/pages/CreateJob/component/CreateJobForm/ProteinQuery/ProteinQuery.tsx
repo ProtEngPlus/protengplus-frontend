@@ -11,9 +11,9 @@ import Textarea from "../../../../../commons/components/CreateJob/InputField/Inp
 import TextInput from "../../../../../commons/components/Input/TextInput";
 import ContextWithHelperText from "../../../../../commons/components/CreateJob/Context/ContextWithHelper";
 import DropdownInput from "../../../../../commons/components/CreateJob/InputField/InputField/Dropdown";
-import InputFields from "./InputField";
 import HelperText from "../../../../../commons/components/CreateJob/InputField/HelperText";
 import InputProtein from "../../../../../commons/components/CreateJob/InputProtein/InputProtein";
+import InputFields from "../../../../../commons/components/CreateJob/InputField/InputFields";
 
 interface Props {
   isWithConfig?: boolean;
@@ -170,7 +170,6 @@ export default function ProteinQuery({
         {/* SubMethod's input */}
         <div className="space-y-2">
           <InputFields
-            setIsChange={setIsChange}
             jobConfig={jobConfig}
             jobValue={getValues(
               `${stepsForCreateJob[step - 1]}.${currentSubMethod}`
@@ -181,10 +180,9 @@ export default function ProteinQuery({
         </div>
         {!isEditOption && (
           <InputProtein
-            isChange={isChange}
-            setIsChange={setIsChange}
+            isJobDetail={false}
             onEdit={isEditOption}
-            jobWithConfig={isWithConfig}
+            isWithConfig={isWithConfig}
             initialStep={initialStep}
             isConclusion={isConclusion}
           />
@@ -193,10 +191,9 @@ export default function ProteinQuery({
 
       {isEditOption && (
         <InputProtein
-          isChange={isChange}
-          setIsChange={setIsChange}
+          isJobDetail={false}
           onEdit={isEditOption}
-          jobWithConfig={isWithConfig}
+          isWithConfig={isWithConfig}
           initialStep={initialStep}
           isConclusion={isConclusion}
         />
