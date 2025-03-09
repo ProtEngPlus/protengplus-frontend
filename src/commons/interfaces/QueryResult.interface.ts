@@ -1,8 +1,13 @@
-import { Order } from "./Job.interface";
+import { Order, State } from "./Job.interface";
 
 export interface QueryResult {
-  input_protein: string;
+  complete_at: string;
+  created_at: string;
+  id: string;
   job_id: string;
+  input_protein: string;
+  run_id: number;
+  state: State;
   result: Result[];
 }
 
@@ -27,12 +32,12 @@ export interface QueryResultSearchParams {
   job_id?: string;
   is_selected?: boolean;
   organisms?: string;
-  percent_identity_from?: number;
-  percent_identity_to?: number;
-  e_values_from?: number;
-  e_values_to?: number;
-  query_cover_from?: number;
-  query_cover_to?: number;
+  percentIdentityFrom?: number;
+  percentIdentityTo?: number;
+  eValuesFrom?: number;
+  eValuesTo?: number;
+  queryCoverFrom?: number;
+  queryCoverTo?: number;
   sort?: string;
   order?: Order;
 }
