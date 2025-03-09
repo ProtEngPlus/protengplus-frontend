@@ -68,7 +68,9 @@ export default function Mutation({
         disabled={disable}
         isJobDetail={true}
         runTime={
-          stageId == 3 ? formatTime(getValues("run_time.mutation")) : undefined
+          stageId == 3 && getValues("run_time.mutation")
+            ? formatTime(getValues("run_time.mutation"))
+            : undefined
         }
       >
         <div className="space-y-4">

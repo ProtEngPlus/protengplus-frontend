@@ -68,7 +68,9 @@ export default function ProteinRepresentation({
         disabled={disable}
         isJobDetail={true}
         runTime={
-          stageId > 1 ? formatTime(getValues("run_time.evotune")) : undefined
+          stageId > 1 && getValues("run_time.evotune")
+            ? formatTime(getValues("run_time.evotune"))
+            : undefined
         }
       >
         <div className="space-y-4">

@@ -37,6 +37,8 @@ import {
   createJobConfiguration,
   updateJobDetail,
 } from "../../../../commons/api/job";
+import { QueryResult } from "../../../../commons/interfaces/QueryResult.interface";
+import { updateQueryResult } from "../../../../commons/api/queryResult";
 
 export default function Pipeline({
   job,
@@ -53,6 +55,7 @@ export default function Pipeline({
   const [currentStep, setCurrentStep] = useState(job.stage_id);
   const [isOpen, setIsOpen] = useState(false);
   const [pipeline, setPipeline] = useState<PipelineItem[]>(defaultPipeline);
+  const [queryResult, setQueryResult] = useState<QueryResult>();
 
   useEffect(() => {
     const updatedPipeline = [...pipeline];
@@ -110,6 +113,9 @@ export default function Pipeline({
 
   const handleJobUpdate = async () => {
     try {
+      if (currentStep == 0 && job.stage_id == 1 && queryResult) {
+        await updateQueryResult(queryResult.id, queryResult);
+      }
       const data = watch();
       const newJobOption = {} as CreateJobOption;
       const meta = [] as string[];
@@ -333,6 +339,8 @@ export default function Pipeline({
               state={job.state}
               pipeline={pipeline}
               setPipeline={setPipeline}
+              queryResult={queryResult}
+              setQueryResult={setQueryResult}
             />
           )}
           {currentStep === 1 && (

@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { PipelineItem } from "../../../../../commons/interfaces/CreateJob.interface";
 import { formatTime } from "../../../../../commons/utils/FormatTime";
 import InputFields from "../../../../../commons/components/CreateJob/InputField/InputFields";
+import { QueryResult } from "../../../../../commons/interfaces/QueryResult.interface";
 
 interface Props {
   isEdit: boolean;
@@ -29,6 +30,8 @@ interface Props {
   };
   pipeline: PipelineItem[];
   setPipeline: (p: PipelineItem[]) => void;
+  queryResult?: QueryResult;
+  setQueryResult?: (queryResult: QueryResult) => void;
 }
 
 export default function ProteinQuery({
@@ -41,6 +44,8 @@ export default function ProteinQuery({
   jobConfig,
   pipeline,
   setPipeline,
+  queryResult,
+  setQueryResult,
 }: Props) {
   const { getValues, watch } = useFormContext();
 
@@ -84,7 +89,9 @@ export default function ProteinQuery({
         onEditChange={handleChange}
         isJobDetail={true}
         runTime={
-          stageId > 0 ? formatTime(getValues("run_time.query")) : undefined
+          stageId > 0 && getValues("run_time.query")
+            ? formatTime(getValues("run_time.query"))
+            : undefined
         }
       >
         <div className="space-y-4">
@@ -128,6 +135,8 @@ export default function ProteinQuery({
             state={state}
             stage={stageId}
             onEdit={isEdit}
+            queryResult={queryResult}
+            setQueryResult={setQueryResult}
           />
         )}
       </ContextWithHelperText>
@@ -138,6 +147,8 @@ export default function ProteinQuery({
           state={state}
           stage={stageId}
           onEdit={isEdit}
+          queryResult={queryResult}
+          setQueryResult={setQueryResult}
         />
       )}
     </div>

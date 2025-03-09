@@ -68,7 +68,9 @@ export default function TopModel({
         disabled={disable}
         isJobDetail={true}
         runTime={
-          stageId > 2 ? formatTime(getValues("run_time.fittop")) : undefined
+          stageId > 2 && getValues("run_time.fittop")
+            ? formatTime(getValues("run_time.fittop"))
+            : undefined
         }
       >
         <div className="space-y-4">
