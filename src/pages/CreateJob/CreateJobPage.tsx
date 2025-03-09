@@ -114,6 +114,7 @@ export default function CreateJobPage() {
 
       handleSubmit(
         (data: any) => {
+          console.log(data);
           try {
             // Update jobDetail
             const newJobDetail: CreateJobDetail = {
