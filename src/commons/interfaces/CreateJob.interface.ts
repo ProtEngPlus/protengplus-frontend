@@ -1,4 +1,5 @@
 import { LabResult, OptionValue, RunType, State } from "./Job.interface";
+import { QueryResult } from "./QueryResult.interface";
 
 export const stepsForCreateJob = [
   "Protein Query",
@@ -31,6 +32,7 @@ export interface CreateJobInterface {
   is_notification_on: boolean;
   run_type: RunType;
   artifact: Record<string, object> | null;
+  query_result?: QueryResult;
 }
 
 export interface CreateJobDetail {
