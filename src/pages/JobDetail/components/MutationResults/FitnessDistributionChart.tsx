@@ -24,6 +24,7 @@ export default function FitnessDistributionChartData({
     document.head.appendChild(style);
 
     const [series, setSeries] = useState<MutationHistogram[]>([]);
+    const numberOfDataPoints = chartSeries.reduce((acc, series) => acc + series.data.reduce((sum, value) => sum + value, 0), 0);
 
     const [options, setOptions] = useState<ApexOptions>({
         chart: {
@@ -109,8 +110,10 @@ export default function FitnessDistributionChartData({
         <div className="p-4 border border-pep-light-gray rounded-md font-light">
             <div className="flex flex-col gap-2">
                 <div className="text-pep-blue text-2xl font-medium">Result Characteristics</div>
-                <div className="text-pep-dark-blue text-xl">Position Scan 25k</div>
-                <div>Fitness distribution of 25k sequences from Position_scan step</div>
+                <div>
+                    Fitness distribution of {numberOfDataPoints} sequences from Position_scan step
+                    {isShowLegend === true ? ` in ${series.length} collections` : ""}
+                </div>
             </div>
             <div id="chart">
                 <ReactApexChart

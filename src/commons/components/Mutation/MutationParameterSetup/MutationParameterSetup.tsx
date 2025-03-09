@@ -65,7 +65,7 @@ export default function MutationParameterSetup({
                 </div>
                 {isShowChart && chartLabels && (
                     <div className="!mt-0 bg-white rounded-sm">
-                        <FitnessDistributionChartData chartLabels={chartLabels} chartSeries={[{ name: mutation.name, data: mutation.histogram_data }]} />
+                        <FitnessDistributionChartData chartLabels={chartLabels} chartSeries={[{ name: mutation.name, data: mutation.histogram_data }]} isShowLegend={false} />
                     </div>
                 )}
             </div>
