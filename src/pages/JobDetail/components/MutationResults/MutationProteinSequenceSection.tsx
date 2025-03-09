@@ -7,12 +7,16 @@ import { ProteinSequenceOverlay, ProteinSequenceProps } from "../Overlay/Protein
 import SortOptionDropdown from "./Input/SortOptionDropDown";
 import ScoreDropDown from "./Input/ScoreDropDown";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import DownloadCSVButton from "../../../../commons/components/Button/DownloadCSVButton";
+import { ExportMutationResultOverlay } from "../Overlay/ExportMutationResultOverlay";
 
 export default function MutationProteinSequenceSection({
     mutationId,
+    mutationName,
     inputProtein,
 }: {
     mutationId: string;
+    mutationName: string;
     inputProtein: string;
 }) {
     const [mutationResults, setMutationResults] = useState<MutationResultInterface[]>([]);
@@ -26,6 +30,7 @@ export default function MutationProteinSequenceSection({
     const [valuemin, setValueMin] = useState(-2);
     const [valuemax, setValueMax] = useState(2);
     const [isOrDescending, setIsOrDescending] = useState(true);
+    const [isExportMutationResultVisible, setIsExportMutationResultVisible] = useState(false);
 
     const dropdownItems: { text: string; value: string }[] = [
         { text: "Score", value: "assay_score" },
@@ -71,6 +76,23 @@ export default function MutationProteinSequenceSection({
         }
     }, [valuemin, valuemax]);
 
+    // handle click outside for export mutation result overlay
+    useEffect(() => {
+        const handleClickOutSide = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            const modalElement = document.getElementById(`export_${mutationId}`);
+
+            if (modalElement && !modalElement.contains(target)) {
+                setIsExportMutationResultVisible(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutSide);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutSide);
+        };
+    });
+
     return (
         <div className="space-y-6 relative">
             <ProteinSequenceOverlay
@@ -78,7 +100,20 @@ export default function MutationProteinSequenceSection({
                 proteinSequenceProps={proteinSequenceProps}
                 proteinSequence={currentMutationResult?.protein_sequence || ""}
                 mutationPositions={currentMutationResult?.mutation_positions || []} />
+            <ExportMutationResultOverlay
+                isVisible={isExportMutationResultVisible}
+                exportProps={{
+                    id: "export_" + mutationId,
+                    onClose: () => setIsExportMutationResultVisible(false),
+                    title: "Do you want to export mutation results",
+                    message: mutationName,
+                    mutationId: mutationId,
+                }}
+            />
             <div className="space-y-8 px-6 py-8 font-light rounded-lg h-fit bg-gray-50 drop-shadow-md w-full flex flex-col items-center">
+                <div className="w-full flex justify-end">
+                    <DownloadCSVButton onClick={() => setIsExportMutationResultVisible(true)} />
+                </div>
                 <div className="flex justify-between w-full items-start gap-6">
                     <div className="flex justify-start gap-3 items-center pt-2">
                         <div onClick={() => setIsOrDescending(!isOrDescending)} className="cursor-pointer">

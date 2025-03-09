@@ -1,4 +1,4 @@
-import { del, get, post, put } from "./common";
+import { del, get, getRaw, post, put } from "./common";
 import { BACKEND_BASE_URL } from "../configs/apiConfig";
 import { CreateMutationInterface, MutationInterface, MutationHistogram, MutationSearchParams, MutationResultInterface, MutationResultSearchParams } from "../interfaces/Mutation.interface";
 import { Params } from "../interfaces/ApiResponse.interface";
@@ -48,4 +48,9 @@ export const getAllMutationResults = async (params: MutationResultSearchParams) 
 export const updateMutationResultDetail = async (mutationResultId: string, updateData: Partial<MutationResultInterface>) => {
     const path = MUTATION_RESULT_PATH + `/${mutationResultId}`;
     return await put<MutationResultInterface>(path, updateData, true);
+}
+
+export const downloadMutationResults = async (mutationId: string) => {
+    const path = MUTATION_PATH + `/${mutationId}/download`;
+    return await getRaw(path, true);
 }
