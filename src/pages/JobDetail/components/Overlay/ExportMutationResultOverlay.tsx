@@ -6,7 +6,6 @@ import { downloadMutationResults } from "../../../../commons/api/mutation";
 
 export type ExportMutationResultOverlayProps = {
     id: string;
-    onClose: () => void;
     title: string;
     message: string;
     mutationId: string;
@@ -19,29 +18,26 @@ export function ExportMutationResultOverlay({
     isVisible: boolean;
     exportProps: ExportMutationResultOverlayProps;
 }) {
-    const { id, onClose, title, message, mutationId } = exportProps;
+    const { id, title, message, mutationId } = exportProps;
 
     const handleExportMutationResult = async (isBookmarkOnly: boolean) => {
-        if (!isBookmarkOnly) {
-            try {
-                const response = await downloadMutationResults(mutationId);
-                console.log(response);
+        try {
+            const response = await downloadMutationResults(mutationId, isBookmarkOnly ? { is_bookmark: true } : {});
 
-                // Create a Blob from the CSV response
-                const blob = new Blob([response], { type: "text/csv" });
+            // Create a Blob from the CSV response
+            const blob = new Blob([response], { type: "text/csv" });
 
-                // Create a temporary download link
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `mutaiton_results_${mutationId}.csv`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            } catch (error) {
-                console.error("Error downloading CSV:", error);
-            }
+            // Create a temporary download link
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `mutaiton_results_${isBookmarkOnly ? "bookmark_" : ""}${mutationId}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Error downloading CSV:", error);
         }
     };
 
@@ -88,7 +84,7 @@ export function ExportMutationResultOverlay({
                             buttonType="submit"
                             text="Export Bookmark"
                             className="w-[190px] min-w-fit !font-light"
-                            onClick={onClose}
+                            onClick={() => handleExportMutationResult(true)}
                         />
                         <Button
                             id="export-all"

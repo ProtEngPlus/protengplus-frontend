@@ -104,7 +104,6 @@ export default function MutationProteinSequenceSection({
                 isVisible={isExportMutationResultVisible}
                 exportProps={{
                     id: "export_" + mutationId,
-                    onClose: () => setIsExportMutationResultVisible(false),
                     title: "Do you want to export mutation results",
                     message: mutationName,
                     mutationId: mutationId,

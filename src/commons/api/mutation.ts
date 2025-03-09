@@ -50,7 +50,7 @@ export const updateMutationResultDetail = async (mutationResultId: string, updat
     return await put<MutationResultInterface>(path, updateData, true);
 }
 
-export const downloadMutationResults = async (mutationId: string) => {
+export const downloadMutationResults = async (mutationId: string, params: MutationResultSearchParams) => {
     const path = MUTATION_PATH + `/${mutationId}/download`;
-    return await getRaw(path, true);
+    return await getRaw(path, true, params as Params);
 }
