@@ -12,6 +12,7 @@ import {
   inputProteinProtSeq,
   inputProteinUniprotId,
 } from "../../../configs/createJobConfig";
+import { QueryResult } from "../../../interfaces/QueryResult.interface";
 
 interface Props {
   isJobDetail: boolean;
@@ -21,6 +22,8 @@ interface Props {
   isWithConfig?: boolean;
   initialStep?: number;
   isConclusion?: boolean;
+  queryResult?: QueryResult;
+  setQueryResult?: (queryResult: QueryResult) => void; // for create job page
 }
 
 export default function InputProtein({
@@ -31,6 +34,8 @@ export default function InputProtein({
   onEdit,
   initialStep = 1,
   isConclusion = false,
+  queryResult,
+  setQueryResult,
 }: Props) {
   const {
     register,
@@ -233,6 +238,8 @@ export default function InputProtein({
               isOverlay={false}
               disable={!canEditQueryResult}
               jobId={jobId}
+              queryResult={queryResult}
+              setQueryResult={setQueryResult}
             />
           )}
         </div>

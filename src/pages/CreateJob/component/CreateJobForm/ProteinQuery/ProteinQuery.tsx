@@ -14,6 +14,7 @@ import DropdownInput from "../../../../../commons/components/CreateJob/InputFiel
 import HelperText from "../../../../../commons/components/CreateJob/InputField/HelperText";
 import InputProtein from "../../../../../commons/components/CreateJob/InputProtein/InputProtein";
 import InputFields from "../../../../../commons/components/CreateJob/InputField/InputFields";
+import { QueryResult } from "../../../../../commons/interfaces/QueryResult.interface";
 
 interface Props {
   isWithConfig?: boolean;
@@ -24,6 +25,8 @@ interface Props {
   isConclusion?: boolean;
   onEditInfo?: boolean;
   onEditOption?: boolean;
+  queryResult?: QueryResult;
+  setQueryResult?: (queryResult: QueryResult) => void;
 }
 
 export default function ProteinQuery({
@@ -35,6 +38,8 @@ export default function ProteinQuery({
   isConclusion = false,
   onEditInfo = true,
   onEditOption = true,
+  queryResult,
+  setQueryResult,
 }: Props) {
   const {
     getValues,
@@ -45,9 +50,6 @@ export default function ProteinQuery({
   const currentSubMethod =
     watch(`tool_${stepsForCreateJob[step - 1]}`) ??
     pipeline[step - 1].subMethod;
-
-  // detect input change for display query result Table
-  const [isChange, setIsChange] = useState(false);
 
   // isEdit (for conclusion step)
   const [isEditInfo, setEditInfo] = useState(onEditInfo);
@@ -185,6 +187,8 @@ export default function ProteinQuery({
             isWithConfig={isWithConfig}
             initialStep={initialStep}
             isConclusion={isConclusion}
+            queryResult={queryResult}
+            setQueryResult={setQueryResult}
           />
         )}
       </ContextWithHelperText>
@@ -196,6 +200,8 @@ export default function ProteinQuery({
           isWithConfig={isWithConfig}
           initialStep={initialStep}
           isConclusion={isConclusion}
+          queryResult={queryResult}
+          setQueryResult={setQueryResult}
         />
       )}
     </div>
