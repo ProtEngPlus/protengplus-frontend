@@ -10,8 +10,10 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function MutationProteinSequenceSection({
     mutationId,
+    inputProtein,
 }: {
     mutationId: string;
+    inputProtein: string;
 }) {
     const [mutationResults, setMutationResults] = useState<MutationResultInterface[]>([]);
     const [isProteinSequenceVisible, setIsProteinSequenceVisible] = useState(false);
@@ -77,20 +79,27 @@ export default function MutationProteinSequenceSection({
                 proteinSequence={currentMutationResult?.protein_sequence || ""}
                 mutationPositions={currentMutationResult?.mutation_positions || []} />
             <div className="space-y-8 px-6 py-8 font-light rounded-lg h-fit bg-gray-50 drop-shadow-md w-full flex flex-col items-center">
-                <div className="w-full space-y-4">
-                    <div className="flex justify-between items-center">
-                        <div className="flex justify-start gap-3 items-center">
-                            <div onClick={() => setIsOrDescending(!isOrDescending)} className="cursor-pointer">
-                                {isOrDescending ? (
-                                    <Icon icon="ph:sort-ascending-bold" className="text-pep-blue" width="30" height="30" />
-                                ) : (
-                                    <Icon icon="ph:sort-descending-bold" className="text-pep-blue" width="30" height="30" />
-                                )}
-                            </div>
-                            <Icon icon="ic:baseline-sort" className="text-gray-400" width="24" height="24" />
-                            <SortOptionDropdown sortBy={sortBy} setSortBy={setSortBy} dropdownItems={dropdownItems} />
-                            <ScoreDropDown label={dropdownItems.find((item) => item.value === sortBy)?.text || "Score"} value={valuemin} setValue={setValueMin} />
-                            <ScoreDropDown label="to" value={valuemax} setValue={setValueMax} />
+                <div className="flex justify-between w-full items-start gap-6">
+                    <div className="flex justify-start gap-3 items-center pt-2">
+                        <div onClick={() => setIsOrDescending(!isOrDescending)} className="cursor-pointer">
+                            {isOrDescending ? (
+                                <Icon icon="ph:sort-ascending-bold" className="text-pep-blue" width="30" height="30" />
+                            ) : (
+                                <Icon icon="ph:sort-descending-bold" className="text-pep-blue" width="30" height="30" />
+                            )}
+                        </div>
+                        <Icon icon="ic:baseline-sort" className="text-gray-400" width="24" height="24" />
+                        <SortOptionDropdown sortBy={sortBy} setSortBy={setSortBy} dropdownItems={dropdownItems} />
+                        <ScoreDropDown label={dropdownItems.find((item) => item.value === sortBy)?.text + ':' || "Score:"} value={valuemin} setValue={setValueMin} />
+                        <ScoreDropDown label="to" value={valuemax} setValue={setValueMax} />
+                    </div>
+                    <div className="flex flex-col gap-2 items-start">
+                        <div className="font-normal flex gap-1 items-center">
+                            <Icon icon="hugeicons:dna" className="text-gray-400" width="30" height="30" />
+                            Input Protein
+                        </div>
+                        <div className="bg-pep-blue font-light rounded-lg p-1 text-white break-all">
+                            {inputProtein}
                         </div>
                     </div>
                 </div>

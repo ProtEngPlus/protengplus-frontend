@@ -40,7 +40,7 @@ export default function SortOptionDropdown({
 
     return (
         <div ref={dropdownRef} className="relative flex space-x-2 items-center text-light">
-            <div className="text-gray-500">Sort By: </div>
+            <div className="text-gray-500 whitespace-nowrap">Sort By: </div>
             <button
                 id="dropdown-mutation-page-number"
                 onClick={toggleDropdown}

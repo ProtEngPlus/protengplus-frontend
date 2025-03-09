@@ -239,7 +239,7 @@ export default function MutationResults({
 
                         <MutationParameterSetup mutation={currentMutation} isShowChart={true} chartLabels={chartLabels} currentStep={currentStep} pipeline={pipeline} />
 
-                        <MutationProteinSequenceSection mutationId={currentMutation.id} />
+                        <MutationProteinSequenceSection mutationId={currentMutation.id} inputProtein={currentMutation.input_protein} />
                     </div>
                 )}
             </div>
