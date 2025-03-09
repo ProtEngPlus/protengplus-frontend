@@ -23,6 +23,7 @@ export interface PipelineItems {
 export interface CreateJobInterface {
   user_id: string;
   ref_job_id?: string;
+  stage_id: number;
   name: string;
   description: string;
   input_protein: string;
