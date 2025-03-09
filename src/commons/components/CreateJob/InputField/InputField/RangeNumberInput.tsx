@@ -32,12 +32,14 @@ export default function RangeNumberInput({
     setValue,
     getValues,
   } = useFormContext();
-  useEffect(() => {
-    setValue(`${id}_low`, defaultLow || undefined);
-    setValue(`${id}_high`, defaultHigh || undefined);
-  }, []);
+
   const currentValueLow = watch(`${id}_low`) ?? defaultLow;
   const currentValueHigh = watch(`${id}_high`) ?? defaultHigh;
+
+  useEffect(() => {
+    setValue(`${id}_low`, watch(`${id}_low`) || defaultLow || undefined);
+    setValue(`${id}_high`, watch(`${id}_high`) || defaultHigh || undefined);
+  }, [defaultLow, defaultHigh, id, setValue]);
 
   const handleIncrease = (field: string) => {
     const currentValue = parseFloat(getValues(field)) || 0;

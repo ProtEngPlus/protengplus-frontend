@@ -37,8 +37,8 @@ export default function RangePercentInput({
   const currentValueHigh = watch(`${id}_high`) ?? defaultHigh ?? undefined;
 
   useEffect(() => {
-    setValue(`${id}_low`, defaultLow || undefined);
-    setValue(`${id}_high`, defaultHigh || undefined);
+    setValue(`${id}_low`, watch(`${id}_low`) || defaultLow || undefined);
+    setValue(`${id}_high`, watch(`${id}_high`) || defaultHigh || undefined);
   }, [defaultLow, defaultHigh, id, setValue]);
 
   // Local state for formatted values
