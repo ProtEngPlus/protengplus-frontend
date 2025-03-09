@@ -13,6 +13,10 @@ import {
   inputProteinUniprotId,
 } from "../../../configs/createJobConfig";
 import { QueryResult } from "../../../interfaces/QueryResult.interface";
+import {
+  QueryResultOverlay,
+  QueryResultOverlayProps,
+} from "./QueryResultOverlay";
 
 interface Props {
   isJobDetail: boolean;
@@ -81,10 +85,23 @@ export default function InputProtein({
     }
   };
 
+  // query result filter
+  const [isQueryResultVisible, setQueryResultVisible] = useState(false);
+  const queryResultOverlayProps: QueryResultOverlayProps = {
+    inputProtein,
+    jobId,
+    onClose: () => {
+      setQueryResultVisible(false);
+    },
+  };
+
   return (
     <div>
       {/* Add Protein Table Overlay & Query Result Filter Here */}
-
+      <QueryResultOverlay
+        isVisible={isQueryResultVisible}
+        queryResultProps={queryResultOverlayProps}
+      />
       <div className="space-y-12">
         {/* Header Section */}
         <div
@@ -221,6 +238,21 @@ export default function InputProtein({
               </div>
             ) : hasQueryResult ? (
               <div className="flex items-center space-x-3">
+                <Button
+                  id="btn-view-protein-with-table"
+                  buttonType="cancel"
+                  type="button"
+                  text="View"
+                  className="w-fit px-3 py-2 font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-3 text-pep-dark-gray"
+                  onClick={() => {
+                    setQueryResultVisible(true);
+                  }}
+                >
+                  <Icon
+                    icon="carbon:view"
+                    className="size-[30px] text-pep-gray"
+                  />
+                </Button>
                 <DownloadCSVButton />
               </div>
             ) : (
