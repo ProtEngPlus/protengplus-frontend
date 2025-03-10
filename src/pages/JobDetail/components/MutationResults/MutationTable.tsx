@@ -1,12 +1,7 @@
 import { useState } from "react";
-import { Mutation, MutationStateType } from "../../../../commons/interfaces/Mutation.interface";
-import {
-    DeleteOverlay,
-    DeleteOverlayProps,
-} from "../../../../commons/components/ModalOverlay/DeleteOverlay";
+import { MutationInterface, MutationStateType } from "../../../../commons/interfaces/Mutation.interface";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { deleteMutation, runMutation, updateMutationDetail } from "../../../../commons/api/mutation";
-import { useNavigate } from "react-router-dom";
+import { updateMutationDetail } from "../../../../commons/api/mutation";
 import editIcon from "../../../../assets/images/CreateJob/editIcon.svg";
 import { RenameMutationOverlay, RenameMutationProps } from "../Overlay/RenameMutationOverlay";
 import MutationState from "../../../../commons/components/Mutation/MutationState/MutationState";
@@ -22,18 +17,22 @@ export default function MutationTable({
     refresh,
     currentMutation,
     setCurrentMutation,
-}: {
-    mutations: Mutation[];
-    refresh: () => void;
-    currentMutation: Mutation | null;
-    setCurrentMutation: (mutation: Mutation) => void;
-}) {
-    const navigate = useNavigate();
-    const [isDeleteVisible, setDeleteVisible] = useState(false);
+    setIsSelectCollection,
+    handleRunMutation,
+    handleDelete,
 
+}: {
+    mutations: MutationInterface[];
+    refresh: () => void;
+    currentMutation: MutationInterface | null;
+    setCurrentMutation: (mutation: MutationInterface) => void;
+    setIsSelectCollection: (value: boolean) => void;
+    handleRunMutation: (mutation: MutationInterface) => void;
+    handleDelete: (mutation: MutationInterface) => void;
+}) {
     const [isRenameMutationVisible, setIsRenameMutationVisible] = useState(false);
 
-    const handleRename = (mutation: Mutation) => {
+    const handleRename = (mutation: MutationInterface) => {
         setCurrentMutation(mutation);
         setIsRenameMutationVisible(true);
     }
@@ -54,48 +53,18 @@ export default function MutationTable({
         }
     };
 
-    const handleDelete = (mutation: Mutation) => {
-        setCurrentMutation(mutation);
-        setDeleteVisible(true);
-    };
-    const DeleteProps: DeleteOverlayProps = {
-        id: "delete-job",
-        onClose: () => {
-            setDeleteVisible(false);
-        },
-        onDelete: async () => {
-            if (currentMutation) {
-                await deleteMutation(currentMutation.id);
-            }
-            setDeleteVisible(false);
-            refresh();
-        },
-        title: "Do you want to delete this mutation collection?",
-        children: (
-            <div className="flex flex-col font-light mt-4 gap-y-2">
-                <label>
-                    Collection name: {currentMutation?.name} <br />
-                </label>
-                <label className="text-red-500">
-                    Delete the mutate will delete all this mutate's bookmark
-                </label>
-            </div>
-        ),
-    };
-
-    const handleRunMutation = async (mutation: Mutation) => {
-        await runMutation(mutation.id);
-        refresh();
-    };
-
-    const handleBookmark = async (mutation: Mutation) => {
+    const handleBookmark = async (mutation: MutationInterface) => {
         await updateMutationDetail(mutation.id, { is_bookmark: !mutation.is_bookmark });
         refresh();
     };
 
+    const handleSelectMutation = (mutation: MutationInterface) => {
+        setCurrentMutation(mutation);
+        setIsSelectCollection(true);
+    }
+
     return (
         <div>
-            <DeleteOverlay isVisible={isDeleteVisible} deleteProps={DeleteProps} />
             <RenameMutationOverlay
                 renameMutationProps={renameMutationProps}
                 isVisible={isRenameMutationVisible}
@@ -120,7 +89,7 @@ export default function MutationTable({
                                     {headers.map((header, index) => (
                                         <th
                                             key={index}
-                                            className="font-normal px-3 py-3 text-base"
+                                            className="font-normal px-6 py-3 text-base"
                                         >
                                             {header}
                                         </th>
@@ -137,48 +106,42 @@ export default function MutationTable({
                                         className={`font-light border-b h-[80px] w-full ${mutation.id === currentMutation?.id ? "bg-blue-50" : "bg-white"}`}
                                         onClick={() => setCurrentMutation(mutation)}
                                     >
-                                        <td className="px-3 py-3 place-items-center">
-                                            <div className="flex space-x-4 items-center">
-                                                {mutation.is_bookmark ?
-                                                    <Icon
-                                                        icon="fa-solid:bookmark"
-                                                        className={`text-pep-orange text-xl`}
-                                                        onClick={() => {
-                                                            handleBookmark(mutation);
-                                                        }} /> :
-                                                    <Icon
-                                                        icon="cil:bookmark"
-                                                        className={`text-pep-orange text-xl`}
-                                                        onClick={() => {
-                                                            handleBookmark(mutation);
-                                                        }} />}
-
+                                        <td className="pl-3 py-3 place-items-center">
+                                            <Icon
+                                                icon="cil:bookmark"
+                                                className={`${mutation.is_bookmark ? "text-pep-orange" : "text-pep-gray"}  text-xl cursor-pointer`}
+                                                onClick={() => {
+                                                    handleBookmark(mutation);
+                                                }} />
+                                        </td>
+                                        <td className="px-3 py-3">
+                                            <div className="flex items-center space-x-4">
                                                 <img
                                                     src={editIcon}
                                                     alt="edit"
                                                     className="text-pep-gray size-5 min-w-5 cursor-pointer"
                                                     onClick={() => handleRename(mutation)}
                                                 />
+                                                <label
+                                                    className="truncate text-blue-500 font-normal text-sm leading-5 underline cursor-pointer"
+                                                    onClick={() =>
+                                                        handleSelectMutation(mutation)
+                                                    }
+                                                >
+                                                    {mutation.name}
+                                                </label>
                                             </div>
                                         </td>
-                                        <td className="flex px-3 py-3 items-center h-[80px]">
-                                            <label
-                                                className="truncate text-blue-500 font-normal text-sm leading-5 underline cursor-pointer"
-                                                onClick={() =>
-                                                    navigate(`/dashboard/job-detail/${mutation.id}`)
-                                                }
-                                            >
-                                                {mutation.name}
-                                            </label>
-                                        </td>
-                                        <td className="px-3 py-3 text-center">
-                                            <MutationState state={mutation.state as MutationStateType} className="mx-auto" />
-                                            {mutation.state === "COMPLETED" && mutation.complete_at && (
-                                                <label>
-                                                    Total Time:{" "}
-                                                    {getTotalTime(mutation.created_at, mutation.complete_at)} Min
-                                                </label>
-                                            )}
+                                        <td className="px-3 py-3">
+                                            <div className="flex flex-col items-center w-fit">
+                                                <MutationState state={mutation.state as MutationStateType} className="mx-auto" />
+                                                {mutation.state === "COMPLETED" && mutation.complete_at && (
+                                                    <label>
+                                                        Total Time:{" "}
+                                                        {getTotalTime(mutation.created_at, mutation.complete_at)} Min
+                                                    </label>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-3 py-3 place-items-center">
                                             <div className="flex space-x-4 items-center">
@@ -205,7 +168,6 @@ export default function MutationTable({
                         </table>
                     </div>
                 </div>
-
             )}
         </div>
     );

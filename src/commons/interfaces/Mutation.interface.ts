@@ -7,7 +7,7 @@ export interface MutationHistogram {
     data: number[]
 }
 
-export interface Mutation {
+export interface MutationInterface {
     id: string,
     name: string,
     job_id: string,
@@ -34,4 +34,24 @@ export interface CreateMutationInterface {
 export interface MutationSearchParams {
     job_id?: string,
     is_bookmark?: boolean,
+}
+
+export interface MutationResultInterface {
+    id: string,
+    mutation_id: string,
+    job_id: string,
+    user_id: string,
+    protein_sequence: string,
+    mutation_positions: string[],
+    assay_score: number,
+    is_bookmark: boolean,
+}
+
+export interface MutationResultSearchParams {
+    mutation_id?: string,
+    is_bookmark?: boolean,
+    sort?: string,
+    min_value?: number,
+    max_value?: number,
+    order?: string,
 }
