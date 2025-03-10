@@ -37,7 +37,6 @@ export function FilterOverlay({
     eValuesTo,
     queryCoverFrom,
     queryCoverTo,
-    onClose,
     onReset,
     onConfirm,
   } = filterOverlayProps;
