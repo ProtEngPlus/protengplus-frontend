@@ -11,7 +11,7 @@ const createJobOptions: Option[] = [
   { label: "Step 1 - Protein Query", value: "1" },
   { label: "Step 2 - Protein Representation", value: "2" },
   { label: "Step 3 - Upload Lab Input", value: "3" },
-  { label: "Step 2 - Top Model", value: "4" },
+  { label: "Step 4 - Top Model", value: "4" },
   { label: "Step 5 - Mutation", value: "5" },
 ];
 
