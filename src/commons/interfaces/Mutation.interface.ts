@@ -26,19 +26,19 @@ export interface Mutation {
 }
 
 export interface MutationInterface {
-    id: string,
-    name: string,
-    job_id: string,
-    run_id: string,
-    input_protein: string,
-    options: string,
-    tool: string,
-    state: string,
-    is_bookmark: boolean,
-    user_id: string,
-    histogram_data: number[],
-    created_at: string,
-    complete_at: string,
+  id: string,
+  name: string,
+  job_id: string,
+  run_id: string,
+  input_protein: string,
+  options: string,
+  tool: string,
+  state: string,
+  is_bookmark: boolean,
+  user_id: string,
+  histogram_data: number[],
+  created_at: string,
+  complete_at: string,
 }
 
 export interface MutationSearchParams {
@@ -62,8 +62,8 @@ export interface MutationResultSearchParams {
   job_id?: string;
   is_bookmark?: boolean;
   sort?: string;
-  min_value?: boolean;
-  max_value?: boolean;
+  min_value?: number;
+  max_value?: number;
   order?: Order;
 }
 
@@ -76,12 +76,12 @@ export interface CreateMutationInterface {
 }
 
 export interface MutationResultInterface {
-    id: string,
-    mutation_id: string,
-    job_id: string,
-    user_id: string,
-    protein_sequence: string,
-    mutation_positions: string[],
-    assay_score: number,
-    is_bookmark: boolean,
+  id: string,
+  mutation_id: string,
+  job_id: string,
+  user_id: string,
+  protein_sequence: string,
+  mutation_positions: string[],
+  assay_score: number,
+  is_bookmark: boolean,
 }
