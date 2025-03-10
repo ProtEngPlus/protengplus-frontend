@@ -31,6 +31,26 @@ export const get = async <T>(
   }
 };
 
+export const getRaw = async (
+  path: string,
+  withHeader: boolean = false,
+  params?: Params
+) => {
+  try {
+    const headers = withHeader ? getHeaderWithToken() : {};
+    const axios_response = await axios.get(path, {
+      headers,
+      params,
+      paramsSerializer: { indexes: null },
+    });
+
+    const res = axios_response.data as Blob;
+    return res;
+  } catch (error: any) {
+    return error.response.data;
+  }
+};
+
 export const post = async <T>(
   path: string,
   data: T,
