@@ -287,7 +287,7 @@ export default function JobDetailPage() {
 
               <li className="me-2">
                 <button
-                  disabled={job.state !== "COMPLETED" || isEditPipeline}
+                  disabled={job.stage_id < 3 || isEditPipeline}
                   className="inline-block p-4 border-b-2 rounded-t-lg disabled:cursor-not-allowed disabled:text-gray-300"
                   id="mutaion-results-tab"
                   type="button"

@@ -1,3 +1,5 @@
+import { pdf } from "@react-pdf/renderer";
+import html2canvas from "html2canvas";
 import { useEffect, useMemo, useState } from "react";
 import Stepper from "../../../../commons/components/JobDetail/Stepper/Stepper";
 import {
@@ -32,6 +34,7 @@ import {
   CreateJobConfiguration,
   CreateJobOption,
   PipelineItem,
+  ReportJobDetail,
 } from "../../../../commons/interfaces/CreateJob.interface";
 import {
   createJobConfiguration,
@@ -39,6 +42,12 @@ import {
 } from "../../../../commons/api/job";
 import { QueryResult } from "../../../../commons/interfaces/QueryResult.interface";
 import { updateQueryResult } from "../../../../commons/api/queryResult";
+import { ReportInterface } from "../../../../commons/interfaces/Report.interface";
+import { useAuth } from "../../../../commons/hooks/useAuth";
+import ReportPDF from "../../../../commons/components/ReportPDF/ReportPDF";
+import FitnessDistributionChartData from "../MutationResults/FitnessDistributionChart";
+import { getMutationHistogram } from "../../../../commons/api/mutation";
+import { createRoot } from "react-dom/client";
 
 export default function Pipeline({
   job,
@@ -52,6 +61,8 @@ export default function Pipeline({
   fetchJob: () => void;
 }) {
   const { setValue, watch } = useFormContext();
+  const formData = watch();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(job.stage_id);
   const [isOpen, setIsOpen] = useState(false);
   const [pipeline, setPipeline] = useState<PipelineItem[]>(defaultPipeline);
@@ -201,6 +212,91 @@ export default function Pipeline({
     updateJob();
   }, [runType, isNotificationOn, job.id]);
 
+  const getReportData = () => {
+    const newJobDetail: ReportJobDetail = {
+      artifact: formData["artifact"],
+      ref_job_id: formData["ref_job_id"],
+      description: formData["description"],
+      input_protein: formData["input_protein"],
+      is_notification_on: formData["is_notification_on"],
+      lab_result: formData["lab_result"],
+      name: formData["name"],
+      run_type: formData["run_type"],
+      run_time: formData["run_time"],
+    };
+
+    const newJobOption: CreateJobOption = formData["options"];
+    const meta: string[] = formData["meta"];
+
+    const { lab_result, ...otherDetails } = newJobDetail;
+    const labResult = lab_result;
+
+    const newJob: ReportInterface = {
+      user_id: user?.id ?? "",
+      username: user ? `${user.name} ${user.surname}` : "",
+      options: newJobOption,
+      lab_result: labResult,
+      ...otherDetails,
+      meta: meta,
+    };
+
+    return newJob;
+  };
+
+  const onPDFDownload = async () => {
+    try {
+      const chartLabels = ["-2.0", "-1.9", "-1.8", "-1.7", "-1.6", "-1.5", "-1.4", "-1.3", "-1.2", "-1.1", "-1.0", "-0.9", "-0.8", "-0.7", "-0.6", "-0.5", "-0.4", "-0.3", "-0.2", "-0.1", "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9"];
+      let chartSeries = [];
+
+      if (formData) {
+        const { data } = await getMutationHistogram(formData["id"]);
+        if (data) {
+          chartSeries = data;
+        }
+      }
+
+      const hiddenDiv = document.createElement("div");
+      hiddenDiv.className = "hidden-chart-container";
+      document.body.appendChild(hiddenDiv);
+
+      // Render the chart inside the hidden div
+      const chartContainer = document.createElement("div");
+      chartContainer.id = "hidden-chart";
+      hiddenDiv.appendChild(chartContainer);
+
+      const root = createRoot(chartContainer);
+      root.render(
+        <FitnessDistributionChartData
+          chartLabels={chartLabels}
+          chartSeries={chartSeries}
+        />
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const canvas = await html2canvas(chartContainer);
+      const chartImage = canvas.toDataURL("image/png");
+
+      root.unmount();
+      document.body.removeChild(hiddenDiv);
+
+      const blob = await pdf(
+        <ReportPDF jobData={getReportData()} chart={chartImage} />
+      ).toBlob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      const today = new Date().toISOString().split("T")[0];
+      link.download = `Report_${formData["name"]}_${today}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <ConfirmOverlay
@@ -280,7 +376,7 @@ export default function Pipeline({
                     } else {
                       setIsOpen(false);
                       {
-                        /* download pdf */
+                        onPDFDownload();
                       }
                     }
                   }}

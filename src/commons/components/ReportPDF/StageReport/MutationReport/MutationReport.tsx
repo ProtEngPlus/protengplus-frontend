@@ -13,10 +13,10 @@ export default function MutationReport({
 }) {
   const Mcmc = () => (
     <View>
-      <InfoBox label={"Number Of Trajectories"} text={option.num_trajectories} />
-      <InfoBox label={"Number Of Iteration"} text={option.num_iterations} />
-      <InfoBox label={"Mutation Position Range"} text={option.mutate_pos_range} />
-      <InfoBox label={"Temperature"} text={option.temperature} />
+      <InfoBox label={"Number Of Trajectories"} text={option.num_trajectories || "-" } />
+      <InfoBox label={"Number Of Iteration"} text={option.num_iterations || "-" } />
+      <InfoBox label={"Mutation Position Range"} text={option.mutate_pos_range || "-" } />
+      <InfoBox label={"Temperature"} text={option.temperature || "-" } />
     </View>
   );
 
@@ -41,7 +41,7 @@ export default function MutationReport({
         </View>
       </View>
       <View>
-        <InfoBox label={"Tool"} text={tool} />
+        <InfoBox label={"Tool"} text={tool || "-" } />
         <ToolSelection />
       </View>
     </View>
