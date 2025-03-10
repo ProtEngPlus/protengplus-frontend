@@ -1,5 +1,7 @@
 FROM node:alpine AS build
 ARG BUILD_MODE=production
+ARG VITE_BACKEND_BASE_URL
+ENV VITE_BACKEND_BASE_URL=$VITE_BACKEND_BASE_URL
 WORKDIR /app
 COPY package.json .
 RUN npm install

@@ -44,6 +44,7 @@ jobs:
           file: Dockerfile
           build-args: |
             BUILD_MODE=development
+            VITE_BACKEND_BASE_URL=${{ secrets.VITE_BACKEND_BASE_URL }}
           push: true
           tags: ${{ secrets.IMAGE_REPO }}/${{ secrets.REGISTRY_USERNAME }}/protengplus-frontend:${{ env.SHORT_SHA }}
           cache-from: type=gha
