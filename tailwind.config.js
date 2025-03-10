@@ -3,6 +3,7 @@ export default {
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/flowbite/**/*.js",
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.{js,ts}",
   ],
 
   theme: {
@@ -34,6 +35,10 @@ export default {
       },
       boxShadow: {
         dropShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
+        pagination: "0 1px 3px 0 rgba(0,0,0,0.13)",
+        table: "0 3px 8px 0 rgba(0,0,0,0.08)",
+        dropDown: "0 1px 3px 0 rgba(166,175,195,0.4)",
+        statistic: "0 1px 6.25px 0 rgba(166,175,195,0.4)",
       },
       screens: {
         inputField: "900px",

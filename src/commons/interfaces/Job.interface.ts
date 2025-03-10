@@ -49,7 +49,7 @@ export interface JobInterface {
 
 export interface JobSearchParams {
   name?: string;
-  state?: string | string[];
-  sort?: string;
-  order?: Order;
+  state?: State | State[];
+  created_at_from?: string;
+  created_at_to?: string;
 }

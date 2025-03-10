@@ -32,7 +32,7 @@ export default function JobRunTypeIcon({
       return (
         <Icon
           icon="heroicons-solid:fast-forward"
-          className="size-8 text-customOrange"
+          className="size-8 text-pep-orange cursor-pointer"
           onClick={onClick}
         />
       );
@@ -41,33 +41,38 @@ export default function JobRunTypeIcon({
       return (
         <Icon
           icon="heroicons-solid:fast-forward"
-          className="size-8 text-gray-300 "
+          className="size-8 text-pep-gray"
         />
       );
     } else if (state === "PENDING" || state === "CREATED") {
       return (
         <Icon
           icon="iconoir:play-solid"
-          className="size-8 text-[#76C280] cursor-pointer"
+          className="size-8 text-pep-green cursor-pointer"
           onClick={onClick}
         />
       );
     } else if (state === "ONGOING") {
-      return <Icon icon="ic:round-pause" className="size-8 text-gray-300" />;
+      return (
+        <Icon
+          icon="ic:round-pause"
+          className="size-8 text-pep-gray cursor-pointer"
+        />
+      );
     } else {
       // failed and completed
       return (
-        <Icon icon="iconoir:play-solid" className="size-8 text-gray-300" />
+        <Icon icon="iconoir:play-solid" className="size-8 text-pep-gray" />
       );
     }
   };
   return (
     <div className="relative group">
       {renderIcon()}
-      <div className="hidden text-nowrap absolute left-1/2 transform -translate-x-1/2 top-7 z-10 group-hover:block p-[2px] text-[8px] leading-none font-light text-white text-center bg-gray-500 rounded-md">
+      <div className="hidden text-nowrap absolute left-1/2 transform -translate-x-1/2 top-7 z-10 group-hover:block p-[2px] text-[8px] leading-none font-light text-white text-center bg-label rounded-md">
         {getTooltipText(runType, state)}
         {/* Arrow */}
-        <div className="bg-gray-500 size-1 rotate-45 absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 z-[-10]"></div>
+        <div className="bg-label size-1 rotate-45 absolute left-1/2 -translate-x-1/2 top-0 -translate-y-1/2 z-[-10]"></div>
       </div>
     </div>
   );
