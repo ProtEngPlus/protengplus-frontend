@@ -42,19 +42,12 @@ export function generateInitialJobConfig(
   const initialJobOption = {} as JobOption;
   const pipelineItem = defaultPipeline;
 
-  // add input protein config here
-  initialJobOption["Protein Input"] = {};
-  initialJobOption["Protein Input"]["Protein Input Config"] = {};
-  createJobConfig["Protein Input"].tool[
-    "Protein Input Config"
-  ].parameters.forEach((value) => {
-    initialJobOption["Protein Input"]["Protein Input Config"][
-      `${value.id}_low`
-    ] = value.low;
-    initialJobOption["Protein Input"]["Protein Input Config"][
-      `${value.id}_high`
-    ] = value.high;
-  });
+  // query result option
+  if (stepConfig > 1 && jobConfig.options["query result"]) {
+    initialJobOption["Protein Input"] = {};
+    initialJobOption["Protein Input"]["Query Result"] =
+      jobConfig.options["query result"];
+  }
 
   jobConfig.meta.forEach((subMethod, index) => {
     const currentMethod = pipelineItem[index].method;

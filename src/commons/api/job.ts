@@ -27,7 +27,8 @@ export const getJob = async (id: string) => {
 
 export const createJob = async (job: CreateJobInterface) => {
   const path = JOB_PATH;
-  return await post<CreateJobInterface>(path, job, true);
+  const requestBody = { job };
+  return await post<typeof requestBody>(path, requestBody, true);
 };
 
 export const getAllConfigurationJobs = async () => {

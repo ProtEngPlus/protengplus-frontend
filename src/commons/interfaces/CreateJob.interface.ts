@@ -1,4 +1,5 @@
 import { LabResult, OptionValue, RunType, State } from "./Job.interface";
+import { QueryResult } from "./QueryResult.interface";
 import { RunTime } from "./Report.interface";
 
 export const stepsForCreateJob = [
@@ -23,6 +24,7 @@ export interface PipelineItems {
 export interface CreateJobInterface {
   user_id: string;
   ref_job_id?: string;
+  stage_id: number;
   name: string;
   description: string;
   input_protein: string;
@@ -32,6 +34,7 @@ export interface CreateJobInterface {
   is_notification_on: boolean;
   run_type: RunType;
   artifact: Record<string, object> | null;
+  query_result?: QueryResult;
 }
 
 export interface CreateJobDetail {

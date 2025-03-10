@@ -1,22 +1,26 @@
 import { useFormContext } from "react-hook-form";
 import ContextWithHelperText from "../../../../../commons/components/CreateJob/Context/ContextWithHelper";
 import DropdownInput from "../../../../../commons/components/CreateJob/InputField/InputField/Dropdown";
-import InputFields from "../../../../CreateJob/component/CreateJobForm/ProteinQuery/InputField";
+
 import InputProtein from "../../../../../commons/components/CreateJob/InputProtein/InputProtein";
 import {
   createJobConfig,
   MethodParameter,
 } from "../../../../../commons/configs/createJobConfig";
-import { Steps } from "../../../../../commons/interfaces/Job.interface";
+import { State, Steps } from "../../../../../commons/interfaces/Job.interface";
 import HelperText from "../../../../../commons/components/CreateJob/InputField/HelperText";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PipelineItem } from "../../../../../commons/interfaces/CreateJob.interface";
+import { formatTime } from "../../../../../commons/utils/FormatTime";
+import InputFields from "../../../../../commons/components/CreateJob/InputField/InputFields";
+import { QueryResult } from "../../../../../commons/interfaces/QueryResult.interface";
 
 interface Props {
   isEdit: boolean;
   currentStep: number;
   stageId: number;
+  state: State;
   handleChange: () => void;
   disable: boolean;
   jobConfig: {
@@ -26,22 +30,24 @@ interface Props {
   };
   pipeline: PipelineItem[];
   setPipeline: (p: PipelineItem[]) => void;
+  queryResult?: QueryResult;
+  setQueryResult?: (queryResult: QueryResult) => void;
 }
 
 export default function ProteinQuery({
   isEdit,
   currentStep,
   stageId,
+  state,
   handleChange,
   disable,
   jobConfig,
   pipeline,
   setPipeline,
+  queryResult,
+  setQueryResult,
 }: Props) {
   const { getValues, watch } = useFormContext();
-
-  // detect input change for display query result Table
-  const [isChange, setIsChange] = useState(false);
 
   const currentSubMethod =
     watch(`tool_${Steps[currentStep]}`) ?? pipeline[currentStep].subMethod;
@@ -57,7 +63,7 @@ export default function ProteinQuery({
     <HelperText
       currentSubMethod={currentSubMethod}
       jobConfig={jobConfig}
-      step={currentStep}
+      step={currentStep + 1}
       stepsFormat={Steps}
     >
       <div className="flex rounded-lg border border-pep-gray-border space-x-3 font-light items-center p-3 h-[70px] min-h-fit">
@@ -72,6 +78,7 @@ export default function ProteinQuery({
       </div>
     </HelperText>
   );
+
   return (
     <div className="space-y-11">
       <ContextWithHelperText
@@ -80,6 +87,12 @@ export default function ProteinQuery({
         isConclusion={true}
         onEdit={isEdit}
         onEditChange={handleChange}
+        isJobDetail={true}
+        runTime={
+          stageId > 0 && getValues("run_time.query")
+            ? formatTime(getValues("run_time.query"))
+            : undefined
+        }
       >
         <div className="space-y-4">
           {/* Select SubMethod's Tool */}
@@ -110,7 +123,6 @@ export default function ProteinQuery({
         {/* SubMethod's input */}
         <div className="space-y-2">
           <InputFields
-            setIsChange={setIsChange}
             jobConfig={jobConfig}
             jobValue={getValues(`options.${currentSubMethod.toLowerCase()}`)}
             isEdit={isEdit}
@@ -119,24 +131,24 @@ export default function ProteinQuery({
         </div>
         {!isEdit && (
           <InputProtein
-            isChange={isChange}
-            setIsChange={setIsChange}
+            isJobDetail={true}
+            state={state}
+            stage={stageId}
             onEdit={isEdit}
-            jobWithConfig={stageId > 0}
-            initialStep={stageId}
-            isConclusion={true}
+            queryResult={queryResult}
+            setQueryResult={setQueryResult}
           />
         )}
       </ContextWithHelperText>
 
       {isEdit && (
         <InputProtein
-          isChange={isChange}
-          setIsChange={setIsChange}
+          isJobDetail={true}
+          state={state}
+          stage={stageId}
           onEdit={isEdit}
-          jobWithConfig={stageId > 0}
-          initialStep={stageId}
-          isConclusion={true}
+          queryResult={queryResult}
+          setQueryResult={setQueryResult}
         />
       )}
     </div>

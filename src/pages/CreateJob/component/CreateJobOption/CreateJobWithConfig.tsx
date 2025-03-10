@@ -68,7 +68,7 @@ export default function CreateJobWithConfig({
   return (
     <div className="h-full place-content-center">
       <FormProvider {...form}>
-        <div className="w-full max-w-[665px] p-16 rounded-lg border border-pep-gray-border place-self-center space-y-16">
+        <div className="w-fit max-w-[665px] p-16 rounded-lg border border-pep-gray-border place-self-center space-y-16 mx-auto">
           <h1 className="text-pep-blue text-4xl leading-8 text-center text-nowrap">
             Create Job With Configuration
           </h1>

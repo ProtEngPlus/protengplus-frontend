@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../commons/hooks/useAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CreateJobInterface,
   CreateJobDetail,
@@ -39,6 +39,8 @@ import {
   SuccessOverlayProps,
 } from "../../commons/components/ModalOverlay/SuccessOverlay";
 import { createJob } from "../../commons/api/job";
+import { QueryResult } from "../../commons/interfaces/QueryResult.interface";
+import { getAllQueryResults } from "../../commons/api/queryResult";
 
 export default function CreateJobPage() {
   const navigate = useNavigate();
@@ -52,6 +54,27 @@ export default function CreateJobPage() {
     defaultCreateJobDetail
   );
   const [jobOption, setJobOption] = useState<JobOption>(generateInitialJob());
+  const [queryResult, setQueryResult] = useState<QueryResult>(); // for adding query result in create job request body
+
+  // fetch query result
+  useEffect(() => {
+    const fetchQueryResults = async () => {
+      if (isWithConfig && initialStep > 1 && jobDetail) {
+        try {
+          const data = await getAllQueryResults({
+            job_id: jobDetail.ref_job_id,
+          });
+          if (data?.data) {
+            setQueryResult(data.data[0]);
+          }
+        } catch (error) {
+          console.error("Error fetching query results:", error);
+        }
+      }
+    };
+
+    fetchQueryResults();
+  }, [isWithConfig, initialStep, jobDetail]);
 
   const form = useForm({
     defaultValues: {
@@ -141,9 +164,9 @@ export default function CreateJobPage() {
               jobConfig.forEach((param) => {
                 if (param.type === "rangeNumber") {
                   newJobOption[subMethod.toLowerCase()][`${param.id}_low`] =
-                    data[`${param.id}_low`];
+                    Number(data[`${param.id}_low`]);
                   newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
-                    data[`${param.id}_high`];
+                    Number(data[`${param.id}_high`]);
                 } else {
                   newJobOption[subMethod.toLowerCase()][param.id] =
                     data[param.id];
@@ -186,11 +209,15 @@ export default function CreateJobPage() {
 
       const newJob: CreateJobInterface = {
         user_id: user?.id ?? "",
+        stage_id: initialStep - 1,
         options: option,
         lab_result: labResult,
         ...otherDetails,
         meta: meta,
+        query_result: initialStep > 1 && queryResult ? queryResult : undefined,
       };
+
+      console.log(newJob);
 
       try {
         await createJob(newJob);
@@ -261,6 +288,8 @@ export default function CreateJobPage() {
                       pipeline={pipeline}
                       setPipeline={setPipeline}
                       step={step}
+                      queryResult={queryResult}
+                      setQueryResult={setQueryResult}
                     />
                   )}
                   {step === 2 && (

@@ -2,23 +2,25 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Modal } from "flowbite";
 import type { ModalOptions, ModalInterface } from "flowbite";
 import { useEffect } from "react";
+import QueryResultTable from "./QueryResultTable";
 
-export type InputProteinOverlayProps = {
+export type QueryResultOverlayProps = {
+  jobId: string;
   inputProtein: string;
   onClose: () => void;
 };
 
-export function InputProteinOverlay({
+export function QueryResultOverlay({
   isVisible,
-  inputProteinProps,
+  queryResultProps,
 }: {
   isVisible: boolean;
-  inputProteinProps: InputProteinOverlayProps;
+  queryResultProps: QueryResultOverlayProps;
 }) {
-  const { inputProtein, onClose } = inputProteinProps;
+  const { jobId, inputProtein, onClose } = queryResultProps;
 
   useEffect(() => {
-    const $modalElement = document.querySelector("input-protein-modal");
+    const $modalElement = document.querySelector("query-result-modal");
 
     let modal: ModalInterface | null = null;
 
@@ -42,26 +44,13 @@ export function InputProteinOverlay({
     };
   }, [isVisible]);
 
-  useEffect(() => {
-    if (isVisible) {
-      const handleWheel = (event: WheelEvent) => {
-        event.preventDefault(); // Prevent scrolling
-      };
-      window.addEventListener("wheel", handleWheel, { passive: false });
-
-      return () => {
-        window.removeEventListener("wheel", handleWheel);
-      };
-    }
-  }, [isVisible]);
-
   return (
     isVisible && (
       <div
-        id="input-protein-modal"
+        id="query-result-modal"
         className="fixed top-0 right-0 left-0 z-[90] flex justify-center items-center w-full h-full bg-gray-900/50 mt-0"
       >
-        <div className="space-y-5 place-items-center place-self-center w-[644px] place-content-center text-center">
+        <div className="space-y-5 place-items-center place-self-center overflow-y-auto h-[80%] w-[90%] place-content-center text-center">
           <div className="bg-pep-blue-light opacity-100 px-5 py-8 m-auto z-[100]">
             <Icon
               icon="streamline:delete-1-solid"
@@ -69,20 +58,24 @@ export function InputProteinOverlay({
               onClick={onClose}
             />
             <div className="p-5 space-y-8">
-              <div className="flex place-content-center items-center space-x-3">
+              <div className="flex place-content-center items-center space-x-3 place-self-center">
                 <Icon
                   icon="hugeicons:dna"
-                  className="size-[30px] text-pep-gray"
+                  className="size-[30px] min-w-[30px] text-pep-gray"
                 />
-                <label className="text-2xl text-pep-dark-gray">
-                  Protein Sequence
+                <label className="text-pep-dark-gray text-nowrap">
+                  Protein Sequence:
                 </label>
-              </div>
-              <div className="bg-white rounded-lg p-8 ">
-                <div className="rounded-lg border border-pep-gray-border py-3 pl-5 pr-4 flex-wrap break-words text-start">
+                <div className="w-full break-all text-start">
                   {inputProtein}
                 </div>
               </div>
+              <QueryResultTable
+                isJobDetail={true}
+                jobId={jobId}
+                disable={true}
+                isOverlay={true}
+              />
             </div>
           </div>
         </div>

@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .then((response) => {
         setLoading(false);
         if (response.code !== 200 || !response.data) {
+          navigate("/sign-in");
           return;
         }
         const { access_token, ...userData } = response.data;

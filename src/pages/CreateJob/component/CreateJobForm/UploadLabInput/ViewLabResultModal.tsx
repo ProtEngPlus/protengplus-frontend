@@ -58,7 +58,7 @@ export function ViewLabResult({
               className="size-5 text-error cursor-pointer"
               onClick={onClose}
             />
-            <div className="w-[738px] space-y-8 place-self-center">
+            <div className="w-[738px] space-y-8 place-self-center mx-auto">
               <div className="flex items-center space-x-2">
                 <Icon
                   icon="heroicons:paper-clip-20-solid"

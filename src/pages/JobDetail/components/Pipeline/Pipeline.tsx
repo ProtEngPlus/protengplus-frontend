@@ -40,6 +40,8 @@ import {
   createJobConfiguration,
   updateJobDetail,
 } from "../../../../commons/api/job";
+import { QueryResult } from "../../../../commons/interfaces/QueryResult.interface";
+import { updateQueryResult } from "../../../../commons/api/queryResult";
 import { ReportInterface } from "../../../../commons/interfaces/Report.interface";
 import { useAuth } from "../../../../commons/hooks/useAuth";
 import ReportPDF from "../../../../commons/components/ReportPDF/ReportPDF";
@@ -64,6 +66,7 @@ export default function Pipeline({
   const [currentStep, setCurrentStep] = useState(job.stage_id);
   const [isOpen, setIsOpen] = useState(false);
   const [pipeline, setPipeline] = useState<PipelineItem[]>(defaultPipeline);
+  const [queryResult, setQueryResult] = useState<QueryResult>();
 
   useEffect(() => {
     const updatedPipeline = [...pipeline];
@@ -121,27 +124,35 @@ export default function Pipeline({
 
   const handleJobUpdate = async () => {
     try {
+      if (currentStep == 0 && job.stage_id == 1 && queryResult) {
+        await updateQueryResult(queryResult.id, queryResult);
+      }
       const data = watch();
       const newJobOption = {} as CreateJobOption;
       const meta = [] as string[];
+      // Update newJobInfo
       for (const step of pipeline) {
         const { method, subMethod }: { method: string; subMethod: string } =
           step;
         meta.push(subMethod.toLowerCase());
         newJobOption[subMethod.toLowerCase()] = {};
         const jobConfig = createJobConfig[method].tool[subMethod].parameters;
+        const jobOptions = job["options"][subMethod.toLowerCase()] || {};
 
         jobConfig.forEach((param) => {
           if (param.type === "rangeNumber") {
             newJobOption[subMethod.toLowerCase()][`${param.id}_low`] =
-              data[`${param.id}_low`];
+              data[`${param.id}_low`] ?? jobOptions[`${param.id}_low`];
+
             newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
-              data[`${param.id}_high`];
+              data[`${param.id}_high`] ?? jobOptions[`${param.id}_high`];
           } else {
-            newJobOption[subMethod.toLowerCase()][param.id] = data[param.id];
+            newJobOption[subMethod.toLowerCase()][param.id] =
+              data[param.id] ?? jobOptions[param.id];
           }
         });
       }
+
       await updateJobDetail(job.id, { meta: meta, options: newJobOption });
       setIsConfirmVisible(false);
       setIsSuccessVisible(true);
@@ -421,15 +432,22 @@ export default function Pipeline({
               }
               jobConfig={jobConfig}
               stageId={job.stage_id}
+              state={job.state}
               pipeline={pipeline}
               setPipeline={setPipeline}
+              queryResult={queryResult}
+              setQueryResult={setQueryResult}
             />
           )}
           {currentStep === 1 && (
             <ProteinRepresentation
               isEdit={isEditPipeline}
+              stageId={job.stage_id}
               currentStep={currentStep}
-              disable={job.stage_id >= 1}
+              disable={
+                job.stage_id > 1 ||
+                (job.state === "ONGOING" && job.stage_id === 1)
+              }
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)
@@ -443,8 +461,12 @@ export default function Pipeline({
           {currentStep === 2 && (
             <TopModel
               isEdit={isEditPipeline}
+              stageId={job.stage_id}
               currentStep={currentStep}
-              disable={job.stage_id >= 2}
+              disable={
+                job.stage_id > 2 ||
+                (job.state === "ONGOING" && job.stage_id === 2)
+              }
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)
@@ -458,8 +480,12 @@ export default function Pipeline({
           {currentStep === 3 && (
             <Mutation
               isEdit={isEditPipeline}
+              stageId={job.stage_id}
               currentStep={currentStep}
-              disable={job.stage_id >= 3}
+              disable={
+                job.stage_id === 3 &&
+                (job.state === "COMPLETED" || job.state === "ONGOING")
+              }
               handleChange={() =>
                 isEditPipeline
                   ? setIsConfirmVisible(true)

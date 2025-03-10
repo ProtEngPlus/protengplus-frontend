@@ -6,23 +6,40 @@ import ViewButton from "../../Button/ViewButton";
 import searchIcon from "../../../../assets/images/CreateJob/searchIcon.svg";
 import { useEffect, useState } from "react";
 import { getUniProtId } from "../../../api/job";
+import QueryResultTable from "./QueryResultTable";
+import { State } from "../../../interfaces/Job.interface";
+import {
+  inputProteinProtSeq,
+  inputProteinUniprotId,
+} from "../../../configs/createJobConfig";
+import { QueryResult } from "../../../interfaces/QueryResult.interface";
+import {
+  QueryResultOverlay,
+  QueryResultOverlayProps,
+} from "./QueryResultOverlay";
 
 interface Props {
-  isChange: boolean;
-  setIsChange: (isChange: boolean) => void;
+  isJobDetail: boolean;
+  stage?: number;
+  state?: State;
   onEdit: boolean;
-  initialStep: number;
-  jobWithConfig?: boolean;
+  isWithConfig?: boolean;
+  initialStep?: number;
   isConclusion?: boolean;
+  queryResult?: QueryResult;
+  setQueryResult?: (queryResult: QueryResult) => void; // for create job page
 }
 
 export default function InputProtein({
-  isChange,
-  setIsChange,
+  isJobDetail,
+  stage = 1,
+  state = "CREATED",
+  isWithConfig = true,
   onEdit,
-  jobWithConfig = true,
-  initialStep,
+  initialStep = 1,
   isConclusion = false,
+  queryResult,
+  setQueryResult,
 }: Props) {
   const {
     register,
@@ -32,6 +49,16 @@ export default function InputProtein({
     watch,
     trigger,
   } = useFormContext();
+
+  // to display query result
+  const jobId = getValues(isJobDetail ? "id" : "ref_job_id");
+  const hasQueryResult = isJobDetail
+    ? stage > 0
+    : initialStep > 1 && isWithConfig;
+  const canEditQueryResult = isJobDetail
+    ? stage == 1 && state === "PENDING"
+    : initialStep == 2 && isWithConfig;
+  const canEditInputProtein = isJobDetail ? stage == 0 : initialStep == 1;
 
   const inputProtein = watch("input_protein");
   const inputProteinField = watch("input_protein_field");
@@ -44,14 +71,6 @@ export default function InputProtein({
   useEffect(() => {
     if (inputMode === "prot_seq") {
       setValue("input_protein", getValues("input_protein_field"));
-    }
-    if (
-      inputProteinField === getValues("initial_input_protein") &&
-      inputMode === "prot_seq"
-    ) {
-      setIsChange(false);
-    } else {
-      setIsChange(true);
     }
   }, [inputProteinField, inputMode]);
 
@@ -66,9 +85,23 @@ export default function InputProtein({
     }
   };
 
+  // query result filter
+  const [isQueryResultVisible, setQueryResultVisible] = useState(false);
+  const queryResultOverlayProps: QueryResultOverlayProps = {
+    inputProtein,
+    jobId,
+    onClose: () => {
+      setQueryResultVisible(false);
+    },
+  };
+
   return (
     <div>
       {/* Add Protein Table Overlay & Query Result Filter Here */}
+      <QueryResultOverlay
+        isVisible={isQueryResultVisible}
+        queryResultProps={queryResultOverlayProps}
+      />
       <div className="space-y-12">
         {/* Header Section */}
         <div
@@ -93,7 +126,7 @@ export default function InputProtein({
                   <div className="relative">
                     <input
                       id="input_protein_field"
-                      disabled={initialStep > 2}
+                      disabled={!canEditInputProtein}
                       placeholder="Input Protein*"
                       className={`text-wrap h-[50px] w-full min-w-fit pl-3 pr-10 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label ${
                         (errors.input_protein_field &&
@@ -159,22 +192,35 @@ export default function InputProtein({
             {onEdit ? (
               <div className="flex items-center space-x-3">
                 <Button
-                  disabled={initialStep > 2}
                   id="prot_seq"
                   buttonType={inputMode === "prot_seq" ? "submit" : "cancel"}
                   type="button"
-                  onClick={() => setValue("input_mode", "prot_seq")}
+                  onClick={() => {
+                    if (canEditInputProtein) {
+                      setValue("input_mode", "prot_seq");
+                      setValue("input_protein_field", inputProteinProtSeq);
+                    }
+                  }}
                   text="Amino Acid Sequence"
-                  className="!font-light !p-0 w-[100px] text-sm disabled:bg-pep-blue disabled:text-white"
+                  className={`!font-light !p-0 w-[100px] text-sm ${
+                    canEditInputProtein
+                      ? "cursor-pointer"
+                      : "cursor-not-allowed hover:bg-pep-blue"
+                  }`}
                 />
                 <Button
-                  disabled={initialStep > 2}
+                  disabled={!canEditInputProtein}
                   id="uniprot_id"
                   buttonType={inputMode === "uniprot_id" ? "submit" : "cancel"}
                   type="button"
                   onClick={() => {
-                    setValue("input_mode", "uniprot_id");
-                    getUniProt(inputProteinField);
+                    if (inputMode === "uniprot_id") {
+                      getUniProt(inputProteinField);
+                    } else {
+                      setValue("input_mode", "uniprot_id");
+                      setValue("input_protein_field", inputProteinUniprotId);
+                      getUniProt(inputProteinUniprotId);
+                    }
                   }}
                   text="UniprotID"
                   className="!font-light !p-0 w-[100px] text-sm disabled:bg-white !disabled:text-black"
@@ -190,8 +236,23 @@ export default function InputProtein({
                   }
                 />
               </div>
-            ) : !isChange && jobWithConfig ? (
+            ) : hasQueryResult ? (
               <div className="flex items-center space-x-3">
+                <Button
+                  id="btn-view-protein-with-table"
+                  buttonType="cancel"
+                  type="button"
+                  text="View"
+                  className="w-fit px-3 py-2 font-normal inline-flex items-center whitespace-nowrap place-content-center text-center gap-3 text-pep-dark-gray"
+                  onClick={() => {
+                    setQueryResultVisible(true);
+                  }}
+                >
+                  <Icon
+                    icon="carbon:view"
+                    className="size-[30px] text-pep-gray"
+                  />
+                </Button>
                 <DownloadCSVButton />
               </div>
             ) : (
@@ -203,9 +264,19 @@ export default function InputProtein({
             )}
           </div>
           {/*--------------------------- Input Protein Table -------------------------------*/}
+          {onEdit && hasQueryResult && (
+            <QueryResultTable
+              isJobDetail={isJobDetail}
+              isOverlay={false}
+              disable={!canEditQueryResult}
+              jobId={jobId}
+              queryResult={queryResult}
+              setQueryResult={setQueryResult}
+            />
+          )}
         </div>
-        {/* Note for Non-configurable Jobs - create job */}
-        {!isConclusion && onEdit && (!jobWithConfig || isChange) && (
+        {/* Note for no query result */}
+        {!isConclusion && onEdit && !hasQueryResult && (
           <div className="text-center text-label font-light">
             Note: Blast Results can be manually filtered and selected only in{" "}
             <span className="text-pep-orange font-normal">'One-Step Run'</span>{" "}

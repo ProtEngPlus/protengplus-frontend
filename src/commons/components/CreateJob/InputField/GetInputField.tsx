@@ -5,6 +5,7 @@ import DropdownInput from "./InputField/Dropdown";
 import MultiNumberDropdown from "./InputField/MultiNumberDropdown";
 import { MethodParameter } from "../../../../commons/configs/createJobConfig";
 import { ValidationProps } from "../../../../commons/components/Input/InputPropsType";
+import RangePercentInput from "./InputField/RangePercentInput";
 
 interface GetInputFieldProps {
   id: MethodParameter["id"];
@@ -102,6 +103,29 @@ export default function GetInputField({
           onEdit={onEdit}
         />
       );
+
+    case "rangePercent": {
+      const low =
+        value && typeof value === "object" && "low" in value
+          ? value.low
+          : undefined;
+      const high =
+        value && typeof value === "object" && "high" in value
+          ? value.high
+          : undefined;
+
+      return (
+        <RangePercentInput
+          id={id}
+          label={label}
+          defaultLow={low}
+          defaultHigh={high}
+          additionalValidation={filteredValidation}
+          disabled={disable}
+          onEdit={onEdit}
+        />
+      );
+    }
 
     case "multiNumberDropdown":
       return (

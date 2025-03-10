@@ -58,6 +58,19 @@ export function ManualInput({
     };
   }, [isVisible]);
 
+  useEffect(() => {
+    if (isVisible) {
+      const handleWheel = (event: WheelEvent) => {
+        event.preventDefault(); // Prevent scrolling
+      };
+      window.addEventListener("wheel", handleWheel, { passive: false });
+
+      return () => {
+        window.removeEventListener("wheel", handleWheel);
+      };
+    }
+  }, [isVisible]);
+
   const checkValidate = (data: { sequence: string; score: number }[]) => {
     // Regular expression for valid amino acid sequences
     const validSequenceRegex = /^(?!.*[BJOUXZ])[A-Z]+$/i;

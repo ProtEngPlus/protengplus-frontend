@@ -10,9 +10,11 @@ import HelperText from "../../../../../commons/components/CreateJob/InputField/H
 import InputFields from "../../../../../commons/components/CreateJob/InputField/InputFields";
 import { PipelineItem } from "../../../../../commons/interfaces/CreateJob.interface";
 import { useEffect } from "react";
+import { formatTime } from "../../../../../commons/utils/FormatTime";
 
 interface Props {
   isEdit: boolean;
+  stageId: number;
   currentStep: number;
   handleChange: () => void;
   disable: boolean;
@@ -27,6 +29,7 @@ interface Props {
 
 export default function TopModel({
   isEdit,
+  stageId,
   currentStep,
   handleChange,
   disable,
@@ -50,7 +53,7 @@ export default function TopModel({
     <HelperText
       currentSubMethod={currentSubMethod}
       jobConfig={jobConfig}
-      step={currentStep}
+      step={currentStep + 1}
       stepsFormat={Steps}
     />
   );
@@ -63,6 +66,12 @@ export default function TopModel({
         onEdit={isEdit}
         onEditChange={handleChange}
         disabled={disable}
+        isJobDetail={true}
+        runTime={
+          stageId > 2 && getValues("run_time.fittop")
+            ? formatTime(getValues("run_time.fittop"))
+            : undefined
+        }
       >
         <div className="space-y-4">
           {/* Select SubMethod's Tool */}

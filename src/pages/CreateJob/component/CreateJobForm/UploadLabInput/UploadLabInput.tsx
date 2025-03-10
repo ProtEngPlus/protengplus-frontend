@@ -212,7 +212,9 @@ export default function UploadLabInput({
             </div>
             <div className="rounded-lg bg-pep-blue-light p-5 text-pep-dark-gray">
               {isExpand ? (
-                <LabInputTable data={exampleLabResult} isExample={true} />
+                <div className="mx-auto w-fit">
+                  <LabInputTable data={exampleLabResult} isExample={true} />
+                </div>
               ) : (
                 "Click expand to see full template"
               )}
@@ -329,45 +331,44 @@ export default function UploadLabInput({
             </div>
           </div>
 
-          {/*----------------------------------- Lab Input Table --------------------------------------------*/}
-          {isEdit && labResult.length !== 0 && isError.isValidate && (
-            <div className="rounded-lg p-5 bg-pep-blue-light place-items-center">
-              <div className="w-[738px] space-y-8">
-                <div className="flex space-x-2">
+          <div className="relative rounded-lg bg-pep-blue-light place-items-center">
+            {/*----------------------------------- Lab Input Table --------------------------------------------*/}
+            {isEdit && labResultForm.length > 0 && (
+              <div className="w-[738px] space-y-8 p-5 min-w-fit mx-auto">
+                <div className="flex space-x-2 text-start">
                   <span className="text-pep-dark-gray font-normal">Total:</span>
                   <span className="font-light text-pep-blue">
-                    {labResult.length} sequences
+                    {labResultForm.length} sequences
                   </span>
                 </div>
                 <div>
                   <LabInputTable
-                    data={labResult}
+                    data={labResultForm}
                     isExample={false}
                     inputProtein={inputProtein}
                     setProteinVisible={setProteinVisible}
                   />
                 </div>
               </div>
-            </div>
-          )}
-
-          {/*------------------------------------- Helper Text -------------------------------------------------*/}
-          {isRead && (
-            <div className="absolute inset-0 -translate-y-[35px] rounded-lg p-5 z-10 bg-pep-blue-light min-h-fit">
-              <div className="flex space-x-3">
-                <Icon icon="ep:setting" className="text-pep-gray size-6" />
-                <label>Parameter Setup</label>
+            )}
+            {/*------------------------------------- Helper Text -------------------------------------------------*/}
+            {isRead && (
+              <div className="absolute inset-0 rounded-lg p-5 z-10 bg-pep-blue-light h-fit">
+                <div className="flex space-x-3">
+                  <Icon icon="ep:setting" className="text-pep-gray size-6" />
+                  <label>Parameter Setup</label>
+                </div>
+                <div className="flex mt-4 space-x-5 text-pep-dark-gray items-center">
+                  <span className="text-nowrap">Upload Lab Result:</span>
+                  <span className="leading-10">
+                    Upload your lab results with the experimented protein
+                    sequences and their scores. This data will be used to train
+                    the model for low-n engineering.
+                  </span>
+                </div>
               </div>
-              <div className="flex mt-4 space-x-5 text-pep-dark-gray items-center">
-                <span className="text-nowrap">Upload Lab Result:</span>
-                <span className="leading-10">
-                  Upload your lab results with the experimented protein
-                  sequences and their scores. This data will be used to train
-                  the model for low-n engineering.
-                </span>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

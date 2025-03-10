@@ -26,7 +26,7 @@ export default function DropdownInput({
   }));
 
   return (
-    <div className="w-[40%]">
+    <div className="w-[40%] min-w-fit">
       <div className="min-w-fit justify-between items-center space-x-3 grid grid-cols-[1fr,4fr] max-w-[1000px]">
         <label className="font-light w-[40%]">{label}:</label>
 
