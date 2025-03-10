@@ -124,12 +124,12 @@ export default function JobDetailPage() {
         setIsDeleteSuccessVisible(true);
       }
     },
-    title: "Do you want to delete this mutate collection?",
+    title: "Do you want to delete this job?",
     children: (
       <div className="text-center flex flex-col font-light">
-        <label>Collection name: {job?.name}</label>
-        <label className="text-error">
-          Delete the mutate will delete all this mutate's bookmark
+        <label>
+          Job name: {job?.name} <br />
+          Description: {job?.description}
         </label>
       </div>
     ),
@@ -142,7 +142,7 @@ export default function JobDetailPage() {
       setIsDeleteSuccessVisible(false);
       navigate("/dashboard");
     },
-    title: "The Mutates Delete Successfully",
+    title: "The Job Delete Successfully",
   };
 
   const handleRunJob = async () => {
@@ -205,11 +205,10 @@ export default function JobDetailPage() {
               <div className="flex space-x-1 items-center">
                 <Icon
                   icon="ic:round-refresh"
-                  className={`size-7 ${
-                    job.state === "FAILED"
-                      ? "text-pep-gray cursor-pointer"
-                      : "text-pep-gray-border cursor-not-allowed"
-                  }`}
+                  className={`size-7 ${job.state === "FAILED"
+                    ? "text-pep-gray cursor-pointer"
+                    : "text-pep-gray-border cursor-not-allowed"
+                    }`}
                   onClick={() => {
                     job.state === "FAILED" && handleRunJob();
                   }}

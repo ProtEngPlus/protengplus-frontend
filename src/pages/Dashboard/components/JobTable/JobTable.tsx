@@ -71,7 +71,7 @@ export default function JobTable({
     onClose: () => {
       setIsDeleteSuccessVisible(false);
     },
-    title: "The Mutates Delete Successfully",
+    title: "The Job Delete Successfully",
   };
 
   // run job
@@ -207,11 +207,10 @@ export default function JobTable({
                       <div className="flex space-x-2">
                         <Icon
                           icon="ic:round-refresh"
-                          className={`size-7 ${
-                            job.state === "FAILED"
+                          className={`size-7 ${job.state === "FAILED"
                               ? "text-pep-gray cursor-pointer"
                               : "text-pep-gray-border cursor-not-allowed"
-                          }`}
+                            }`}
                           onClick={() => {
                             job.state === "FAILED" && handleRunJob(job);
                           }}
@@ -257,11 +256,10 @@ export default function JobTable({
               {[...Array(totalPages)].map((_, index) => (
                 <li key={index}>
                   <button
-                    className={`size-[35px] text-pep-dark-gray border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray ${
-                      currentPage === index + 1
+                    className={`size-[35px] text-pep-dark-gray border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray ${currentPage === index + 1
                         ? "bg-pep-gray border-none text-white"
                         : "hover:bg-pep-light-gray"
-                    }`}
+                      }`}
                     onClick={() => handlePageClick(index + 1)}
                     type="button"
                   >
