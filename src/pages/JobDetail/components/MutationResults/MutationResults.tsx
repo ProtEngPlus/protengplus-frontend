@@ -131,7 +131,7 @@ export default function MutationResults({
         };
         fetchChartData();
         setFetchMutation(false);
-    }, [fetchMutation]);
+    }, [fetchMutation, mutations]);
 
     useEffect(() => {
         const params: MutationSearchParams = isBookmarkOnly
