@@ -48,36 +48,36 @@ export function FilterOverlay({
   const [isRead, setRead] = useState(false);
   const [isLoading, setLoading] = useState(true);
 
-  // Prevent scrolling outside the modal
   useEffect(() => {
-    if (!isVisible) return;
+    const $modalElement = document.querySelector("#protein-filter-modal");
+    let modal: ModalInterface | null = null;
 
-    const handleWheel = (event: WheelEvent) => {
-      const modalScrollable = document.getElementById("modal-scrollable");
-      if (modalScrollable?.contains(event.target as Node)) return;
+    if ($modalElement instanceof HTMLElement && isVisible && !isLoading) {
+      const modalOptions: ModalOptions = {
+        placement: "bottom-right",
+        backdrop: "dynamic",
+        backdropClasses:
+          "bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-10",
+        closable: true,
+      };
 
-      event.preventDefault();
+      modal = new Modal($modalElement, modalOptions);
+      modal.show();
+      document.body.style.overflow = "hidden";
+      document.body.style.height = "100vh";
+    } else {
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
+    }
+
+    return () => {
+      if (modal) {
+        modal.hide();
+      }
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
     };
-
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    return () => window.removeEventListener("wheel", handleWheel);
   }, [isVisible]);
-
-  // Initialize Flowbite Modal
-  useEffect(() => {
-    const modalElement = document.querySelector("#protein-filter-modal");
-    if (!(modalElement instanceof HTMLElement) || !isVisible || isLoading)
-      return;
-
-    const modalOptions: ModalOptions = {
-      placement: "bottom-right",
-      closable: true,
-    };
-    const modal = new Modal(modalElement, modalOptions);
-    modal.show();
-
-    return () => modal.hide();
-  }, [isVisible, isLoading]);
 
   // Preload form values when modal is opened
   useEffect(() => {
