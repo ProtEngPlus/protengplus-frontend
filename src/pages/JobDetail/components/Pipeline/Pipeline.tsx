@@ -245,7 +245,48 @@ export default function Pipeline({
 
   const onPDFDownload = async () => {
     try {
-      const chartLabels = ["-2.0", "-1.9", "-1.8", "-1.7", "-1.6", "-1.5", "-1.4", "-1.3", "-1.2", "-1.1", "-1.0", "-0.9", "-0.8", "-0.7", "-0.6", "-0.5", "-0.4", "-0.3", "-0.2", "-0.1", "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9"];
+      const chartLabels = [
+        "-2.0",
+        "-1.9",
+        "-1.8",
+        "-1.7",
+        "-1.6",
+        "-1.5",
+        "-1.4",
+        "-1.3",
+        "-1.2",
+        "-1.1",
+        "-1.0",
+        "-0.9",
+        "-0.8",
+        "-0.7",
+        "-0.6",
+        "-0.5",
+        "-0.4",
+        "-0.3",
+        "-0.2",
+        "-0.1",
+        "0.0",
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.8",
+        "0.9",
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+      ];
       let chartSeries = [];
 
       if (formData) {
@@ -405,19 +446,26 @@ export default function Pipeline({
               </ul>
             )}
           </div>
-          <Stepper
-            state={job.state}
-            currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
-            stageId={job.stage_id}
-            handleChange={() => {
-              if (isEditPipeline) {
-                setIsConfirmVisible(true);
-                return false;
-              }
-              return true;
-            }}
-          />
+          <div className="space-y-7">
+            {job.stage_id === 2 && job.state === "FAILED" && (
+              <div className="text-error w-fit mx-auto bg-red-50 p-5">
+                Error: No Lab Input Uploaded yet, Please upload your lab input
+              </div>
+            )}
+            <Stepper
+              state={job.state}
+              currentStep={currentStep}
+              setCurrentStep={setCurrentStep}
+              stageId={job.stage_id}
+              handleChange={() => {
+                if (isEditPipeline) {
+                  setIsConfirmVisible(true);
+                  return false;
+                }
+                return true;
+              }}
+            />
+          </div>
         </div>
         <div className="rounded-lg border border-pep-gray-border px-6 py-8">
           {currentStep === 0 && (

@@ -205,10 +205,11 @@ export default function JobDetailPage() {
               <div className="flex space-x-1 items-center">
                 <Icon
                   icon="ic:round-refresh"
-                  className={`size-7 ${job.state === "FAILED"
-                    ? "text-pep-gray cursor-pointer"
-                    : "text-pep-gray-border cursor-not-allowed"
-                    }`}
+                  className={`size-7 ${
+                    job.state === "FAILED"
+                      ? "text-pep-gray cursor-pointer"
+                      : "text-pep-gray-border cursor-not-allowed"
+                  }`}
                   onClick={() => {
                     job.state === "FAILED" && handleRunJob();
                   }}
@@ -273,13 +274,18 @@ export default function JobDetailPage() {
               <li className="me-2">
                 <button
                   disabled={isEditPipeline}
-                  className="inline-block p-4 border-b-2 rounded-t-lg"
+                  className="flex p-4 border-b-2 rounded-t-lg gap-x-2"
                   id="lab-input-tab"
                   type="button"
                   role="tab"
                   aria-controls="lab-input-content"
                   aria-selected="false"
                 >
+                  {job.state === "FAILED" && job.stage_id === 2 && (
+                    <div className="rounded-full border-2 border-error text-error size-6 flex items-center justify-center">
+                      !
+                    </div>
+                  )}
                   Lab Input
                 </button>
               </li>
