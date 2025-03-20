@@ -15,7 +15,13 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { ReportInterface } from "../../interfaces/Report.interface";
 
-export default function ReportPDF({ jobData, chart }: { jobData: ReportInterface, chart?: string }) {
+export default function ReportPDF({
+  jobData,
+  chart,
+}: {
+  jobData: ReportInterface;
+  chart?: string;
+}) {
   const [pageIndex, setPageIndex] = useState(1);
   const [paginatedLabResults, setPaginatedLabResults] = useState<labResult[]>(
     []
@@ -884,7 +890,9 @@ export default function ReportPDF({ jobData, chart }: { jobData: ReportInterface
 
   useEffect(() => {
     const paginatedLabResults: labResult[] = [];
-
+    if (!jobData.lab_result.scores) {
+      return;
+    }
     for (
       let i = 0;
       i < jobData.lab_result.scores.length;
@@ -977,21 +985,29 @@ export default function ReportPDF({ jobData, chart }: { jobData: ReportInterface
             jobData.options[jobData.meta[0] as keyof typeof jobData.options]
           }
           inputProtein={jobData.input_protein}
-          runTime={jobData.run_time?.query ? formatTime(jobData.run_time.query) : ""}
+          runTime={
+            jobData.run_time?.query ? formatTime(jobData.run_time.query) : ""
+          }
         />
         <ProteinRepresentationReport
           tool={jobData.meta[1]}
           option={
             jobData.options[jobData.meta[1] as keyof typeof jobData.options]
           }
-          runTime={jobData.run_time?.evotune ? formatTime(jobData.run_time.evotune) : ""}
+          runTime={
+            jobData.run_time?.evotune
+              ? formatTime(jobData.run_time.evotune)
+              : ""
+          }
         />
         <TopModelReport
           tool={jobData.meta[2]}
           option={
             jobData.options[jobData.meta[2] as keyof typeof jobData.options]
           }
-          runTime={jobData.run_time?.fittop ? formatTime(jobData.run_time.fittop) : ""}
+          runTime={
+            jobData.run_time?.fittop ? formatTime(jobData.run_time.fittop) : ""
+          }
         />
         <MutationReport
           tool={jobData.meta[3]}
@@ -999,22 +1015,25 @@ export default function ReportPDF({ jobData, chart }: { jobData: ReportInterface
             jobData.options[jobData.meta[3] as keyof typeof jobData.options]
           }
           runTime={
-            jobData.run_time?.mutation ? formatTime(jobData.run_time.mutation) : ""
+            jobData.run_time?.mutation
+              ? formatTime(jobData.run_time.mutation)
+              : ""
           }
         />
         <Footer index={1} total={pageIndex} />
       </Page>
-      {paginatedLabResults.map((chunk, index) => (
-        <Page key={index} size="A4" style={styles.page}>
-          <Header />
-          <UploadLabResultReport
-            labResult={chunk}
-            countFrom={index * labResultPerPage}
-            totalCount={jobData.lab_result.total}
-          />
-          <Footer index={index + 2} total={pageIndex} />
-        </Page>
-      ))}
+      {jobData.lab_result.scores ??
+        paginatedLabResults.map((chunk, index) => (
+          <Page key={index} size="A4" style={styles.page}>
+            <Header />
+            <UploadLabResultReport
+              labResult={chunk}
+              countFrom={index * labResultPerPage}
+              totalCount={jobData.lab_result.total}
+            />
+            <Footer index={index + 2} total={pageIndex} />
+          </Page>
+        ))}
       {paginatedQueryResults.map((chunk, index) => (
         <Page key={index} size="A4" style={styles.page}>
           <Header />
