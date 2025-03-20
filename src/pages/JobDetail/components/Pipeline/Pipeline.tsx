@@ -40,8 +40,15 @@ import {
   createJobConfiguration,
   updateJobDetail,
 } from "../../../../commons/api/job";
-import { QueryResult } from "../../../../commons/interfaces/QueryResult.interface";
-import { updateQueryResult } from "../../../../commons/api/queryResult";
+import {
+  QueryResult,
+  QueryResultSearchParams,
+  Result,
+} from "../../../../commons/interfaces/QueryResult.interface";
+import {
+  getAllQueryResults,
+  updateQueryResult,
+} from "../../../../commons/api/queryResult";
 import { ReportInterface } from "../../../../commons/interfaces/Report.interface";
 import { useAuth } from "../../../../commons/hooks/useAuth";
 import ReportPDF from "../../../../commons/components/ReportPDF/ReportPDF";
@@ -245,7 +252,48 @@ export default function Pipeline({
 
   const onPDFDownload = async () => {
     try {
-      const chartLabels = ["-2.0", "-1.9", "-1.8", "-1.7", "-1.6", "-1.5", "-1.4", "-1.3", "-1.2", "-1.1", "-1.0", "-0.9", "-0.8", "-0.7", "-0.6", "-0.5", "-0.4", "-0.3", "-0.2", "-0.1", "0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9"];
+      const chartLabels = [
+        "-2.0",
+        "-1.9",
+        "-1.8",
+        "-1.7",
+        "-1.6",
+        "-1.5",
+        "-1.4",
+        "-1.3",
+        "-1.2",
+        "-1.1",
+        "-1.0",
+        "-0.9",
+        "-0.8",
+        "-0.7",
+        "-0.6",
+        "-0.5",
+        "-0.4",
+        "-0.3",
+        "-0.2",
+        "-0.1",
+        "0.0",
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.8",
+        "0.9",
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8",
+        "1.9",
+      ];
       let chartSeries = [];
 
       if (formData) {
@@ -280,18 +328,33 @@ export default function Pipeline({
       root.unmount();
       document.body.removeChild(hiddenDiv);
 
-      const blob = await pdf(
-        <ReportPDF jobData={getReportData()} chart={chartImage} />
-      ).toBlob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      const today = new Date().toISOString().split("T")[0];
-      link.download = `Report_${formData["name"]}_${today}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      let queryResults: Result[] = [];
+      const params: QueryResultSearchParams = {};
+      getAllQueryResults(params)
+        .then(async (response) => {
+          queryResults = (
+            response.data ? response.data[0].result : []
+          ) as Result[];
+          const blob = await pdf(
+            <ReportPDF
+              jobData={getReportData()}
+              chart={chartImage}
+              queryResultData={queryResults}
+            />
+          ).toBlob();
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          const today = new Date().toISOString().split("T")[0];
+          link.download = `Report_${formData["name"]}_${today}.pdf`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        })
+        .catch((error) => {
+          console.error("Error fetching query results:", error);
+        });
     } catch (error) {
       console.log(error);
     }
