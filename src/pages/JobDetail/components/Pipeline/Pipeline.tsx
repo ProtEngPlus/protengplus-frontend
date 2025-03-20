@@ -447,11 +447,13 @@ export default function Pipeline({
             )}
           </div>
           <div className="space-y-7">
-            {job.stage_id === 2 && job.state === "FAILED" && (
-              <div className="text-error w-fit mx-auto bg-red-50 p-5">
-                Error: No Lab Input Uploaded yet, Please upload your lab input
-              </div>
-            )}
+            {job.stage_id === 2 &&
+              job.state === "FAILED" &&
+              job.lab_result.total === 0 && (
+                <div className="text-error w-fit mx-auto bg-red-50 p-5">
+                  Error: No Lab Input Uploaded yet, Please upload your lab input
+                </div>
+              )}
             <Stepper
               state={job.state}
               currentStep={currentStep}

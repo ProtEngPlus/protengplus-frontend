@@ -281,11 +281,13 @@ export default function JobDetailPage() {
                   aria-controls="lab-input-content"
                   aria-selected="false"
                 >
-                  {job.state === "FAILED" && job.stage_id === 2 && (
-                    <div className="rounded-full border-2 border-error text-error size-6 flex items-center justify-center">
-                      !
-                    </div>
-                  )}
+                  {job.state === "FAILED" &&
+                    job.stage_id === 2 &&
+                    job.lab_result.total === 0 && (
+                      <div className="rounded-full border-2 border-error text-error size-6 flex items-center justify-center">
+                        !
+                      </div>
+                    )}
                   Lab Input
                 </button>
               </li>
