@@ -58,7 +58,7 @@ export default function FilterDropdown({
         }`}
         type="button"
       >
-        Filter
+        Status
         <svg
           className="w-2.5 h-2.5 ms-2.5"
           aria-hidden="true"

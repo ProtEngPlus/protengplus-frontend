@@ -27,7 +27,7 @@ export default function CreateJob({
           <Button
             id="btn-create-config-job"
             buttonType="submit"
-            text="Create Job With Configuration"
+            text="Create Job With Existing Configuration"
             className="w-fit !font-light text-2xl inline-flex items-center whitespace-nowrap place-content-center text-center gap-2"
             onClick={createJobWithConfig}
           >
