@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logoWithText from "../../../assets/images/LogoWithText/logoWithText.svg";
 import { Icon } from "@iconify/react";
 import Breadcrumb from "./Breadcrumb";
@@ -29,7 +29,14 @@ export default function RootLayout({
 
   const locationPath = "/" + location.pathname.split("/")[1];
 
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(() => {
+    return localStorage.getItem("isSidebarVisible") === "true";
+  });
+
+  // Save sidebar state to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem("isSidebarVisible", String(isSidebarVisible));
+  }, [isSidebarVisible]);
 
   // Menu Item for side bar
   const menuItems: MenuItem[] = [

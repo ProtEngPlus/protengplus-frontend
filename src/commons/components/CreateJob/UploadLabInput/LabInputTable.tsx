@@ -84,7 +84,7 @@ export function LabManualInputTable({
     setData(data.filter((_, index) => index !== indexToRemove));
   };
   return (
-    <div className="max-w-[759px] max-h-[536px] w-[759px] h-full overflow-y-auto relative rounded-xl border border-[#DFE4EA] shadow-table  bg-white">
+    <div className="max-w-[759px] w-[759px] max-h-[428px] h-full overflow-y-auto relative rounded-xl border border-[#DFE4EA] shadow-table  bg-white">
       <table className="table-fixed max-w-[759px] w-full place-content-center place-items-center text-left rtl:text-right">
         <thead className="leading-6 text-black w-fit place-content-center bg-pep-gray-light text-center border-b">
           <tr className="h-[60px]">

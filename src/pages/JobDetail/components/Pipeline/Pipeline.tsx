@@ -468,19 +468,28 @@ export default function Pipeline({
               </ul>
             )}
           </div>
-          <Stepper
-            state={job.state}
-            currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
-            stageId={job.stage_id}
-            handleChange={() => {
-              if (isEditPipeline) {
-                setIsConfirmVisible(true);
-                return false;
-              }
-              return true;
-            }}
-          />
+          <div className="space-y-7">
+            {job.stage_id === 2 &&
+              job.state === "FAILED" &&
+              job.lab_result.total === 0 && (
+                <div className="text-error w-fit mx-auto bg-red-50 p-5">
+                  Error: No Lab Input Uploaded yet, Please upload your lab input
+                </div>
+              )}
+            <Stepper
+              state={job.state}
+              currentStep={currentStep}
+              setCurrentStep={setCurrentStep}
+              stageId={job.stage_id}
+              handleChange={() => {
+                if (isEditPipeline) {
+                  setIsConfirmVisible(true);
+                  return false;
+                }
+                return true;
+              }}
+            />
+          </div>
         </div>
         <div className="rounded-lg border border-pep-gray-border px-6 py-8">
           {currentStep === 0 && (

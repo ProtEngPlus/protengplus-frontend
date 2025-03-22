@@ -26,7 +26,10 @@ export default function SearchBar({
   }, [organismList, search, setSearch]);
 
   return (
-    <div className="relative w-full flex space-x-2 items-start">
+    <div
+      id="modal-scrollable"
+      className="relative w-full flex space-x-2 items-start"
+    >
       <div className="flex text-center place-items-center space-x-2 h-[50px]">
         <Icon
           icon="eos-icons:organisms-outlined"
@@ -50,7 +53,7 @@ export default function SearchBar({
             className="absolute top-1/2 left-3 transform -translate-y-1/2 cursor-pointer"
           />
         </div>
-        <ul className="mt-2 bg-white rounded-md shadow-dropShadow z-10 py-2 right-0 max-h-[200px] overflow-y-scroll">
+        <ul className="mt-2 bg-white rounded-md shadow-dropShadow max-h-[190px] z-10 py-2 right-0 overflow-y-scroll">
           {filteredList.map((option, index) => (
             <li
               key={index}
