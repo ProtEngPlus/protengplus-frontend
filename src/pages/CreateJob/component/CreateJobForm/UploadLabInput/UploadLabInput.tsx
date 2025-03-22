@@ -111,22 +111,37 @@ export default function UploadLabInput({
 
   useEffect(() => {
     if (file) {
-      Papa.parse(file, {
-        header: false,
-        skipEmptyLines: true,
-        delimiter: ",",
-        complete: (results: ParseResult<string[]>) => {
+      console.log(file);
+      const parseFile = async () => {
+        try {
+          const results = await new Promise<ParseResult<string[]>>(
+            (resolve, reject) => {
+              Papa.parse(file, {
+                header: false,
+                skipEmptyLines: true,
+                delimiter: ",",
+                complete: resolve,
+                error: reject,
+              });
+            }
+          );
+
           const fileData = results.data.map((line: any) => {
-            return { sequence: line[1], score: line[2] };
+            return { sequence: line[0].trim(), score: Number(line[1]) };
           });
+
           const validation = checkValidate(fileData);
           setIsError(validation);
 
           if (validation.isValidate) {
             setLabResultForm(fileData);
           }
-        },
-      });
+        } catch (error) {
+          console.error("Error during file parsing or job update:", error);
+        }
+      };
+
+      parseFile();
     }
   }, [file]);
 

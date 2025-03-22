@@ -35,7 +35,7 @@ export function ManualInput({
   });
 
   useEffect(() => {
-    const $modalElement = document.querySelector(`manual-input`);
+    const $modalElement = document.querySelector(`#manual-input`);
     let modal: ModalInterface | null = null;
 
     if ($modalElement instanceof HTMLElement && isVisible) {
@@ -49,26 +49,20 @@ export function ManualInput({
 
       modal = new Modal($modalElement, modalOptions);
       modal.show();
+      document.body.style.overflow = "hidden";
+      document.body.style.height = "100vh";
+    } else {
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
     }
 
     return () => {
       if (modal) {
         modal.hide();
       }
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
     };
-  }, [isVisible]);
-
-  useEffect(() => {
-    if (isVisible) {
-      const handleWheel = (event: WheelEvent) => {
-        event.preventDefault(); // Prevent scrolling
-      };
-      window.addEventListener("wheel", handleWheel, { passive: false });
-
-      return () => {
-        window.removeEventListener("wheel", handleWheel);
-      };
-    }
   }, [isVisible]);
 
   const checkValidate = (data: { sequence: string; score: number }[]) => {
@@ -126,7 +120,7 @@ export function ManualInput({
         tabIndex={-1}
         className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-900/50 mt-0"
       >
-        <div className="space-y-5 w-[90%] max-w-[90%] h-[70%] max-h-[70%]">
+        <div className="space-y-5 w-fit h-fit">
           <div className="w-full h-full flex bg-pep-blue-light opacity-100 px-8 py-5 gap-x-8 m-auto z-[70] text-center">
             <div className="flex-grow place-items-start space-y-5 mt-14 bg-white p-3 rounded-xl h-fit">
               <div className="flex space-x-3">
@@ -136,7 +130,7 @@ export function ManualInput({
                 />
                 <label className="font-light">Input:</label>
               </div>
-              <div className="grow w-full">
+              <div className="grow w-[500px]">
                 <Textarea
                   id="lab-result-manual"
                   className={`${!isError.isValidate ? "!border-error" : ""}`}

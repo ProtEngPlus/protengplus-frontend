@@ -56,7 +56,6 @@ export default function DashboardPage() {
         const data = await getDashboardContent();
         if (data.data) {
           setContent(data.data);
-          console.log(data.data);
         }
       }
     };
