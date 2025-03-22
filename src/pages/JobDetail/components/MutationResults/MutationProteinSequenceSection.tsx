@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MutationResultInterface, MutationResultSearchParams } from "../../../../commons/interfaces/Mutation.interface";
 import MutationResultTable from "./MutationResultTable";
-import { getAllMutationResults } from "../../../../commons/api/mutation";
+import { getAllMutationResult } from "../../../../commons/api/mutation";
 import PageNumberDropDown from "./Input/PageNumberDropDown";
 import { ProteinSequenceOverlay, ProteinSequenceProps } from "../Overlay/ProteinSequenceOverlay";
 import SortOptionDropdown from "./Input/SortOptionDropDown";
@@ -61,7 +61,7 @@ export default function MutationProteinSequenceSection({
             ...(isBookmarkOnly ? { is_bookmark: true } : {}),
         };
 
-        getAllMutationResults(params)
+        getAllMutationResult(params)
             .then((response) => setMutationResults(response.data || []))
             .catch(console.error);
 
