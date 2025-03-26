@@ -49,10 +49,14 @@ export default function SelectInput({
 
   // set value at beginning
   useEffect(() => {
-    if (defaultValue) {
-      setValue(id, defaultValue);
-    } else if (!placeholder && options.length > 0) {
-      setValue(id, options[0].value);
+    if (disabled) {
+      if (currentValue) {
+        setValue(id, currentValue);
+      } else if (defaultValue) {
+        setValue(id, defaultValue);
+      } else if (!placeholder && options.length > 0) {
+        setValue(id, options[0].value);
+      }
     }
   }, []);
 
@@ -92,22 +96,20 @@ export default function SelectInput({
             onClick={() => !disabled && setIsOpen((prev) => !prev)}
           >
             <div
-              className={`grow ${
-                disabled
-                  ? "text-label"
-                  : options.find((option) => option.value === currentValue)
+              className={`grow ${disabled
+                ? "text-label"
+                : options.find((option) => option.value === currentValue)
                   ? "text-black"
                   : "text-placeholder"
-              }`}
+                }`}
             >
               {options.find((option) => option.value === currentValue)?.label ||
                 placeholder}
             </div>
             <Icon
               icon="quill:chevron-down"
-              className={`text-pep-dark-gray size-4 my-auto ${
-                disabled ? "text-gray-400" : "text-pep-dark-gray"
-              }`}
+              className={`text-pep-dark-gray size-4 my-auto ${disabled ? "text-gray-400" : "text-pep-dark-gray"
+                }`}
             />
           </div>
 

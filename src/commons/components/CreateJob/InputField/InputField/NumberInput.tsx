@@ -33,7 +33,9 @@ export default function NumberInput({
   } = useFormContext();
 
   useEffect(() => {
-    setValue(id, defaultValue);
+    if (disabled) {
+      setValue(id, defaultValue);
+    }
   }, []);
 
   const currentValue = Number(watch(id)) || defaultValue || 0;

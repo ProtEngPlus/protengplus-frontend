@@ -34,7 +34,9 @@ export default function PercentInput({
   } = useFormContext();
 
   useEffect(() => {
-    setValue(id, defaultValue);
+    if (disabled) {
+      setValue(id, defaultValue);
+    }
   }, []);
 
   const currentValue = (() => {
