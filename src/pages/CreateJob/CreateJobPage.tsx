@@ -209,7 +209,7 @@ export default function CreateJobPage() {
 
       const newJob: CreateJobInterface = {
         user_id: user?.id ?? "",
-        stage_id: initialStep - 1,
+        stage_id: initialStep < 4 ? initialStep - 1 : initialStep - 2,
         options: option,
         lab_result: labResult,
         ...otherDetails,
