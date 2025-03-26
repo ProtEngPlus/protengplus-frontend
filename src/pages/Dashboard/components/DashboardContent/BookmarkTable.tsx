@@ -128,7 +128,7 @@ export default function BookmarkTable() {
                         />
                         <Icon
                           icon={
-                            currentMutation?.job_id === mutation.job_id &&
+                            currentMutation?.id === mutation.id &&
                               isExpand
                               ? "mingcute:up-line"
                               : "mingcute:down-line"
@@ -136,7 +136,7 @@ export default function BookmarkTable() {
                           className="text-pep-gray size-5 cursor-pointer"
                           onClick={() => {
                             if (
-                              currentMutation?.job_id === mutation.job_id &&
+                              currentMutation?.id === mutation.id &&
                               isExpand
                             ) {
                               setIsExpand(false);
@@ -152,7 +152,7 @@ export default function BookmarkTable() {
 
                   {/* Mutation Result Table (Only for the selected mutation) */}
                   {isExpand &&
-                    currentMutation?.job_id === mutation.job_id &&
+                    currentMutation?.id === mutation.id &&
                     mutationResult && (
                       <tr>
                         <td colSpan={4}>
