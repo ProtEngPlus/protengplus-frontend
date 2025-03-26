@@ -49,14 +49,12 @@ export default function SelectInput({
 
   // set value at beginning
   useEffect(() => {
-    if (disabled) {
-      if (currentValue) {
-        setValue(id, currentValue);
-      } else if (defaultValue) {
-        setValue(id, defaultValue);
-      } else if (!placeholder && options.length > 0) {
-        setValue(id, options[0].value);
-      }
+    if (currentValue) {
+      setValue(id, currentValue);
+    } else if (defaultValue) {
+      setValue(id, defaultValue);
+    } else if (!placeholder && options.length > 0) {
+      setValue(id, options[0].value);
     }
   }, []);
 
