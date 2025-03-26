@@ -1,10 +1,9 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import JobState from "../../../../commons/components/Job/JobState/JobState";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Mutation,
-  MutationResult,
+  MutationInterface,
+  MutationResultInterface,
 } from "../../../../commons/interfaces/Mutation.interface";
 import {
   getAllMutationResult,
@@ -15,15 +14,16 @@ import {
   InputProteinOverlayProps,
 } from "../../../../commons/components/CreateJob/InputProteinOverlay/InputProteinOverlay";
 import React from "react";
+import MutationState from "../../../../commons/components/Mutation/MutationState/MutationState";
 
 const headers = ["Mutation Collection", "Job Name", "Status"];
 
 export default function BookmarkTable() {
   const navigate = useNavigate();
-  const [mutations, setMutations] = useState<Mutation[]>([]);
-  const [currentMutation, setCurrentMutation] = useState<Mutation>();
+  const [mutations, setMutations] = useState<MutationInterface[]>([]);
+  const [currentMutation, setCurrentMutation] = useState<MutationInterface>();
   const [isExpand, setIsExpand] = useState(false);
-  const [mutationResult, setMutationResult] = useState<MutationResult[]>();
+  const [mutationResult, setMutationResult] = useState<MutationResultInterface[]>();
   const [inputProtein, setInputProtein] = useState("");
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export default function BookmarkTable() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <JobState state={mutation.state} className="mx-auto" />
+                      <MutationState state={mutation.state} className="mx-auto" />
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex space-x-1">
@@ -128,15 +128,15 @@ export default function BookmarkTable() {
                         />
                         <Icon
                           icon={
-                            currentMutation?.job_id === mutation.job_id &&
-                            isExpand
+                            currentMutation?.id === mutation.id &&
+                              isExpand
                               ? "mingcute:up-line"
                               : "mingcute:down-line"
                           }
                           className="text-pep-gray size-5 cursor-pointer"
                           onClick={() => {
                             if (
-                              currentMutation?.job_id === mutation.job_id &&
+                              currentMutation?.id === mutation.id &&
                               isExpand
                             ) {
                               setIsExpand(false);
@@ -152,7 +152,7 @@ export default function BookmarkTable() {
 
                   {/* Mutation Result Table (Only for the selected mutation) */}
                   {isExpand &&
-                    currentMutation?.job_id === mutation.job_id &&
+                    currentMutation?.id === mutation.id &&
                     mutationResult && (
                       <tr>
                         <td colSpan={4}>
@@ -180,7 +180,7 @@ const MutationResultTable = ({
   mutationResult,
   handleViewSequence,
 }: {
-  mutationResult: MutationResult[];
+  mutationResult: MutationResultInterface[];
   handleViewSequence: (sequence: string) => void;
 }) => {
   return (

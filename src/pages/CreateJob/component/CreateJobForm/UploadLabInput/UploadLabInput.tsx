@@ -43,7 +43,7 @@ export default function UploadLabInput({
   isConclusion = false,
   onEdit = true,
 }: Props) {
-  const { watch, getValues } = useFormContext();
+  const { watch, getValues, setValue } = useFormContext();
   const minimumSize =
     getValues("train_batch_sizes")?.[0] ??
     getValues("Top Model.RidgeCV.train_batch_sizes")?.[0];
@@ -135,6 +135,7 @@ export default function UploadLabInput({
 
           if (validation.isValidate) {
             setLabResultForm(fileData);
+            setValue("lab_result", fileData);
           }
         } catch (error) {
           console.error("Error during file parsing or job update:", error);
@@ -166,6 +167,7 @@ export default function UploadLabInput({
       setIsError(validation);
       if (validation.isValidate) {
         setLabResultForm(data);
+        setValue("lab_result", data);
       }
       setManualInputVisible(false);
     },
@@ -243,9 +245,8 @@ export default function UploadLabInput({
             {stepsForCreateJob[step - 1]}
             <Icon
               icon="material-symbols:info-outline"
-              className={`size-8 cursor-pointer ${
-                isRead ? "text-pep-blue" : "text-pep-gray"
-              }
+              className={`size-8 cursor-pointer ${isRead ? "text-pep-blue" : "text-pep-gray"
+                }
            
             `}
               onClick={() => setRead(!isRead)}

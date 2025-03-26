@@ -33,7 +33,7 @@ export default function MultiNumberDropdown({
   } = useFormContext();
 
   useEffect(() => {
-    setValue(id, defaultValue);
+    setValue(id, currentValue);
   }, []);
 
   const currentValue: number[] = Array.isArray(watch(id))
@@ -81,13 +81,11 @@ export default function MultiNumberDropdown({
             <div>
               <div
                 className={`flex flex-row bg-white border font-light rounded-md py-3 px-4 cursor-pointer gap-1 disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label
-                 ${errors[id] ? "border-error" : "border-pep-gray-border"} ${
-                  isOpen ? "border-pep-blue" : ""
-                } ${
-                  disabled
+                 ${errors[id] ? "border-error" : "border-pep-gray-border"} ${isOpen ? "border-pep-blue" : ""
+                  } ${disabled
                     ? "!cursor-not-allowed !bg-disabled !border-disabled !text-label"
                     : ""
-                }`}
+                  }`}
                 onClick={() => !disabled && setIsOpen((prev) => !prev)}
               >
                 <div
@@ -100,9 +98,8 @@ export default function MultiNumberDropdown({
                 </div>
                 <Icon
                   icon="quill:chevron-down"
-                  className={`text-pep-dark-gray size-4 my-auto ${
-                    disabled ? "text-gray-400" : "text-pep-dark-gray"
-                  }`}
+                  className={`text-pep-dark-gray size-4 my-auto ${disabled ? "text-gray-400" : "text-pep-dark-gray"
+                    }`}
                 />
               </div>
               {isOpen && !disabled && (
@@ -120,11 +117,10 @@ export default function MultiNumberDropdown({
                         className="size-5 checked:bg-selected border border-[#DFE4EA] rounded cursor-pointer"
                       />
                       <label
-                        className={`font-normal w-full text-sm cursor-pointer ${
-                          currentValue.includes(option)
-                            ? "text-selected"
-                            : "text-pep-dark-gray"
-                        }`}
+                        className={`font-normal w-full text-sm cursor-pointer ${currentValue.includes(option)
+                          ? "text-selected"
+                          : "text-pep-dark-gray"
+                          }`}
                       >
                         {option}
                       </label>

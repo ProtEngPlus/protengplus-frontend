@@ -1,10 +1,9 @@
 import { del, get, getRaw, post, put } from "./common";
 import { BACKEND_BASE_URL } from "../configs/apiConfig";
 import {
-  Mutation,
+  MutationInterface,
   MutationHistogram,
   CreateMutationInterface,
-  MutationResult,
   MutationResultInterface,
   MutationResultSearchParams,
   MutationSearchParams,
@@ -14,32 +13,24 @@ import { Params } from "../interfaces/ApiResponse.interface";
 const MUTATION_PATH = BACKEND_BASE_URL + "/proteng-conductor/mutations";
 const MUTATION_RESULT_PATH = BACKEND_BASE_URL + "/proteng-conductor/mutations/results";
 
-/*------------------------- job detail section -------------------------------------*/
-
 export const getMutationHistogram = async (jobId: string) => {
-  const path =
-    BACKEND_BASE_URL +
-    "/proteng-conductor/mutations/histograms?job_id=" +
-    jobId;
+  const path = MUTATION_PATH + `/histograms?job_id=${jobId}`;
   return await get<MutationHistogram[]>(path, true);
 };
 
-/*------------------------- mutation detail section -------------------------------------*/
-
 export const getMutation = async (mutationId: string) => {
   const path = MUTATION_PATH + `/${mutationId}`;
-  return await get<Mutation>(path, true);
+  return await get<MutationInterface>(path, true);
 };
 
 export const getAllMutations = async (params: MutationSearchParams) => {
-  return await get<Mutation[]>(MUTATION_PATH, true, params as Params);
+  return await get<MutationInterface[]>(MUTATION_PATH, true, params as Params);
 };
 
 export const getAllMutationResult = async (
   params: MutationResultSearchParams
 ) => {
-  const path = MUTATION_PATH + "/results";
-  return await get<MutationResult[]>(path, true, params as Params);
+  return await get<MutationResultInterface[]>(MUTATION_RESULT_PATH, true, params as Params);
 };
 
 export const createMutation = async (mutation: CreateMutationInterface) => {
@@ -58,16 +49,11 @@ export const runMutation = async (mutationId: string) => {
 
 export const updateMutationDetail = async (
   mutationId: string,
-  updateData: Partial<Mutation>
+  updateData: Partial<MutationInterface>
 ) => {
   const path = MUTATION_PATH + `/${mutationId}`;
-  return await put<Mutation>(path, updateData, true);
+  return await put<MutationInterface>(path, updateData, true);
 };
-
-export const getAllMutationResults = async (params: MutationResultSearchParams) => {
-  const path = MUTATION_RESULT_PATH;
-  return await get<MutationResultInterface[]>(path, true, params as Params);
-}
 
 export const updateMutationResultDetail = async (mutationResultId: string, updateData: Partial<MutationResultInterface>) => {
   const path = MUTATION_RESULT_PATH + `/${mutationResultId}`;

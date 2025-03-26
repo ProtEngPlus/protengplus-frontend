@@ -33,7 +33,7 @@ export default function NumberInput({
   } = useFormContext();
 
   useEffect(() => {
-    setValue(id, defaultValue);
+    setValue(id, currentValue);
   }, []);
 
   const currentValue = Number(watch(id)) || defaultValue || 0;
