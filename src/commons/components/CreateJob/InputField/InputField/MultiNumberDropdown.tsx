@@ -33,9 +33,7 @@ export default function MultiNumberDropdown({
   } = useFormContext();
 
   useEffect(() => {
-    if (disabled) {
-      setValue(id, defaultValue);
-    }
+    setValue(id, currentValue);
   }, []);
 
   const currentValue: number[] = Array.isArray(watch(id))
