@@ -8,7 +8,6 @@ import {
   JobSearchParams,
   State,
 } from "../../commons/interfaces/Job.interface";
-import DonutChart from "./components/DashboardContent/DonutChart";
 import Card from "./components/DashboardContent/Card";
 import BookmarkTable from "./components/DashboardContent/BookmarkTable";
 import SearchName from "./components/SearchBar/SearchName";
@@ -21,6 +20,7 @@ import DateRangePicker, {
 } from "./components/SearchBar/DateRangePicker";
 import ongoing from "../../assets/images/Dashboard/ongoing.svg";
 import bestAssay from "../../assets/images/Dashboard/bestAssay.svg";
+import Bar from "./components/DashboardContent/Chart/Bar";
 
 const allState: State[] = [
   "CREATED",
@@ -83,7 +83,7 @@ export default function DashboardPage() {
     <div className="space-y-[3%] py-5">
       {content && (
         <div className="grid grid-cols-[1fr,1fr,2fr] gap-8 min-w-fit">
-          <DonutChart
+          <Bar
             series={[
               content.number_of_jobs.created,
               content.number_of_jobs.pending,
