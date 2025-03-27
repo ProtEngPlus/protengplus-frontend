@@ -22,7 +22,7 @@ export default function BarChart({ labels, series, setIsDonutChart }: Props) {
         borderRadius: 0,
         borderRadiusApplication: "around",
         borderRadiusWhenStacked: "last",
-        columnWidth: "70%",
+        columnWidth: "90%",
         barHeight: "70%",
         distributed: false,
         hideZeroBarsWhenGrouped: false,
