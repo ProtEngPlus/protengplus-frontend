@@ -5,14 +5,14 @@ import { RunType } from "../interfaces/Job.interface";
 export const defaultCreateJobDetail: CreateJobDetail = {
     name: "",
     description: "",
-    input_protein: "BSIQHFHW",
+    input_protein: "SIQHFHW",
     lab_result: [],
     run_type: "one-step",
     is_notification_on: true,
     artifact:null,
 }
 // default for inputProtein
-export const inputProteinProtSeq = "BSIQHFHW"
+export const inputProteinProtSeq = "SIQHFHW"
 export const inputProteinUniprotId = "P69905"
 
 // all pipelines
