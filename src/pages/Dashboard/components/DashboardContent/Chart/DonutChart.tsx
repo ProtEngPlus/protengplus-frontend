@@ -94,6 +94,7 @@ export default function DonutChart({ labels, series, setIsDonutChart }: Props) {
   return (
     <div className="bg-white rounded-md shadow-statistic pt-3 pb-4 min-w-fit">
       <Icon
+        id="change-to-bar-chart"
         icon="solar:chart-bold"
         className="text-label size-6 min-w-6 place-self-end mx-2 cursor-pointer"
         onClick={() => setIsDonutChart(false)}
@@ -102,13 +103,15 @@ export default function DonutChart({ labels, series, setIsDonutChart }: Props) {
         Number of Jobs
       </h1>
       {/* Donut chart */}
-      <Chart
-        options={options}
-        series={series}
-        type="donut"
-        width="100%"
-        height={250}
-      />
+      <div id="donut-chart">
+        <Chart
+          options={options}
+          series={series}
+          type="donut"
+          width="100%"
+          height={250}
+        />
+      </div>
     </div>
   );
 }

@@ -78,6 +78,7 @@ export default function BarChart({ labels, series, setIsDonutChart }: Props) {
   return (
     <div className="bg-white rounded-md shadow-statistic pt-3 pb-4 min-w-fit">
       <Icon
+        id="change-to-donut-chart"
         icon="mdi:chart-arc"
         className="text-label size-6 min-w-6 place-self-end mx-2 cursor-pointer"
         onClick={() => setIsDonutChart(true)}
@@ -85,13 +86,15 @@ export default function BarChart({ labels, series, setIsDonutChart }: Props) {
       <h1 className="text-label text-center text-lg text-nowrap p-3">
         Number of Jobs
       </h1>
-      <Chart
-        options={options}
-        series={chartSeries}
-        type="bar"
-        height={250}
-        width="100%"
-      />
+      <div id="bar-chart">
+        <Chart
+          options={options}
+          series={chartSeries}
+          type="bar"
+          height={250}
+          width="100%"
+        />
+      </div>
     </div>
   );
 }

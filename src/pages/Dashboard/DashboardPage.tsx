@@ -94,6 +94,7 @@ export default function DashboardPage() {
           />
           <div className="grid grid-flow-row gap-5 min-w-conte w-full">
             <Card
+              id="on-going-card"
               icon={ongoing}
               bgColor="bg-[rgba(251,113,133,0.08)]"
               dropdownText="View Jobs"
@@ -105,6 +106,7 @@ export default function DashboardPage() {
               <p>{content.number_of_jobs.ongoing} Jobs</p>
             </Card>
             <Card
+              id="best-assay-card"
               icon={bestAssay}
               bgColor="bg-[rgba(251,191,36,0.08)]"
               dropdownText="View Job"
@@ -124,6 +126,7 @@ export default function DashboardPage() {
               </p>
             </Card>
             <Card
+              id="recent-job-card"
               isRecentJob={true}
               icon="carbon:view"
               bgColor="bg-pep-blue-light"
