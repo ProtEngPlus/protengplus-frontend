@@ -135,6 +135,7 @@ export default function UploadLabInput({
 
           if (validation.isValidate) {
             setLabResultForm(fileData);
+            setValue("file_name", file.name);
             setValue("lab_result", fileData);
           }
         } catch (error) {
@@ -220,6 +221,7 @@ export default function UploadLabInput({
             <hr />
             <div className="flex justify-between space-x-4">
               <Icon
+                id="expand-example-table"
                 icon={isExpand ? "mingcute:up-line" : "mingcute:down-line"}
                 onClick={() => setIsExpand(!isExpand)}
                 className="cursor-pointer text-pep-gray size-[30px]"
@@ -245,8 +247,9 @@ export default function UploadLabInput({
             {stepsForCreateJob[step - 1]}
             <Icon
               icon="material-symbols:info-outline"
-              className={`size-8 cursor-pointer ${isRead ? "text-pep-blue" : "text-pep-gray"
-                }
+              className={`size-8 cursor-pointer ${
+                isRead ? "text-pep-blue" : "text-pep-gray"
+              }
            
             `}
               onClick={() => setRead(!isRead)}
