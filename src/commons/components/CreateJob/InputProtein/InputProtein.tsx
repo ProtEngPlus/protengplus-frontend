@@ -136,15 +136,24 @@ export default function InputProtein({
                           : "border-gray-border"
                       }`}
                       {...register("input_protein_field", {
+                        required:
+                          inputMode === "prot_seq"
+                            ? "Protein input is required."
+                            : false,
+
                         validate:
                           inputMode === "prot_seq"
-                            ? {
-                                required: (value) =>
-                                  !!value || "Protein input is required",
-                                pattern: (value) =>
-                                  /^(?:[A-IK-NP-TVWY]+|[a-ik-np-tvwy]+)$/.test(
-                                    value
-                                  ) || "Incorrect protein sequence format.",
+                            ? (value) => {
+                                const invalidAminoAcids = /[BJOUXZ]/i.test(
+                                  value
+                                );
+                                const containsExactATGC = /ATGC/i.test(value);
+
+                                if (invalidAminoAcids || containsExactATGC) {
+                                  return "Incorrect protein sequence format.";
+                                }
+
+                                return true;
                               }
                             : !isError.isValidate
                             ? () => isError.errorMessage
