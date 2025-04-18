@@ -120,7 +120,10 @@ export default function JobTable({
       ) : (
         <div className="space-y-5">
           {/* Job Table */}
-          <div className="relative overflow-auto rounded-xl border border-[#DFE4EA] shadow-table">
+          <div
+            id="job-table"
+            className="relative overflow-auto rounded-xl border border-[#DFE4EA] shadow-table"
+          >
             <table className="w-full text-xs text-left rtl:text-right">
               <thead className="leading-6 bg-[#F9FAFB] text-center border-b">
                 <tr>
@@ -172,8 +175,12 @@ export default function JobTable({
                         state={job.state}
                       />
                     </td>
-                    <td className="flex grow flex-col px-3 py-3">
+                    <td
+                      id="table-job-detail"
+                      className="flex grow flex-col px-3 py-3"
+                    >
                       <label
+                        id="table-job-name"
                         className="truncate text-blue-500 font-normal text-sm leading-5 underline cursor-pointer"
                         onClick={() =>
                           navigate(`/dashboard/job-detail/${job.id}`)
@@ -181,11 +188,14 @@ export default function JobTable({
                       >
                         {job.name}
                       </label>
-                      <label className="truncate text-sm">
+                      <label
+                        id="table-job-description"
+                        className="truncate text-sm"
+                      >
                         {job.description}
                       </label>
                     </td>
-                    <td className="px-3 py-3 text-center">
+                    <td id="table-job-status" className="px-3 py-3 text-center">
                       <JobState state={job.state} className="mx-auto" />
                       {job.state === "COMPLETED" && job.complete_at && (
                         <label>
@@ -197,7 +207,10 @@ export default function JobTable({
                     <td className="place-items-center px-3 py-3">
                       <Stepper stageId={job.stage_id} state={job.state} />
                     </td>
-                    <td className="text-label px-3 py-3 text-center">
+                    <td
+                      id="table-job-created-at"
+                      className="text-label px-3 py-3 text-center"
+                    >
                       {job.created_at ? formatDate(job.created_at) : ""}
                     </td>
                     <td className="text-label px-3 py-3 text-center">
@@ -207,10 +220,11 @@ export default function JobTable({
                       <div className="flex space-x-2">
                         <Icon
                           icon="ic:round-refresh"
-                          className={`size-7 ${job.state === "FAILED"
+                          className={`size-7 ${
+                            job.state === "FAILED"
                               ? "text-pep-gray cursor-pointer"
                               : "text-pep-gray-border cursor-not-allowed"
-                            }`}
+                          }`}
                           onClick={() => {
                             job.state === "FAILED" && handleRunJob(job);
                           }}
@@ -256,10 +270,11 @@ export default function JobTable({
               {[...Array(totalPages)].map((_, index) => (
                 <li key={index}>
                   <button
-                    className={`size-[35px] text-pep-dark-gray border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray ${currentPage === index + 1
+                    className={`size-[35px] text-pep-dark-gray border border-pep-gray-border transition-colors duration-150 rounded-full focus:border-none focus:text-white focus:bg-pep-gray ${
+                      currentPage === index + 1
                         ? "bg-pep-gray border-none text-white"
                         : "hover:bg-pep-light-gray"
-                      }`}
+                    }`}
                     onClick={() => handlePageClick(index + 1)}
                     type="button"
                   >
