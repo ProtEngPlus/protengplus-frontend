@@ -1,13 +1,14 @@
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface Props {
+  labels: string[];
   series: number[];
+  setIsDonutChart: (isDonutChart: boolean) => void;
 }
 
-const labels = ["Created", "Pending", "Ongoing", "Completed", "Failed"];
-
-export default function DonutChart({ series }: Props) {
+export default function DonutChart({ labels, series, setIsDonutChart }: Props) {
   const options: ApexOptions = {
     chart: {
       type: "donut",
@@ -92,6 +93,11 @@ export default function DonutChart({ series }: Props) {
 
   return (
     <div className="bg-white rounded-md shadow-statistic pt-3 pb-4 min-w-fit">
+      <Icon
+        icon="solar:chart-bold"
+        className="text-label size-6 min-w-6 place-self-end mx-2 cursor-pointer"
+        onClick={() => setIsDonutChart(false)}
+      />
       <h1 className="text-label text-center text-lg text-nowrap p-3">
         Number of Jobs
       </h1>
