@@ -67,7 +67,7 @@ export default function JobRunTypeIcon({
     }
   };
   return (
-    <div className="relative group">
+    <div data-testid={`${runType}-${state}`} className="relative group">
       {renderIcon()}
       <div className="hidden text-nowrap absolute left-1/2 transform -translate-x-1/2 top-7 z-10 group-hover:block p-[2px] text-[8px] leading-none font-light text-white text-center bg-label rounded-md">
         {getTooltipText(runType, state)}
