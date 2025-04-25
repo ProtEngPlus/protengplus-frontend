@@ -120,7 +120,10 @@ export function ManualInput({
         tabIndex={-1}
         className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-900/50 mt-0"
       >
-        <div className="space-y-5 w-fit h-fit">
+        <div
+          data-testid="manual-input-overlay"
+          className="space-y-5 w-fit h-fit"
+        >
           <div className="w-full h-full flex bg-pep-blue-light opacity-100 px-8 py-5 gap-x-8 m-auto z-[70] text-center">
             <div className="flex-grow place-items-start space-y-5 mt-14 bg-white p-3 rounded-xl h-fit">
               <div className="flex space-x-3">

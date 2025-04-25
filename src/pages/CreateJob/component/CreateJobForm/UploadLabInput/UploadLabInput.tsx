@@ -220,11 +220,11 @@ export default function UploadLabInput({
             <hr />
             <div className="flex justify-between space-x-4">
               <Icon
+                data-testid="expand-template-table"
                 icon={isExpand ? "mingcute:up-line" : "mingcute:down-line"}
                 onClick={() => setIsExpand(!isExpand)}
                 className="cursor-pointer text-pep-gray size-[30px]"
               />
-              {/* <DownloadCSVButton onClick={() => ExportToCsv(labResultForm)} /> */}
               <DownloadCSVButton onClick={() => UploadInputTemplate()} />
             </div>
             <div className="rounded-lg bg-pep-blue-light p-5 text-pep-dark-gray">
@@ -245,8 +245,9 @@ export default function UploadLabInput({
             {stepsForCreateJob[step - 1]}
             <Icon
               icon="material-symbols:info-outline"
-              className={`size-8 cursor-pointer ${isRead ? "text-pep-blue" : "text-pep-gray"
-                }
+              className={`size-8 cursor-pointer ${
+                isRead ? "text-pep-blue" : "text-pep-gray"
+              }
            
             `}
               onClick={() => setRead(!isRead)}
