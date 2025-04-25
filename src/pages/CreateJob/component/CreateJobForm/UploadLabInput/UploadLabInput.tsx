@@ -101,7 +101,7 @@ export default function UploadLabInput({
       ) {
         return {
           isValidate: false,
-          errorMessage: "Uploaded file mismatch!",
+          errorMessage: "Uploaded file mismatch !",
         };
       }
     }
@@ -136,6 +136,7 @@ export default function UploadLabInput({
           if (validation.isValidate) {
             setLabResultForm(fileData);
             setValue("lab_result", fileData);
+            setValue("file_name", file.name);
           }
         } catch (error) {
           console.error("Error during file parsing or job update:", error);
@@ -168,6 +169,7 @@ export default function UploadLabInput({
       if (validation.isValidate) {
         setLabResultForm(data);
         setValue("lab_result", data);
+        setValue("file_name", "manual input");
       }
       setManualInputVisible(false);
     },

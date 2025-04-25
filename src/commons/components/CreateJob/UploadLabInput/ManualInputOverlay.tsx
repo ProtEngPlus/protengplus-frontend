@@ -87,7 +87,7 @@ export function ManualInput({
       ) {
         return {
           isValidate: false,
-          errorMessage: "Input format mismatch!",
+          errorMessage: "Input format mismatch !",
         };
       }
     }
