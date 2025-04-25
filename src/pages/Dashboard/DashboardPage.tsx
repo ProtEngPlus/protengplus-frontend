@@ -94,6 +94,7 @@ export default function DashboardPage() {
           />
           <div className="grid grid-flow-row gap-5 min-w-conte w-full">
             <Card
+              id="ongoing-card"
               icon={ongoing}
               bgColor="bg-[rgba(251,113,133,0.08)]"
               dropdownText="View Jobs"
@@ -105,6 +106,7 @@ export default function DashboardPage() {
               <p>{content.number_of_jobs.ongoing} Jobs</p>
             </Card>
             <Card
+              id="best-assay-card"
               icon={bestAssay}
               bgColor="bg-[rgba(251,191,36,0.08)]"
               dropdownText="View Job"
@@ -124,6 +126,7 @@ export default function DashboardPage() {
               </p>
             </Card>
             <Card
+              id="recent-job-card"
               isRecentJob={true}
               icon="carbon:view"
               bgColor="bg-pep-blue-light"
@@ -150,7 +153,9 @@ export default function DashboardPage() {
       <div className="w-full grid grid-flow-col gap-4 rounded-lg border border-pep-gray-border px-5 py-4">
         <form className="flex space-x-4">
           <SearchName name={name} setName={setName} />
-          <DateRangePicker date={date} setDate={setDate} />
+          <div data-testid="date-picker">
+            <DateRangePicker date={date} setDate={setDate} />
+          </div>
           <FilterDropdown state={state} setState={setState} />
         </form>
 
