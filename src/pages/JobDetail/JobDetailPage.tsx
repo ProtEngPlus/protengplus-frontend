@@ -160,7 +160,10 @@ export default function JobDetailPage() {
       />
       {job && (
         <div className="space-y-8 py-5">
-          <div className="p-5 space-y-5 border border-pep-gray-border rounded-xl">
+          <div
+            data-testid="job-information"
+            className="p-5 space-y-5 border border-pep-gray-border rounded-xl"
+          >
             <div className="flex justify-between items-center space-x-8">
               <div className="flex space-x-8 items-center">
                 <JobRunTypeIcon
