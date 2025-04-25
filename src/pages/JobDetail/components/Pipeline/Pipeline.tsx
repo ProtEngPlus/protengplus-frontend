@@ -153,6 +153,18 @@ export default function Pipeline({
 
             newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
               data[`${param.id}_high`] ?? jobOptions[`${param.id}_high`];
+          } else if (param.type == "percent") {
+            const num = Number(data[param.id]);
+            newJobOption[subMethod.toLowerCase()][param.id] = isNaN(num)
+              ? jobOptions[param.id]
+              : num;
+          } else if (param.type == "multiNumberDropdown") {
+            var array: number[] = data[param.id]
+              ? data[param.id].sort((n1: number, n2: number) => n1 - n2)
+              : [];
+
+            newJobOption[subMethod.toLowerCase()][param.id] =
+              array.length === 0 ? jobOptions[param.id] : array;
           } else {
             newJobOption[subMethod.toLowerCase()][param.id] =
               data[param.id] ?? jobOptions[param.id];
