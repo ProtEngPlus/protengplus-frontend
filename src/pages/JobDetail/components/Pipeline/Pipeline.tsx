@@ -67,7 +67,7 @@ export default function Pipeline({
   setIsEditPipeline: (isEditPipeline: boolean) => void;
   fetchJob: () => void;
 }) {
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch, getValues } = useFormContext();
   const formData = watch();
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(job.stage_id);
@@ -160,7 +160,11 @@ export default function Pipeline({
         });
       }
 
-      await updateJobDetail(job.id, { meta: meta, options: newJobOption });
+      await updateJobDetail(job.id, {
+        meta: meta,
+        options: newJobOption,
+        input_protein: getValues("input_protein") ?? job.input_protein,
+      });
       setIsConfirmVisible(false);
       setIsSuccessVisible(true);
     } catch (error) {
