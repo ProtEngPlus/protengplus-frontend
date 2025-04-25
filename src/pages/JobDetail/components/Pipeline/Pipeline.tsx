@@ -378,6 +378,7 @@ export default function Pipeline({
         <div className="space-y-24">
           <div className="flex space-x-6 items-center justify-end">
             <Icon
+              data-testid={`isnotification-${isNotificationOn}`}
               icon={
                 isNotificationOn
                   ? "carbon:notification-filled"
@@ -390,6 +391,7 @@ export default function Pipeline({
             />
             <div className="flex space-x-2 items-center">
               <Button
+                data-testid={`auto-run-${runType === "auto"}`}
                 id="auto-run"
                 type="button"
                 buttonType={runType === "auto" ? "next" : "cancel"}
@@ -405,6 +407,7 @@ export default function Pipeline({
                 />
               </Button>
               <Button
+                data-testid={`one-step-run-${runType === "one-step"}`}
                 id="one-step-run"
                 type="button"
                 buttonType={runType === "one-step" ? "next" : "cancel"}
