@@ -138,10 +138,10 @@ export default function DashboardPage() {
             >
               <div className="relative flex flex-col pt-2 pb-[10px]">
                 <span className="text-nowrap truncate text-sm">
-                  {content.recent_job.name}
+                  {content.recent_job?.name}
                 </span>
                 <span className="text-label text-nowrap truncate text-[10px]">
-                  {content.recent_job.description}
+                  {content.recent_job?.description}
                 </span>
               </div>
             </Card>
