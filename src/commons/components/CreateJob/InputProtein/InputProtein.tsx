@@ -105,9 +105,8 @@ export default function InputProtein({
       <div className="space-y-12">
         {/* Header Section */}
         <div
-          className={`space-y-3 rounded-lg border-pep-gray-border ${
-            onEdit ? "bg-pep-blue-light p-5" : ""
-          } `}
+          className={`space-y-3 rounded-lg border-pep-gray-border ${onEdit ? "bg-pep-blue-light p-5" : ""
+            } `}
         >
           <div className="flex items-center space-x-3">
             <Icon
@@ -128,13 +127,12 @@ export default function InputProtein({
                       id="input_protein_field"
                       disabled={!canEditInputProtein}
                       placeholder="Input Protein*"
-                      className={`text-wrap h-[50px] w-full min-w-fit pl-3 pr-10 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label ${
-                        (errors.input_protein_field &&
+                      className={`text-wrap h-[50px] w-full min-w-fit pl-3 pr-10 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label ${(errors.input_protein_field &&
                           inputMode === "prot_seq") ||
-                        (!isError.isValidate && inputMode === "uniprot_id")
+                          (!isError.isValidate && inputMode === "uniprot_id")
                           ? "border-error"
                           : "border-gray-border"
-                      }`}
+                        }`}
                       {...register("input_protein_field", {
                         required:
                           inputMode === "prot_seq"
@@ -144,20 +142,20 @@ export default function InputProtein({
                         validate:
                           inputMode === "prot_seq"
                             ? (value) => {
-                                const invalidAminoAcids = /[BJOUXZ]/i.test(
-                                  value
-                                );
-                                const containsExactATGC = /ATGC/i.test(value);
+                              const invalidAminoAcids = /[BJOUXZ]/i.test(
+                                value
+                              );
+                              const containsExactATGC = /ATGC/i.test(value);
 
-                                if (invalidAminoAcids || containsExactATGC) {
-                                  return "Incorrect protein sequence format.";
-                                }
-
-                                return true;
+                              if (invalidAminoAcids || containsExactATGC) {
+                                return "Incorrect protein sequence format.";
                               }
+
+                              return true;
+                            }
                             : !isError.isValidate
-                            ? () => isError.errorMessage
-                            : undefined,
+                              ? () => isError.errorMessage
+                              : undefined,
                       })}
                       onBlur={() => {
                         if (inputMode === "prot_seq") {
@@ -211,11 +209,10 @@ export default function InputProtein({
                     }
                   }}
                   text="Amino Acid Sequence"
-                  className={`!font-light !p-0 w-[100px] text-sm ${
-                    canEditInputProtein
+                  className={`!font-light !p-0 w-[100px] text-sm ${canEditInputProtein
                       ? "cursor-pointer"
                       : "cursor-not-allowed hover:bg-pep-blue"
-                  }`}
+                    }`}
                 />
                 <Button
                   disabled={!canEditInputProtein}
@@ -287,7 +284,7 @@ export default function InputProtein({
         {/* Note for no query result */}
         {!isConclusion && onEdit && !hasQueryResult && (
           <div className="text-center text-label font-light">
-            Note: Blast Results can be manually filtered and selected only in{" "}
+            Note: Query Results can be manually filtered and selected only in{" "}
             <span className="text-pep-orange font-normal">'One-Step Run'</span>{" "}
             mode
           </div>
