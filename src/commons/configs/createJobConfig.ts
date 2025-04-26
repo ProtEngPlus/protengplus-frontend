@@ -25,7 +25,7 @@ export const Pipelines: PipelineItems[] = [
 
 // default pipeline
 export const defaultPipeline: PipelineItem[] = [
-    { method: "Protein Query", subMethod: "MMseqs2" },
+    { method: "Protein Query", subMethod: "Blast" },
     { method: "Protein Representation", subMethod: "Unirep" },
     { method: "Top Model", subMethod: "RidgeCV" },
     { method: "Mutation", subMethod: "Mutation" },
