@@ -381,7 +381,7 @@ export default function QueryResultTable({
                           {query.organisms}
                         </td>
                         <td data-testid="max-score" className="px-3 py-3">
-                          {query.max_score}
+                          {query.max_score.toFixed(2)}
                         </td>
                         <td data-testid="score" className="px-3 py-3">
                           {query.score}
@@ -393,7 +393,7 @@ export default function QueryResultTable({
                           {query.e_values}
                         </td>
                         <td data-testid="perc-ident" className="px-3 py-3">
-                          {query.percent_identity}
+                          {query.percent_identity.toFixed(2)}
                         </td>
                         <td data-testid="acc-len" className="px-3 py-3">
                           {query.acc_len}
