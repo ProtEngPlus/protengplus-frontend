@@ -345,7 +345,9 @@ export default function Pipeline({
       document.body.removeChild(hiddenDiv);
 
       let queryResults: Result[] = [];
-      const params: QueryResultSearchParams = {};
+      const params: QueryResultSearchParams = {
+        job_id: job.id,
+      };
       getAllQueryResults(params)
         .then(async (response) => {
           queryResults = (
@@ -400,13 +402,11 @@ export default function Pipeline({
                   ? "carbon:notification-filled"
                   : "carbon:notification-off-filled"
               }
-              className={` ${
-                job.state === "COMPLETED"
+              className={` ${job.state === "COMPLETED"
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
-              }  size-[30px] ${
-                isNotificationOn ? "text-pep-orange" : "text-error"
-              }`}
+                }  size-[30px] ${isNotificationOn ? "text-pep-orange" : "text-error"
+                }`}
               onClick={() =>
                 job.state !== "COMPLETED" &&
                 setValue("is_notification_on", !isNotificationOn)
@@ -425,9 +425,8 @@ export default function Pipeline({
               >
                 <Icon
                   icon="fa-solid:running"
-                  className={`w-[20px] h-[25px] ${
-                    runType === "auto" ? "text-white" : "text-pep-gray"
-                  }`}
+                  className={`w-[20px] h-[25px] ${runType === "auto" ? "text-white" : "text-pep-gray"
+                    }`}
                 />
               </Button>
               <Button
@@ -442,9 +441,8 @@ export default function Pipeline({
               >
                 <Icon
                   icon="ic:baseline-checklist-rtl"
-                  className={`size-[20px] ${
-                    runType === "one-step" ? "text-white" : "text-pep-gray"
-                  }`}
+                  className={`size-[20px] ${runType === "one-step" ? "text-white" : "text-pep-gray"
+                    }`}
                 />
               </Button>
             </div>
@@ -476,11 +474,10 @@ export default function Pipeline({
                 </li>
                 <li
                   key="save-config"
-                  className={`px-5 py-2 font-light text-label ${
-                    job.state === "COMPLETED"
-                      ? "cursor-pointer hover:text-pep-blue hover:bg-pep-blue-light"
-                      : "cursor-not-allowed"
-                  }`}
+                  className={`px-5 py-2 font-light text-label ${job.state === "COMPLETED"
+                    ? "cursor-pointer hover:text-pep-blue hover:bg-pep-blue-light"
+                    : "cursor-not-allowed"
+                    }`}
                   onClick={() => {
                     if (isEditPipeline) {
                       setIsOpen(false);
