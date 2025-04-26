@@ -167,6 +167,9 @@ export default function CreateJobPage() {
                     Number(data[`${param.id}_low`]);
                   newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
                     Number(data[`${param.id}_high`]);
+                } else if (param.id === "cov_mode") {
+                  newJobOption[subMethod.toLowerCase()][param.id] =
+                    Number(data[param.id]);
                 } else {
                   newJobOption[subMethod.toLowerCase()][param.id] =
                     data[param.id];
