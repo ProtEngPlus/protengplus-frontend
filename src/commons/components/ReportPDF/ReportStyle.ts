@@ -45,7 +45,7 @@ export const ReportStyles = StyleSheet.create({
     flexWrap: "wrap"
   },
   labelText: {
-    width: "120px",
+    width: "130px",
   },
   smallLabelText: {
     width: "100px",
