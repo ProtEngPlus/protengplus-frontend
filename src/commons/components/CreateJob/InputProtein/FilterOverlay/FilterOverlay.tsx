@@ -141,6 +141,7 @@ export function FilterOverlay({
     isVisible &&
     !isLoading && (
       <div
+        data-testid="protein-filter-modal"
         id="protein-filter-modal"
         className="fixed top-0 right-0 left-0 z-[90] flex justify-center items-center w-full h-full mt-0"
       >
