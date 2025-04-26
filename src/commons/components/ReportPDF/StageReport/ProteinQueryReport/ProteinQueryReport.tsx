@@ -16,10 +16,10 @@ export default function ProteinQueryReport({
   const Blast = () => (
     <View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"Program"} text={option.program || "-" } isSmall limit={145} />
+        <InfoBox label={"Program"} text={option.program || "-"} isSmall limit={145} />
         <InfoBox
           label={"Database"}
-          text={option.database || "-" }
+          text={option.database || "-"}
           isSmall
           limit={145}
         />
@@ -27,14 +27,14 @@ export default function ProteinQueryReport({
       <View style={styles.inlineInfoBox}>
         <InfoBox
           label={"Hit Size"}
-          text={option.hitlist_size || "-" }
+          text={option.hitlist_size || "-"}
           isSmall
           limit={145}
         />
-        <InfoBox label={"E Value"} text={option.expect || "-" } isSmall limit={145} />
+        <InfoBox label={"E Value"} text={option.expect || "-"} isSmall limit={145} />
         <InfoBox
           label={"Sequence Length"}
-          text={option.seq_length || "-" }
+          text={option.seq_length || "-"}
           isSmall
           limit={145}
         />
@@ -61,11 +61,65 @@ export default function ProteinQueryReport({
       </View>
     </View>
   );
+  const MMseqs2 = () => (
+    <View>
+      <View style={styles.inlineInfoBox}>
+        <InfoBox
+          label={"Maximum Sequences"}
+          text={option.max_seqs || "-"}
+          limit={185}
+        />
+        <InfoBox
+          label={"E Value"}
+          text={option.e || "-"}
+          limit={185}
+        />
+      </View>
+      <View style={styles.inlineInfoBox}>
+        <InfoBox
+          label={"Minimum Sequence Identity"}
+          text={option.min_seq_id || "-"}
+          limit={185}
+        />
+        <InfoBox
+          label={"Minimum Alignment Length"}
+          text={option.min_aln_len || "-"}
+          limit={185}
+        />
+      </View>
+      <View style={styles.inlineInfoBox}>
+        <InfoBox
+          label={"Coverage Mode"}
+          text={option.cov_mode || "-"}
+          limit={185}
+        />
+        <InfoBox
+          label={"Coverage Threshold"}
+          text={option.c || "-"}
+          limit={185}
+        />
+      </View>
+      <View style={styles.inlineInfoBox}>
+        <InfoBox
+          label={"Sequence Length"}
+          text={option.seq_length || "-"}
+          limit={185}
+        />
+        <InfoBox
+          label={"Random State"}
+          text={option.random_state || "-"}
+          limit={185}
+        />
+      </View>
+    </View>
+  );
 
   const ToolSelection = () => {
     switch (tool) {
       case "blast":
         return <Blast />;
+      case "mmseqs2":
+        return <MMseqs2 />;
       default:
         return <Text>No tool selected.</Text>;
     }
@@ -83,9 +137,9 @@ export default function ProteinQueryReport({
         </View>
       </View>
       <View>
-        <InfoBox label={"Tool"} text={tool || "-" } isSmall />
+        <InfoBox label={"Tool"} text={tool || "-"} isSmall={tool === 'blast'} />
         <ToolSelection />
-        <InfoBox label={"Input Protein"} text={inputProtein || "-" } isSmall />
+        <InfoBox label={"Input Protein"} text={inputProtein || "-"} isSmall={tool === 'blast'} />
       </View>
     </View>
   );

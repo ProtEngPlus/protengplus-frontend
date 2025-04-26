@@ -81,7 +81,7 @@ export default function ReportPDF({
       }
       setPaginatedQueryResults(paginatedQueryResults);
     }
-    
+
     var pageCount = 1;
     if (jobData.lab_result.scores && jobData.lab_result.scores.length > 0) {
       pageCount += paginatedLabResults.length;
@@ -126,9 +126,9 @@ export default function ReportPDF({
           totalTime={
             jobData.run_time
               ? formatTime({
-                  start_time: jobData.run_time.query?.end_time,
-                  end_time: jobData.run_time.mutation?.end_time,
-                })
+                start_time: jobData.run_time.query?.end_time,
+                end_time: jobData.run_time.mutation?.end_time,
+              })
               : ""
           }
         />
@@ -186,7 +186,7 @@ export default function ReportPDF({
             />
             <Footer index={index + 2} total={pageIndex} />
           </Page>
-        )):<></>}
+        )) : <></>}
       {queryResultData ? paginatedQueryResults.map((chunk, index) => (
         <Page key={index} size="A4" style={styles.page}>
           <Header />
@@ -194,13 +194,14 @@ export default function ReportPDF({
             queryResult={chunk.queryResult}
             countFrom={index * queryResultPerPage}
             totalCount={queryResultData.length}
+            tool={jobData.meta[0]}
           />
           <Footer
             index={paginatedLabResults.length + index + 2}
             total={pageIndex}
           />
         </Page>
-      )):<></>}
+      )) : <></>}
       {jobData.run_time?.mutation ? (
         <Page size="A4" style={styles.page}>
           <Header />

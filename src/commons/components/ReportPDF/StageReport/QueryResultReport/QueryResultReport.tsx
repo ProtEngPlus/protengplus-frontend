@@ -7,10 +7,12 @@ export default function QueryResultReport({
   queryResult,
   countFrom,
   totalCount,
+  tool
 }: {
   queryResult: Record<string, any>[];
   countFrom?: number;
   totalCount: number;
+  tool: string;
 }) {
   const queryResultColConfig = [
     {
@@ -65,15 +67,24 @@ export default function QueryResultReport({
     },
   ];
 
+  const toolNameMapping: Record<string, string> = {
+    "blast": "Blast",
+    "mmseqs2": "MMseqs2",
+  }
+
+  function getToolDisplayName(tool: string): string {
+    return toolNameMapping[tool] ? `${toolNameMapping[tool]} - ` : "";
+  }
+
   return (
     <View style={styles.stageInfoBox}>
       <View style={styles.stageTitle}>
         <View style={styles.infoBox}>
-          <Text style={styles.stageLabel}>Blast - Query Result</Text>
+          <Text style={styles.stageLabel}>{getToolDisplayName(tool)}Query Result</Text>
         </View>
       </View>
       <InfoBox label={"Total"} text={`${totalCount}`} />
-      <Table columns={queryResultColConfig} data={queryResult} countFrom={countFrom}/>
+      <Table columns={queryResultColConfig} data={queryResult} countFrom={countFrom} />
     </View>
   );
 }
