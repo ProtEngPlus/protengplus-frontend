@@ -34,10 +34,10 @@ export default function GetInputField({
   const filteredValidation: Record<string, ValidationProps> | undefined =
     additionalValidation
       ? Object.fromEntries(
-          Object.entries(additionalValidation).filter(
-            ([, rule]) => rule !== undefined
-          )
+        Object.entries(additionalValidation).filter(
+          ([, rule]) => rule !== undefined
         )
+      )
       : undefined;
 
   switch (type) {
@@ -53,6 +53,7 @@ export default function GetInputField({
           additionalValidation={filteredValidation}
           disabled={disable}
           onEdit={onEdit}
+          formatInput={formatInput}
         />
       );
 
