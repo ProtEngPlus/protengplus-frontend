@@ -258,7 +258,7 @@ export const createJobConfig: CreateJobConfig = {
                 ],
             },
             MMseqs2: {
-                formatInput:1,
+                formatInput:2,
                 description: "Tool used for comparing query sequences against a target database using local alignments to identify similar sequences, optimized for large-scale searches.",
                 parameters: [
                     {
