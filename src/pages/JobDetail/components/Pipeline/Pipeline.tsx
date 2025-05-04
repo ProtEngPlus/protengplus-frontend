@@ -403,8 +403,8 @@ export default function Pipeline({
                   : "carbon:notification-off-filled"
               }
               className={` ${job.state === "COMPLETED"
-                  ? "cursor-not-allowed"
-                  : "cursor-pointer"
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
                 }  size-[30px] ${isNotificationOn ? "text-pep-orange" : "text-error"
                 }`}
               onClick={() =>
