@@ -92,7 +92,7 @@ export default function DonutChart({ labels, series, setIsDonutChart }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-md shadow-statistic pt-3 pb-4 min-w-fit">
+    <div className="bg-white rounded-md shadow-statistic pt-3 pb-4 min-w-fit h-[360px]">
       <Icon
         data-testid="change-to-bar-chart"
         icon="solar:chart-bold"
@@ -109,7 +109,7 @@ export default function DonutChart({ labels, series, setIsDonutChart }: Props) {
         series={series}
         type="donut"
         width="100%"
-        height={250}
+        height="255px"
       />
     </div>
   );

@@ -400,15 +400,23 @@ export default function Pipeline({
                   ? "carbon:notification-filled"
                   : "carbon:notification-off-filled"
               }
-              className={` cursor-pointer size-[30px] ${
+              className={` ${
+                job.state === "COMPLETED"
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }  size-[30px] ${
                 isNotificationOn ? "text-pep-orange" : "text-error"
               }`}
-              onClick={() => setValue("is_notification_on", !isNotificationOn)}
+              onClick={() =>
+                job.state !== "COMPLETED" &&
+                setValue("is_notification_on", !isNotificationOn)
+              }
             />
             <div className="flex space-x-2 items-center">
               <Button
                 data-testid={`auto-run-${runType === "auto"}`}
                 id="auto-run"
+                disabled={job.state === "COMPLETED"}
                 type="button"
                 buttonType={runType === "auto" ? "next" : "cancel"}
                 text="Auto Run"
@@ -425,6 +433,7 @@ export default function Pipeline({
               <Button
                 data-testid={`one-step-run-${runType === "one-step"}`}
                 id="one-step-run"
+                disabled={job.state === "COMPLETED"}
                 type="button"
                 buttonType={runType === "one-step" ? "next" : "cancel"}
                 text="One-Step Run"
