@@ -192,7 +192,9 @@ export default function InputProtein({
                   ) : null}
                 </div>
               ) : (
-                <div className="break-all">{inputProteinField}</div>
+                <div className="line-clamp-2 break-all overflow-hidden max-w-full">
+                  {inputProteinField}
+                </div>
               )}
             </div>
 
@@ -266,9 +268,7 @@ export default function InputProtein({
               </div>
             ) : (
               <div className="flex items-center space-x-3">
-                {inputMode === "uniprot_id" && (
-                  <ViewButton inputProtein={inputProtein} />
-                )}
+                <ViewButton inputProtein={inputProtein} />
               </div>
             )}
           </div>
