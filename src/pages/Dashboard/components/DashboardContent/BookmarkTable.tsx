@@ -117,7 +117,9 @@ export default function BookmarkTable() {
                         <label className="truncate text-sm text-black">
                           {mutation.job_name}
                         </label>
-                        <label className="truncate">desc</label>
+                        <label className="truncate">
+                          {mutation.job_description}
+                        </label>
                       </div>
                     </td>
                     <td className="px-6 py-4">
