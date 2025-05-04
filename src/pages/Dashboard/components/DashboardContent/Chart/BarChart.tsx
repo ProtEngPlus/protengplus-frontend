@@ -76,7 +76,7 @@ export default function BarChart({ labels, series, setIsDonutChart }: Props) {
   }));
 
   return (
-    <div className="bg-white rounded-md shadow-statistic pt-3 pb-4 min-w-fit h-[345px]">
+    <div className="bg-white rounded-md shadow-statistic pt-3 pb-4 min-w-fit h-[360px]">
       <Icon
         icon="mdi:chart-arc"
         className="text-label size-6 min-w-6 place-self-end mx-2 cursor-pointer"
