@@ -18,6 +18,7 @@ export type SelectInputProps = {
   additionalValidation?: Record<string, ValidationProps>;
   options: Option[];
   onEdit?: boolean;
+  formatInput?: number;
 };
 
 export default function SelectInput({
@@ -29,6 +30,7 @@ export default function SelectInput({
   additionalValidation,
   options,
   onEdit = true,
+  formatInput = 1,
 }: SelectInputProps) {
   const {
     register,
@@ -74,7 +76,11 @@ export default function SelectInput({
   }, []);
 
   return (
-    <div className="relative w-full custom-select">
+    <div className={`
+      ${formatInput === 2
+        ? "w-24 text-start"
+        : "w-full"}
+       relative custom-select`}>
       {!onEdit ? (
         <div>{currentValue}</div>
       ) : (
@@ -88,19 +94,19 @@ export default function SelectInput({
                 "border-pep-blue": isOpen,
                 "!cursor-not-allowed !bg-disabled !border-disabled !text-label":
                   disabled,
+                "h-10 pt-1.5 pr-1.5": formatInput === 2,
               },
               className
             )}
             onClick={() => !disabled && setIsOpen((prev) => !prev)}
           >
             <div
-              className={`grow ${
-                disabled
+              className={`grow ${disabled
                   ? "text-label"
                   : options.find((option) => option.value === currentValue)
-                  ? "text-black"
-                  : "text-placeholder"
-              }`}
+                    ? "text-black"
+                    : "text-placeholder"
+                }`}
             >
               {options.find((option) => option.value === currentValue)?.label ||
                 placeholder}
@@ -108,9 +114,8 @@ export default function SelectInput({
             <Icon
               data-testid={`${id}-dropdown`}
               icon="quill:chevron-down"
-              className={`text-pep-dark-gray size-4 my-auto ${
-                disabled ? "text-gray-400" : "text-pep-dark-gray"
-              }`}
+              className={`text-pep-dark-gray size-4 my-auto ${disabled ? "text-gray-400" : "text-pep-dark-gray"} 
+              ${formatInput === 2 ? "pt-1" : ""}`}
             />
           </div>
 
