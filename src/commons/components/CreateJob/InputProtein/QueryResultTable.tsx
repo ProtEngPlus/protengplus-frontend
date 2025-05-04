@@ -218,7 +218,6 @@ export default function QueryResultTable({
   // set queryresult for adding to create job page
   useEffect(() => {
     if (setQueryResult && queryResult) {
-      console.log("in");
       setQueryResult({
         complete_at: queryResult.complete_at,
         created_at: queryResult.created_at,
@@ -233,7 +232,7 @@ export default function QueryResultTable({
   }, [queryResults, selectedCount]);
 
   return (
-    <div>
+    <div data-testid="protein-query-result">
       <FilterOverlay
         isVisible={isFilterVisible}
         filterOverlayProps={filterOverlayProps}
@@ -249,6 +248,7 @@ export default function QueryResultTable({
           {!isOverlay && (
             <div className="flex items-center space-x-[10px]">
               <input
+                data-testid="selected-all-checkbox"
                 type="checkbox"
                 checked={isSelected}
                 onChange={() => !disable && setIsSelected(!isSelected)}
@@ -270,6 +270,7 @@ export default function QueryResultTable({
           )}
           <div className="flex items-center space-x-[10px] text-nowrap w-fit">
             <div
+              data-testid="filter"
               className={`flex flex-row bg-white border font-light rounded-md py-3 px-4 gap-1 disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label ${
                 disable ? "cursor-not-allowed" : "cursor-pointer"
               }`}
@@ -299,6 +300,7 @@ export default function QueryResultTable({
             <div className="flex items-center space-x-2">
               <label>Show:</label>
               <SelectInput
+                data-testid="show"
                 id="show"
                 defaultValue="10"
                 options={showOption}
@@ -340,15 +342,20 @@ export default function QueryResultTable({
                     ))}
                   </tr>
                 </thead>
-                <tbody className="font-light leading-7">
+                <tbody
+                  data-testid="table-body"
+                  className="font-light leading-7"
+                >
                   {currentQueries &&
-                    currentQueries.map((query) => (
+                    currentQueries.map((query, index) => (
                       <tr
                         key={query.id}
                         className="font-light text-pep-dark-gray bg-white border-b h-[45px] text-center"
                       >
                         <td className="px-3 py-3">
                           <input
+                            disabled={disable || isSelected}
+                            data-testid={`checkbox-${index}`}
                             id={`select-input-protein-${query.id}`}
                             type="checkbox"
                             checked={query.is_selected}
@@ -359,7 +366,7 @@ export default function QueryResultTable({
                             }
                             className={`size-5 checked:bg-selected border border-pep-gray-border rounded ${
                               isSelected || disable
-                                ? "cursor-not-allowed checked:bg-pep-gray"
+                                ? "disable cursor-not-allowed checked:bg-pep-gray"
                                 : "cursor-pointer"
                             }`}
                           />
@@ -367,16 +374,33 @@ export default function QueryResultTable({
                         <td className="px-3 py-3 text-start">
                           {query.description}
                         </td>
-                        <td className="px-3 py-3 text-start">
+                        <td
+                          data-testid="organism"
+                          className="px-3 py-3 text-start"
+                        >
                           {query.organisms}
                         </td>
-                        <td className="px-3 py-3">{query.max_score}</td>
-                        <td className="px-3 py-3">{query.score}</td>
-                        <td className="px-3 py-3">{query.query_cover}</td>
-                        <td className="px-3 py-3">{query.e_values}</td>
-                        <td className="px-3 py-3">{query.percent_identity}</td>
-                        <td className="px-3 py-3">{query.acc_len}</td>
-                        <td className="px-3 py-3">{query.accession}</td>
+                        <td data-testid="max-score" className="px-3 py-3">
+                          {query.max_score.toFixed(2)}
+                        </td>
+                        <td data-testid="score" className="px-3 py-3">
+                          {query.score}
+                        </td>
+                        <td data-testid="query-cover" className="px-3 py-3">
+                          {query.query_cover}
+                        </td>
+                        <td data-testid="e-value" className="px-3 py-3">
+                          {query.e_values}
+                        </td>
+                        <td data-testid="perc-ident" className="px-3 py-3">
+                          {query.percent_identity.toFixed(2)}
+                        </td>
+                        <td data-testid="acc-len" className="px-3 py-3">
+                          {query.acc_len}
+                        </td>
+                        <td data-testid="accession" className="px-3 py-3">
+                          {query.accession}
+                        </td>
                       </tr>
                     ))}
                 </tbody>

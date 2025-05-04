@@ -5,14 +5,14 @@ import { RunType } from "../interfaces/Job.interface";
 export const defaultCreateJobDetail: CreateJobDetail = {
     name: "",
     description: "",
-    input_protein: "SIQHFHW",
+    input_protein: "MSIQFFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRPEERFPMMSTFKVLLCGAVLSRVDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVRELCSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTMPAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGSRGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW",
     lab_result: [],
     run_type: "one-step",
     is_notification_on: true,
     artifact:null,
 }
 // default for inputProtein
-export const inputProteinProtSeq = "SIQHFHW"
+export const inputProteinProtSeq = "MSIQFFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRPEERFPMMSTFKVLLCGAVLSRVDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVRELCSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTMPAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGSRGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW"
 export const inputProteinUniprotId = "P69905"
 
 // all pipelines
@@ -178,7 +178,7 @@ export const createJobConfig: CreateJobConfig = {
                         type: "percent",
                         description:
                         "The maximum number of protein sequences returned from the database that match the query sequence",
-                        default: 70,
+                        default: 50,
                         additionalValidation: {
                             required: { value: true, message: "Hit Size is required." },
                             min: { value: 0, message: "Hit Size must be at least 0." },
@@ -190,7 +190,7 @@ export const createJobConfig: CreateJobConfig = {
                         type: "percent",
                         description:
                         "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match.",
-                        default: 70,
+                        default: 10,
                         additionalValidation: {
                             required: { value: true, message: "Expect is required." },
                             min: { value: 0, message: "Expect must be at least 0." },
@@ -201,7 +201,7 @@ export const createJobConfig: CreateJobConfig = {
                         id: "seq_length",
                         type: "number",
                         description: "The expected length of protein sequences response from database",
-                        default: 70,
+                        default: 300,
                         additionalValidation: {
                             required: {
                                 value: true,
@@ -219,7 +219,7 @@ export const createJobConfig: CreateJobConfig = {
                         type: "percent",
                         description:
                         "The minimum percentage of sequence identity in the database required for a match to the query sequence to be considered significant",
-                        default: 70,
+                        default: 85,
                         additionalValidation: {
                             required: {
                                 value: true,

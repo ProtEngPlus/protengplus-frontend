@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
+  id: string;
   isRecentJob?: boolean;
   icon: string;
   bgColor: string;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function Card({
+  id,
   isRecentJob = false,
   icon,
   bgColor,
@@ -42,7 +44,10 @@ export default function Card({
     };
   }, []);
   return (
-    <div className="bg-white rounded-md shadow-statistic p-3 h-fit w-full">
+    <div
+      id={id}
+      className="bg-white rounded-md shadow-statistic p-3 h-fit w-full"
+    >
       <div className="relative flex justify-end" ref={dropdownRef}>
         <button
           id="dropdownButton"

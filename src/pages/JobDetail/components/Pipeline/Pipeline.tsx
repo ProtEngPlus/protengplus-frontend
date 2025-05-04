@@ -67,7 +67,7 @@ export default function Pipeline({
   setIsEditPipeline: (isEditPipeline: boolean) => void;
   fetchJob: () => void;
 }) {
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch, getValues } = useFormContext();
   const formData = watch();
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(job.stage_id);
@@ -153,6 +153,18 @@ export default function Pipeline({
 
             newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
               data[`${param.id}_high`] ?? jobOptions[`${param.id}_high`];
+          } else if (param.type == "percent") {
+            const num = Number(data[param.id]);
+            newJobOption[subMethod.toLowerCase()][param.id] = isNaN(num)
+              ? jobOptions[param.id]
+              : num;
+          } else if (param.type == "multiNumberDropdown") {
+            var array: number[] = data[param.id]
+              ? data[param.id].sort((n1: number, n2: number) => n1 - n2)
+              : [];
+
+            newJobOption[subMethod.toLowerCase()][param.id] =
+              array.length === 0 ? jobOptions[param.id] : array;
           } else {
             newJobOption[subMethod.toLowerCase()][param.id] =
               data[param.id] ?? jobOptions[param.id];
@@ -160,7 +172,11 @@ export default function Pipeline({
         });
       }
 
-      await updateJobDetail(job.id, { meta: meta, options: newJobOption });
+      await updateJobDetail(job.id, {
+        meta: meta,
+        options: newJobOption,
+        input_protein: getValues("input_protein") ?? job.input_protein,
+      });
       setIsConfirmVisible(false);
       setIsSuccessVisible(true);
     } catch (error) {
@@ -378,6 +394,7 @@ export default function Pipeline({
         <div className="space-y-24">
           <div className="flex space-x-6 items-center justify-end">
             <Icon
+              data-testid={`isnotification-${isNotificationOn}`}
               icon={
                 isNotificationOn
                   ? "carbon:notification-filled"
@@ -390,6 +407,7 @@ export default function Pipeline({
             />
             <div className="flex space-x-2 items-center">
               <Button
+                data-testid={`auto-run-${runType === "auto"}`}
                 id="auto-run"
                 type="button"
                 buttonType={runType === "auto" ? "next" : "cancel"}
@@ -405,6 +423,7 @@ export default function Pipeline({
                 />
               </Button>
               <Button
+                data-testid={`one-step-run-${runType === "one-step"}`}
                 id="one-step-run"
                 type="button"
                 buttonType={runType === "one-step" ? "next" : "cancel"}

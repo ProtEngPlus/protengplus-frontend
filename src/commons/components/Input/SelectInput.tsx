@@ -78,7 +78,7 @@ export default function SelectInput({
       {!onEdit ? (
         <div>{currentValue}</div>
       ) : (
-        <div>
+        <div id={id}>
           <div
             className={clsx(
               "flex flex-row bg-white border font-light rounded-md py-3 px-4 cursor-pointer gap-1 disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
@@ -94,20 +94,23 @@ export default function SelectInput({
             onClick={() => !disabled && setIsOpen((prev) => !prev)}
           >
             <div
-              className={`grow ${disabled
-                ? "text-label"
-                : options.find((option) => option.value === currentValue)
+              className={`grow ${
+                disabled
+                  ? "text-label"
+                  : options.find((option) => option.value === currentValue)
                   ? "text-black"
                   : "text-placeholder"
-                }`}
+              }`}
             >
               {options.find((option) => option.value === currentValue)?.label ||
                 placeholder}
             </div>
             <Icon
+              data-testid={`${id}-dropdown`}
               icon="quill:chevron-down"
-              className={`text-pep-dark-gray size-4 my-auto ${disabled ? "text-gray-400" : "text-pep-dark-gray"
-                }`}
+              className={`text-pep-dark-gray size-4 my-auto ${
+                disabled ? "text-gray-400" : "text-pep-dark-gray"
+              }`}
             />
           </div>
 
