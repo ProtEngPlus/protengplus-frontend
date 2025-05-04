@@ -260,7 +260,7 @@ export default function JobDetailPage() {
               </div>
             </div>
           </div>
-          <div className="mb-8 border-b text-gray-500 border-gray-500 dark:border-gray-500">
+          <div className="mb-8 border-b text-gray-500 border-gray-500">
             <ul className="flex flex-wrap -mb-px text-center" id="tabs">
               <li className="me-2">
                 <button
