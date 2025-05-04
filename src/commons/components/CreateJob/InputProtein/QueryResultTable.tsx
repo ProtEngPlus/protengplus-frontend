@@ -93,7 +93,7 @@ export default function QueryResultTable({
   // reset value to default (use in first time & click reset button from filter modal)
   const resetQueryOption = () => {
     const parameters = [
-      "organism",
+      "organisms",
       "percent_identity_result_low",
       "percent_identity_result_high",
       "e_values_result_low",
@@ -173,7 +173,6 @@ export default function QueryResultTable({
       setFilterVisible(false);
     },
   };
-
   // pagination
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -218,7 +217,6 @@ export default function QueryResultTable({
   // set queryresult for adding to create job page
   useEffect(() => {
     if (setQueryResult && queryResult) {
-      console.log("in");
       setQueryResult({
         complete_at: queryResult.complete_at,
         created_at: queryResult.created_at,
