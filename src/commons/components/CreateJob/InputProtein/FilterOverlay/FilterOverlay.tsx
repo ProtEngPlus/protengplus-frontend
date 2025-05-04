@@ -56,8 +56,7 @@ export function FilterOverlay({
       const modalOptions: ModalOptions = {
         placement: "bottom-right",
         backdrop: "dynamic",
-        backdropClasses:
-          "bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-10",
+        backdropClasses: "bg-gray-900/50 fixed inset-0 z-10",
         closable: true,
       };
 
