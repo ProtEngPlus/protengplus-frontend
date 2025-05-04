@@ -80,8 +80,34 @@ export default function RangeNumberInput({
                 defaultValue={defaultLow ?? ""}
                 {...register(`${id}_low`, {
                   ...(additionalValidation || {}),
+                  valueAsNumber: true,
                   onBlur: () => handleBlur(`${id}_low`, defaultLow),
                 })}
+                onKeyDown={(e) => {
+                  const allowedKeys = [
+                    "Backspace",
+                    "Tab",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "Delete",
+                    "Home",
+                    "End",
+                  ];
+
+                  // Allow digits, control keys
+                  if (/[0-9]/.test(e.key) || allowedKeys.includes(e.key)) {
+                    return;
+                  }
+
+                  // Allow only one dot
+                  const value = e.currentTarget.value;
+                  if (e.key === "." && !value.includes(".")) {
+                    return;
+                  }
+
+                  // Block all other keys
+                  e.preventDefault();
+                }}
                 className={clsx(
                   "h-[40px] w-24 p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
                   {
@@ -126,8 +152,34 @@ export default function RangeNumberInput({
                     }
                     return true;
                   },
+                  valueAsNumber: true,
                   onBlur: () => handleBlur(`${id}_high`, defaultHigh),
                 })}
+                onKeyDown={(e) => {
+                  const allowedKeys = [
+                    "Backspace",
+                    "Tab",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "Delete",
+                    "Home",
+                    "End",
+                  ];
+
+                  // Allow digits, control keys
+                  if (/[0-9]/.test(e.key) || allowedKeys.includes(e.key)) {
+                    return;
+                  }
+
+                  // Allow only one dot
+                  const value = e.currentTarget.value;
+                  if (e.key === "." && !value.includes(".")) {
+                    return;
+                  }
+
+                  // Block all other keys
+                  e.preventDefault();
+                }}
                 className={clsx(
                   "h-[40px] w-24 p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
                   {
