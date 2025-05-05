@@ -121,6 +121,7 @@ export default function SelectInput({
 
           {isOpen && !disabled && (
             <ul
+              data-testid={`${id}-list`}
               className={clsx(
                 "mt-2 absolute w-full bg-white rounded-md shadow-dropShadow z-10 py-2",
                 className

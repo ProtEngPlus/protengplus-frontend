@@ -158,11 +158,15 @@ export default function Pipeline({
             newJobOption[subMethod.toLowerCase()][param.id] = isNaN(num)
               ? jobOptions[param.id]
               : num;
-          } else if (param.type == "multiNumberDropdown") {
-            var array: number[] = data[param.id]
-              ? data[param.id].sort((n1: number, n2: number) => n1 - n2)
-              : [];
+          } else if (param.type === "multiNumberDropdown") {
+            let array: number[] = [];
 
+            const value = data[param.id];
+            if (Array.isArray(value)) {
+              array = value
+                .filter((v): v is number => typeof v === "number")
+                .sort((n1, n2) => n1 - n2);
+            }
             newJobOption[subMethod.toLowerCase()][param.id] =
               array.length === 0 ? jobOptions[param.id] : array;
           } else {
@@ -177,6 +181,7 @@ export default function Pipeline({
         options: newJobOption,
         input_protein: getValues("input_protein") ?? job.input_protein,
       });
+
       setIsConfirmVisible(false);
       setIsSuccessVisible(true);
     } catch (error) {

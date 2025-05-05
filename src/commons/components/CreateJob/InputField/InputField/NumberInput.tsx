@@ -49,25 +49,27 @@ export default function NumberInput({
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-    if (value === "") {
+    const raw = e.target.value.trim();
+
+    if (raw === "" || isNaN(Number(raw))) {
       setValue(id, defaultValue || 0);
     } else {
-      setValue(id, Number(value));
+      setValue(id, Number(parseFloat(raw)));
     }
   };
 
   return (
     <div
       className={`
-          ${formatInput === 1
-          ? "grid grid-cols-2 w-[22%] place-items-start"
-          : formatInput === 2
-            ? "flex flex-row justify-between max-w-[1000px]"
-            : formatInput === 3
+          ${
+            formatInput === 1
+              ? "grid grid-cols-2 w-[22%] place-items-start"
+              : formatInput === 2
+              ? "flex flex-row justify-between max-w-[1000px]"
+              : formatInput === 3
               ? "grid grid-cols-[1fr,4fr] max-w-[1000px]"
               : "grid grid-cols-[1fr,2fr] max-w-[1000px]"
-        }
+          }
          min-w-fit space-x-3 items-center`}
     >
       <label className="font-light ">{label}:</label>
@@ -79,12 +81,38 @@ export default function NumberInput({
             <input
               id={id}
               type="text"
+              inputMode="numeric"
+              pattern="\d*"
               defaultValue={defaultValue}
               {...register(id, {
                 ...(additionalValidation || {}),
-                valueAsNumber: true,
                 onBlur: handleBlur,
               })}
+              onKeyDown={(e) => {
+                const allowedKeys = [
+                  "Backspace",
+                  "Tab",
+                  "ArrowLeft",
+                  "ArrowRight",
+                  "Delete",
+                  "Home",
+                  "End",
+                ];
+
+                // Allow digits, control keys
+                if (/[0-9]/.test(e.key) || allowedKeys.includes(e.key)) {
+                  return;
+                }
+
+                // Allow only one dot
+                const value = e.currentTarget.value;
+                if (e.key === "." && !value.includes(".")) {
+                  return;
+                }
+
+                // Block all other keys
+                e.preventDefault();
+              }}
               className={clsx(
                 "h-[40px] w-24 p-2 bg-white border text-sm border-pep-gray-border font-light placeholder:text-placeholder rounded-md focus:ring-0 focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label",
                 {
