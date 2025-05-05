@@ -1,14 +1,16 @@
 import { StyleSheet, Font } from "@react-pdf/renderer";
+import THSarabunNew from "../../../assets/fonts/THSarabunNew.ttf";
+import THSarabunNewBold from "../../../assets/fonts/THSarabunNewBold.ttf";
 
 Font.register({
   family: "TH Sarabun New",
-  src: "/src/assets/fonts/THSarabunNew.ttf", // Path to your font file
+  src: THSarabunNew, // Path to your font file
   fontWeight: "normal",
 });
 
 Font.register({
   family: "TH Sarabun New",
-  src: "/src/assets/fonts/THSarabunNewBold.ttf", // Path to bold font file
+  src: THSarabunNewBold, // Path to bold font file
   fontWeight: "bold",
 });
 
