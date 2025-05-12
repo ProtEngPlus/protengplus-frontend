@@ -224,6 +224,13 @@ export default function Pipeline({
         user_id: job.user_id,
       };
 
+      if (jobConfig.options.mmseqs2) {
+        const covMode = jobConfig.options.mmseqs2.cov_mode;
+        if (typeof covMode === "string") {
+          jobConfig.options.mmseqs2.cov_mode = parseInt(covMode, 10);
+        }
+      }
+
       await createJobConfiguration(jobConfig);
     },
   };
@@ -357,7 +364,7 @@ export default function Pipeline({
       const params: QueryResultSearchParams = {
         job_id: job.id,
       };
-      
+
       const today = new Date().toISOString().split("T")[0];
 
       const response = await getAllQueryResults(params);
@@ -378,15 +385,15 @@ export default function Pipeline({
         const queryResultResponse = await getReportQueryResults(
           job.id
         ); // CSV blob
-        const csvBlob = new Blob([queryResultResponse], {type: "text/csv"});
+        const csvBlob = new Blob([queryResultResponse], { type: "text/csv" });
         zip.file(`QueryResult_${formData["name"]}_${today}.csv`, csvBlob);
       }
-  
+
       const zipBlob = await zip.generateAsync({ type: "blob" });
       const url = URL.createObjectURL(zipBlob);
       const link = document.createElement("a");
       link.href = url;
-      
+
       link.download = `Report_${formData["name"]}_${today}.zip`;
       document.body.appendChild(link);
       link.click();
