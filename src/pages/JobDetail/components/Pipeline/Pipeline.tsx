@@ -57,7 +57,6 @@ import FitnessDistributionChartData from "../MutationResults/FitnessDistribution
 import { getMutationHistogram } from "../../../../commons/api/mutation";
 import { createRoot } from "react-dom/client";
 import JSZip from "jszip";
-import { saveAs } from "file-saver";
 
 export default function Pipeline({
   job,
