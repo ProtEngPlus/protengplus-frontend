@@ -82,7 +82,7 @@ export default function Pipeline({
 
     job.meta.forEach((subMethod, index) => {
       Pipelines[index].subMethod.forEach((value) => {
-        if (value.toLowerCase() === subMethod) {
+        if (value.toLowerCase() === subMethod || value === subMethod) {
           updatedPipeline[index] = {
             ...updatedPipeline[index],
             subMethod: value,
