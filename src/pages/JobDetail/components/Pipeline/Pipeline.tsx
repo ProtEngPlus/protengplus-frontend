@@ -47,6 +47,7 @@ import {
 } from "../../../../commons/interfaces/QueryResult.interface";
 import {
   getAllQueryResults,
+  getReportQueryResults,
   updateQueryResult,
 } from "../../../../commons/api/queryResult";
 import { ReportInterface } from "../../../../commons/interfaces/Report.interface";
@@ -55,6 +56,8 @@ import ReportPDF from "../../../../commons/components/ReportPDF/ReportPDF";
 import FitnessDistributionChartData from "../MutationResults/FitnessDistributionChart";
 import { getMutationHistogram } from "../../../../commons/api/mutation";
 import { createRoot } from "react-dom/client";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 export default function Pipeline({
   job,
@@ -325,7 +328,12 @@ export default function Pipeline({
       }
 
       const hiddenDiv = document.createElement("div");
-      hiddenDiv.className = "hidden-chart-container";
+      hiddenDiv.style.position = "fixed";
+      hiddenDiv.style.left = "-9999px";
+      hiddenDiv.style.top = "0";
+      hiddenDiv.style.width = "800px";
+      hiddenDiv.style.height = "600px";
+
       document.body.appendChild(hiddenDiv);
 
       // Render the chart inside the hidden div
@@ -353,23 +361,38 @@ export default function Pipeline({
       const params: QueryResultSearchParams = {
         job_id: job.id,
       };
+
+      const queryResultResponse = await getReportQueryResults(
+        job.id
+      ); // CSV blob
+      const queryResultBlob = new Blob([queryResultResponse], {type: "text/csv"});
+
       getAllQueryResults(params)
         .then(async (response) => {
           queryResults = (
             response.data ? response.data[0].result : []
           ) as Result[];
-          const blob = await pdf(
+          const pdfBlob = await pdf(
             <ReportPDF
               jobData={getReportData()}
               chart={chartImage}
               queryResultData={queryResults}
             />
           ).toBlob();
-          const url = URL.createObjectURL(blob);
+
+          const zip = new JSZip();
+          const today = new Date().toISOString().split("T")[0];
+
+          zip.file(`Report_${formData["name"]}_${today}.pdf`, pdfBlob);
+          zip.file(`QueryResult_${formData["name"]}_${today}.csv`, queryResultBlob);
+          
+          const zipBlob = await zip.generateAsync({ type: "blob" });
+
+          const url = URL.createObjectURL(zipBlob);
           const link = document.createElement("a");
           link.href = url;
-          const today = new Date().toISOString().split("T")[0];
-          link.download = `Report_${formData["name"]}_${today}.pdf`;
+          
+          link.download = `Report_${formData["name"]}_${today}.zip`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
