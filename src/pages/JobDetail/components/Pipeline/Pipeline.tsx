@@ -331,8 +331,6 @@ export default function Pipeline({
       hiddenDiv.style.position = "fixed";
       hiddenDiv.style.left = "-9999px";
       hiddenDiv.style.top = "0";
-      hiddenDiv.style.width = "800px";
-      hiddenDiv.style.height = "600px";
 
       document.body.appendChild(hiddenDiv);
 
@@ -357,50 +355,44 @@ export default function Pipeline({
       root.unmount();
       document.body.removeChild(hiddenDiv);
 
-      let queryResults: Result[] = [];
       const params: QueryResultSearchParams = {
         job_id: job.id,
       };
+      
+      const today = new Date().toISOString().split("T")[0];
 
-      const queryResultResponse = await getReportQueryResults(
-        job.id
-      ); // CSV blob
-      const queryResultBlob = new Blob([queryResultResponse], {type: "text/csv"});
+      const response = await getAllQueryResults(params);
+      const queryResults: Result[] = response.data ? response.data[0].result : [];
 
-      getAllQueryResults(params)
-        .then(async (response) => {
-          queryResults = (
-            response.data ? response.data[0].result : []
-          ) as Result[];
-          const pdfBlob = await pdf(
-            <ReportPDF
-              jobData={getReportData()}
-              chart={chartImage}
-              queryResultData={queryResults}
-            />
-          ).toBlob();
+      const pdfBlob = await pdf(
+        <ReportPDF
+          jobData={getReportData()}
+          chart={chartImage}
+          queryResultData={queryResults}
+        />
+      ).toBlob();
 
-          const zip = new JSZip();
-          const today = new Date().toISOString().split("T")[0];
+      const zip = new JSZip();
+      zip.file(`Report_${formData["name"]}_${today}.pdf`, pdfBlob);
 
-          zip.file(`Report_${formData["name"]}_${today}.pdf`, pdfBlob);
-          zip.file(`QueryResult_${formData["name"]}_${today}.csv`, queryResultBlob);
-          
-          const zipBlob = await zip.generateAsync({ type: "blob" });
-
-          const url = URL.createObjectURL(zipBlob);
-          const link = document.createElement("a");
-          link.href = url;
-          
-          link.download = `Report_${formData["name"]}_${today}.zip`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-        })
-        .catch((error) => {
-          console.error("Error fetching query results:", error);
-        });
+      if (response.data) {
+        const queryResultResponse = await getReportQueryResults(
+          job.id
+        ); // CSV blob
+        const csvBlob = new Blob([queryResultResponse], {type: "text/csv"});
+        zip.file(`QueryResult_${formData["name"]}_${today}.csv`, csvBlob);
+      }
+  
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(zipBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      
+      link.download = `Report_${formData["name"]}_${today}.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.log(error);
     }
