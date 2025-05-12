@@ -28,10 +28,23 @@ export default function ProteinRepresentationReport({
     </View>
   );
 
+  const ESM = () => (
+    <View>
+      <View style={styles.inlineInfoBox}>
+        <InfoBox label={"Weight Decay"} text={option.weight_decay || "-" } limit={185} />
+      </View>
+      <View style={styles.inlineInfoBox}>
+        <InfoBox label={"N Epoch Config"} text={option.n_epochs_config || "-" } limit={185} />
+      </View>
+    </View>
+  );
+
   const ToolSelection = () => {
     switch (tool) {
       case "unirep":
         return <Unirep />;
+      case "ESM":
+        return <ESM />;
       default:
         return <Text>No tool selected.</Text>;
     }
