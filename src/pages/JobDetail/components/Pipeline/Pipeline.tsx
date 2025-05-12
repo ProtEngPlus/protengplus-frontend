@@ -47,6 +47,7 @@ import {
 } from "../../../../commons/interfaces/QueryResult.interface";
 import {
   getAllQueryResults,
+  getReportQueryResults,
   updateQueryResult,
 } from "../../../../commons/api/queryResult";
 import { ReportInterface } from "../../../../commons/interfaces/Report.interface";
@@ -55,6 +56,8 @@ import ReportPDF from "../../../../commons/components/ReportPDF/ReportPDF";
 import FitnessDistributionChartData from "../MutationResults/FitnessDistributionChart";
 import { getMutationHistogram } from "../../../../commons/api/mutation";
 import { createRoot } from "react-dom/client";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 export default function Pipeline({
   job,
@@ -325,7 +328,10 @@ export default function Pipeline({
       }
 
       const hiddenDiv = document.createElement("div");
-      hiddenDiv.className = "hidden-chart-container";
+      hiddenDiv.style.position = "fixed";
+      hiddenDiv.style.left = "-9999px";
+      hiddenDiv.style.top = "0";
+
       document.body.appendChild(hiddenDiv);
 
       // Render the chart inside the hidden div
@@ -349,35 +355,44 @@ export default function Pipeline({
       root.unmount();
       document.body.removeChild(hiddenDiv);
 
-      let queryResults: Result[] = [];
       const params: QueryResultSearchParams = {
         job_id: job.id,
       };
-      getAllQueryResults(params)
-        .then(async (response) => {
-          queryResults = (
-            response.data ? response.data[0].result : []
-          ) as Result[];
-          const blob = await pdf(
-            <ReportPDF
-              jobData={getReportData()}
-              chart={chartImage}
-              queryResultData={queryResults}
-            />
-          ).toBlob();
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          const today = new Date().toISOString().split("T")[0];
-          link.download = `Report_${formData["name"]}_${today}.pdf`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-        })
-        .catch((error) => {
-          console.error("Error fetching query results:", error);
-        });
+      
+      const today = new Date().toISOString().split("T")[0];
+
+      const response = await getAllQueryResults(params);
+      const queryResults: Result[] = response.data ? response.data[0].result : [];
+
+      const pdfBlob = await pdf(
+        <ReportPDF
+          jobData={getReportData()}
+          chart={chartImage}
+          queryResultData={queryResults}
+        />
+      ).toBlob();
+
+      const zip = new JSZip();
+      zip.file(`Report_${formData["name"]}_${today}.pdf`, pdfBlob);
+
+      if (response.data) {
+        const queryResultResponse = await getReportQueryResults(
+          job.id
+        ); // CSV blob
+        const csvBlob = new Blob([queryResultResponse], {type: "text/csv"});
+        zip.file(`QueryResult_${formData["name"]}_${today}.csv`, csvBlob);
+      }
+  
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(zipBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      
+      link.download = `Report_${formData["name"]}_${today}.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.log(error);
     }
