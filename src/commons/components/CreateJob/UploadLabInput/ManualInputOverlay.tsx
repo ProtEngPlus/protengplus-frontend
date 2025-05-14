@@ -27,7 +27,8 @@ export function ManualInput({
   const inputProtein = watch("input_protein");
   const minimumSize =
     getValues("train_batch_sizes")?.[0] ??
-    getValues("Top Model.RidgeCV.train_batch_sizes")?.[0];
+    getValues("Top Model.RidgeCV.train_batch_sizes")?.[0] ??
+    getValues("options.ridgecv.train_batch_sizes")[0];
   const [data, setData] = useState<{ sequence: string; score: number }[]>([]);
   const [isError, setIsError] = useState({
     isValidate: true,
