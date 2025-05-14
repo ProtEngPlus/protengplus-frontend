@@ -17,6 +17,7 @@ import {
   QueryResultOverlay,
   QueryResultOverlayProps,
 } from "./QueryResultOverlay";
+import { DownloadQueryResult } from "../../../../pages/CreateJob/services/DownloadQueryResult";
 
 interface Props {
   isJobDetail: boolean;
@@ -52,6 +53,7 @@ export default function InputProtein({
 
   // to display query result
   const jobId = getValues(isJobDetail ? "id" : "ref_job_id");
+  const formData = watch();
   const hasQueryResult = isJobDetail
     ? stage > 0
     : initialStep > 1 && isWithConfig;
@@ -105,8 +107,9 @@ export default function InputProtein({
       <div className="space-y-12">
         {/* Header Section */}
         <div
-          className={`space-y-3 rounded-lg border-pep-gray-border ${onEdit ? "bg-pep-blue-light p-5" : ""
-            } `}
+          className={`space-y-3 rounded-lg border-pep-gray-border ${
+            onEdit ? "bg-pep-blue-light p-5" : ""
+          } `}
         >
           <div className="flex items-center space-x-3">
             <Icon
@@ -127,12 +130,13 @@ export default function InputProtein({
                       id="input_protein_field"
                       disabled={!canEditInputProtein}
                       placeholder="Input Protein*"
-                      className={`text-wrap h-[50px] w-full min-w-fit pl-3 pr-10 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label ${(errors.input_protein_field &&
+                      className={`text-wrap h-[50px] w-full min-w-fit pl-3 pr-10 bg-white border font-light placeholder:text-placeholder rounded-md focus:border-pep-blue focus:outline-none disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label ${
+                        (errors.input_protein_field &&
                           inputMode === "prot_seq") ||
-                          (!isError.isValidate && inputMode === "uniprot_id")
+                        (!isError.isValidate && inputMode === "uniprot_id")
                           ? "border-error"
                           : "border-gray-border"
-                        }`}
+                      }`}
                       {...register("input_protein_field", {
                         required:
                           inputMode === "prot_seq"
@@ -142,20 +146,20 @@ export default function InputProtein({
                         validate:
                           inputMode === "prot_seq"
                             ? (value) => {
-                              const invalidAminoAcids = /[BJOUXZ]/i.test(
-                                value
-                              );
-                              const containsExactATGC = /ATGC/i.test(value);
+                                const invalidAminoAcids = /[BJOUXZ]/i.test(
+                                  value
+                                );
+                                const containsExactATGC = /ATGC/i.test(value);
 
-                              if (invalidAminoAcids || containsExactATGC) {
-                                return "Incorrect protein sequence format.";
+                                if (invalidAminoAcids || containsExactATGC) {
+                                  return "Incorrect protein sequence format.";
+                                }
+
+                                return true;
                               }
-
-                              return true;
-                            }
                             : !isError.isValidate
-                              ? () => isError.errorMessage
-                              : undefined,
+                            ? () => isError.errorMessage
+                            : undefined,
                       })}
                       onBlur={() => {
                         if (inputMode === "prot_seq") {
@@ -211,10 +215,11 @@ export default function InputProtein({
                     }
                   }}
                   text="Amino Acid Sequence"
-                  className={`!font-light !p-0 w-[100px] text-sm ${canEditInputProtein
+                  className={`!font-light !p-0 w-[100px] text-sm ${
+                    canEditInputProtein
                       ? "cursor-pointer"
                       : "cursor-not-allowed hover:bg-pep-blue"
-                    }`}
+                  }`}
                 />
                 <Button
                   disabled={!canEditInputProtein}
@@ -261,7 +266,9 @@ export default function InputProtein({
                     className="size-[30px] text-pep-gray"
                   />
                 </Button>
-                <DownloadCSVButton />
+                <DownloadCSVButton
+                  onClick={() => DownloadQueryResult(formData, jobId)}
+                />
               </div>
             ) : (
               <div className="flex items-center space-x-3">
