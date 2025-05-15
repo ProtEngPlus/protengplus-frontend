@@ -368,7 +368,9 @@ export default function Pipeline({
       const today = new Date().toISOString().split("T")[0];
 
       const response = await getAllQueryResults(params);
-      const queryResults: Result[] = response.data ? response.data[0].result : [];
+      const queryResults: Result[] = response.data
+        ? response.data[0].result
+        : [];
 
       const pdfBlob = await pdf(
         <ReportPDF
@@ -382,9 +384,7 @@ export default function Pipeline({
       zip.file(`Report_${formData["name"]}_${today}.pdf`, pdfBlob);
 
       if (response.data) {
-        const queryResultResponse = await getReportQueryResults(
-          job.id
-        ); // CSV blob
+        const queryResultResponse = await getReportQueryResults(job.id); // CSV blob
         const csvBlob = new Blob([queryResultResponse], { type: "text/csv" });
         zip.file(`QueryResult_${formData["name"]}_${today}.csv`, csvBlob);
       }
@@ -428,11 +428,13 @@ export default function Pipeline({
                   ? "carbon:notification-filled"
                   : "carbon:notification-off-filled"
               }
-              className={` ${job.state === "COMPLETED"
-                ? "cursor-not-allowed"
-                : "cursor-pointer"
-                }  size-[30px] ${isNotificationOn ? "text-pep-orange" : "text-error"
-                }`}
+              className={` ${
+                job.state === "COMPLETED"
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }  size-[30px] ${
+                isNotificationOn ? "text-pep-orange" : "text-error"
+              }`}
               onClick={() =>
                 job.state !== "COMPLETED" &&
                 setValue("is_notification_on", !isNotificationOn)
@@ -451,8 +453,9 @@ export default function Pipeline({
               >
                 <Icon
                   icon="fa-solid:running"
-                  className={`w-[20px] h-[25px] ${runType === "auto" ? "text-white" : "text-pep-gray"
-                    }`}
+                  className={`w-[20px] h-[25px] ${
+                    runType === "auto" ? "text-white" : "text-pep-gray"
+                  }`}
                 />
               </Button>
               <Button
@@ -467,8 +470,9 @@ export default function Pipeline({
               >
                 <Icon
                   icon="ic:baseline-checklist-rtl"
-                  className={`size-[20px] ${runType === "one-step" ? "text-white" : "text-pep-gray"
-                    }`}
+                  className={`size-[20px] ${
+                    runType === "one-step" ? "text-white" : "text-pep-gray"
+                  }`}
                 />
               </Button>
             </div>
@@ -500,10 +504,11 @@ export default function Pipeline({
                 </li>
                 <li
                   key="save-config"
-                  className={`px-5 py-2 font-light text-label ${job.state === "COMPLETED"
-                    ? "cursor-pointer hover:text-pep-blue hover:bg-pep-blue-light"
-                    : "cursor-not-allowed"
-                    }`}
+                  className={`px-5 py-2 font-light text-label ${
+                    job.state === "COMPLETED"
+                      ? "cursor-pointer hover:text-pep-blue hover:bg-pep-blue-light"
+                      : "cursor-not-allowed"
+                  }`}
                   onClick={() => {
                     if (isEditPipeline) {
                       setIsOpen(false);
