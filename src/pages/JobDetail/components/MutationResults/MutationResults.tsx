@@ -212,35 +212,40 @@ export default function MutationResults({
                             </div>
                         </div>
                         <hr />
+                        {currentMutation.state !== "ONGOING" ? (
+                            <>
+                                <div className="w-full min-w-fit flex justify-between items-center border-l-4 border-pep-orange pl-6 font-light text-xl gap-x-5">
+                                    <div className="flex justify-between items-center w-2/5">
+                                        <div>{currentMutation.name}</div>
+                                        <div className="text-gray-500 text-base font-light">Run Time: {" "}
+                                            {getTotalTime(currentMutation.created_at, currentMutation.complete_at)} Minutes</div>
+                                    </div>
+                                    <div className="flex space-x-4 items-center">
+                                        <Icon
+                                            icon="ic:round-refresh"
+                                            className={`size-7 ${currentMutation.state === "FAILED"
+                                                ? "text-pep-gray cursor-pointer"
+                                                : "text-pep-gray-border cursor-not-allowed"
+                                                }`}
+                                            onClick={() => {
+                                                currentMutation.state === "FAILED" && handleRunMutation(currentMutation);
+                                            }}
+                                        />
+                                        <Icon
+                                            icon="streamline:delete-1-solid"
+                                            className="text-error size-5 self-center cursor-pointer"
+                                            onClick={() => handleDelete(currentMutation)}
+                                        />
+                                    </div>
+                                </div>
 
-                        <div className="w-full min-w-fit flex justify-between items-center border-l-4 border-pep-orange pl-6 font-light text-xl gap-x-5">
-                            <div className="flex justify-between items-center w-2/5">
-                                <div>{currentMutation.name}</div>
-                                <div className="text-gray-500 text-base font-light">Run Time: {" "}
-                                    {getTotalTime(currentMutation.created_at, currentMutation.complete_at)} Minutes</div>
-                            </div>
-                            <div className="flex space-x-4 items-center">
-                                <Icon
-                                    icon="ic:round-refresh"
-                                    className={`size-7 ${currentMutation.state === "FAILED"
-                                        ? "text-pep-gray cursor-pointer"
-                                        : "text-pep-gray-border cursor-not-allowed"
-                                        }`}
-                                    onClick={() => {
-                                        currentMutation.state === "FAILED" && handleRunMutation(currentMutation);
-                                    }}
-                                />
-                                <Icon
-                                    icon="streamline:delete-1-solid"
-                                    className="text-error size-5 self-center cursor-pointer"
-                                    onClick={() => handleDelete(currentMutation)}
-                                />
-                            </div>
-                        </div>
+                                <MutationParameterSetup mutation={currentMutation} isShowChart={true} chartLabels={chartLabels} currentStep={currentStep} pipeline={pipeline} />
 
-                        <MutationParameterSetup mutation={currentMutation} isShowChart={true} chartLabels={chartLabels} currentStep={currentStep} pipeline={pipeline} />
-
-                        <MutationProteinSequenceSection mutationId={currentMutation.id} mutationName={currentMutation.name} inputProtein={currentMutation.input_protein} />
+                                <MutationProteinSequenceSection mutationId={currentMutation.id} mutationName={currentMutation.name} inputProtein={currentMutation.input_protein} />
+                            </>
+                        ) : (
+                            <div className="text-gray-500 text-base font-light">Mutation collection {currentMutation.name} is running...</div>
+                        )}
                     </div>
                 )}
             </div>

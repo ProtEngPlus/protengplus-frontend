@@ -101,7 +101,7 @@ export default function UploadLabInput({
       ) {
         return {
           isValidate: false,
-          errorMessage: "Uploaded file mismatch!",
+          errorMessage: "Uploaded file mismatch !",
         };
       }
     }
@@ -135,7 +135,9 @@ export default function UploadLabInput({
 
           if (validation.isValidate) {
             setLabResultForm(fileData);
+            setValue("file_name", file.name);
             setValue("lab_result", fileData);
+            setValue("file_name", file.name);
           }
         } catch (error) {
           console.error("Error during file parsing or job update:", error);
@@ -168,6 +170,7 @@ export default function UploadLabInput({
       if (validation.isValidate) {
         setLabResultForm(data);
         setValue("lab_result", data);
+        setValue("file_name", "manual input");
       }
       setManualInputVisible(false);
     },
@@ -225,7 +228,6 @@ export default function UploadLabInput({
                 onClick={() => setIsExpand(!isExpand)}
                 className="cursor-pointer text-pep-gray size-[30px]"
               />
-              {/* <DownloadCSVButton onClick={() => ExportToCsv(labResultForm)} /> */}
               <DownloadCSVButton onClick={() => UploadInputTemplate()} />
             </div>
             <div className="rounded-lg bg-pep-blue-light p-5 text-pep-dark-gray">

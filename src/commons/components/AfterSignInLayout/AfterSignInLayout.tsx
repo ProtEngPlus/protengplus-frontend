@@ -59,7 +59,7 @@ export default function RootLayout({
   return (
     <div className="h-screen">
       {/* Nav bar */}
-      <nav className="fixed top-0 z-50 h-[4.5rem] w-full items-center bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav className="fixed top-0 z-50 h-[4.5rem] w-full items-center bg-white border-b border-gray-200">
         <div className="flex flex-row h-full items-center space-x-9">
           <div className="flex items-center h-full w-[299px] min-w-[299px] justify-center bg-gray-50">
             <img src={logoWithText} alt="Logo" />
@@ -109,7 +109,7 @@ export default function RootLayout({
       <aside
         className={`fixed top-0 left-0 z-40 h-screen pt-[4.5rem] transition-transform ${
           isSidebarVisible ? "w-64 translate-x-0" : "-translate-x-full"
-        } bg-white dark:bg-gray-800 dark:border-gray-700`}
+        } bg-white `}
         aria-label="Sidebar"
       >
         <div className="h-full w-[299px] overflow-y-auto bg-gray-50 py-14 px-4">

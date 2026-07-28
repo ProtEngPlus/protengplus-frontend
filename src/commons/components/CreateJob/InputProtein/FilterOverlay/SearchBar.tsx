@@ -53,9 +53,13 @@ export default function SearchBar({
             className="absolute top-1/2 left-3 transform -translate-y-1/2 cursor-pointer"
           />
         </div>
-        <ul className="mt-2 bg-white rounded-md shadow-dropShadow max-h-[190px] z-10 py-2 right-0 overflow-y-scroll">
+        <ul
+          data-testid="all-uniqiue-organisms"
+          className="mt-2 bg-white rounded-md shadow-dropShadow max-h-[190px] z-10 py-2 right-0 overflow-y-scroll"
+        >
           {filteredList.map((option, index) => (
             <li
+              data-testid="organism"
               key={index}
               className="text-start px-5 py-2 font-light text-label hover:text-pep-blue hover:bg-blue-50 focus:bg-blue-100 cursor-pointer"
               onMouseDown={() => handleSearch(option)}

@@ -9,12 +9,12 @@ import {
   getAllMutationResult,
   getAllMutations,
 } from "../../../../commons/api/mutation";
-import {
-  InputProteinOverlay,
-  InputProteinOverlayProps,
-} from "../../../../commons/components/CreateJob/InputProteinOverlay/InputProteinOverlay";
 import React from "react";
 import MutationState from "../../../../commons/components/Mutation/MutationState/MutationState";
+import {
+  ProteinSequenceOverlay,
+  ProteinSequenceProps,
+} from "../../../JobDetail/components/Overlay/ProteinSequenceOverlay";
 
 const headers = ["Mutation Collection", "Job Name", "Status"];
 
@@ -23,8 +23,10 @@ export default function BookmarkTable() {
   const [mutations, setMutations] = useState<MutationInterface[]>([]);
   const [currentMutation, setCurrentMutation] = useState<MutationInterface>();
   const [isExpand, setIsExpand] = useState(false);
-  const [mutationResult, setMutationResult] = useState<MutationResultInterface[]>();
-  const [inputProtein, setInputProtein] = useState("");
+  const [mutationResult, setMutationResult] =
+    useState<MutationResultInterface[]>();
+  const [currentSequence, setCurrentSequence] =
+    useState<MutationResultInterface>();
 
   useEffect(() => {
     const fetchMutations = async () => {
@@ -62,16 +64,20 @@ export default function BookmarkTable() {
   }, [currentMutation]);
 
   const [isProteinVisible, setProteinVisible] = useState(false);
-  const InputProteinProps: InputProteinOverlayProps = {
-    inputProtein,
-    onClose: () => setProteinVisible(false),
+
+  const proteinSequenceProps: ProteinSequenceProps = {
+    onClose: () => {
+      setProteinVisible(false);
+    },
   };
 
   return (
     <div>
-      <InputProteinOverlay
+      <ProteinSequenceOverlay
         isVisible={isProteinVisible}
-        inputProteinProps={InputProteinProps}
+        proteinSequenceProps={proteinSequenceProps}
+        proteinSequence={currentSequence?.protein_sequence || ""}
+        mutationPositions={currentSequence?.mutation_positions || []}
       />
       <div className="space-y-3 max-h-[349px]">
         <div className="flex flex-row items-center space-x-2 ">
@@ -111,11 +117,16 @@ export default function BookmarkTable() {
                         <label className="truncate text-sm text-black">
                           {mutation.job_name}
                         </label>
-                        <label className="truncate">desc</label>
+                        <label className="truncate">
+                          {mutation.job_description}
+                        </label>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <MutationState state={mutation.state} className="mx-auto" />
+                      <MutationState
+                        state={mutation.state}
+                        className="mx-auto"
+                      />
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex space-x-1">
@@ -128,8 +139,7 @@ export default function BookmarkTable() {
                         />
                         <Icon
                           icon={
-                            currentMutation?.id === mutation.id &&
-                              isExpand
+                            currentMutation?.id === mutation.id && isExpand
                               ? "mingcute:up-line"
                               : "mingcute:down-line"
                           }
@@ -158,8 +168,10 @@ export default function BookmarkTable() {
                         <td colSpan={4}>
                           <MutationResultTable
                             mutationResult={mutationResult}
-                            handleViewSequence={(sequence: string) => {
-                              setInputProtein(sequence);
+                            handleViewSequence={(
+                              sequence: MutationResultInterface
+                            ) => {
+                              setCurrentSequence(sequence);
                               setProteinVisible(true);
                             }}
                           />
@@ -181,7 +193,7 @@ const MutationResultTable = ({
   handleViewSequence,
 }: {
   mutationResult: MutationResultInterface[];
-  handleViewSequence: (sequence: string) => void;
+  handleViewSequence: (sequence: MutationResultInterface) => void;
 }) => {
   return (
     <table className="w-full text-xs text-left rtl:text-right">
@@ -214,7 +226,7 @@ const MutationResultTable = ({
                 <button
                   className="flex cursor-pointer items-center space-x-1"
                   type="button"
-                  onClick={() => handleViewSequence(result.protein_sequence)}
+                  onClick={() => handleViewSequence(result)}
                 >
                   <span className="text-pep-blue underline">View Sequence</span>
                   <Icon icon="carbon:view" className="size-5 text-pep-blue" />

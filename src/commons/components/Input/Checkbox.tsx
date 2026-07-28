@@ -29,10 +29,10 @@ export default function Checkbox({
             disable
               ? "text-gray-500 border-gray-500"
               : "text-selected border-selected"
-          }  border-2 rounded focus:ring-0 dark:bg-selected dark:border-selected`}
+          }  border-2 rounded focus:ring-0`}
         />
         {label ? (
-          <label className="ms-2 text-sm font-medium text-gray-500 dark:text-gray-800">
+          <label className="ms-2 text-sm font-medium text-gray-500">
             {label}
           </label>
         ) : (

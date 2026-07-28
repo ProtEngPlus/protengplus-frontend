@@ -17,6 +17,7 @@ import {
   QueryResultOverlay,
   QueryResultOverlayProps,
 } from "./QueryResultOverlay";
+import { DownloadQueryResult } from "../../../../pages/CreateJob/services/DownloadQueryResult";
 
 interface Props {
   isJobDetail: boolean;
@@ -52,6 +53,7 @@ export default function InputProtein({
 
   // to display query result
   const jobId = getValues(isJobDetail ? "id" : "ref_job_id");
+  const formData = watch();
   const hasQueryResult = isJobDetail
     ? stage > 0
     : initialStep > 1 && isWithConfig;
@@ -192,7 +194,9 @@ export default function InputProtein({
                   ) : null}
                 </div>
               ) : (
-                <div className="break-all">{inputProteinField}</div>
+                <div className="line-clamp-2 break-all overflow-hidden max-w-full">
+                  {inputProteinField}
+                </div>
               )}
             </div>
 
@@ -262,13 +266,13 @@ export default function InputProtein({
                     className="size-[30px] text-pep-gray"
                   />
                 </Button>
-                <DownloadCSVButton />
+                <DownloadCSVButton
+                  onClick={() => DownloadQueryResult(formData, jobId)}
+                />
               </div>
             ) : (
               <div className="flex items-center space-x-3">
-                {inputMode === "uniprot_id" && (
-                  <ViewButton inputProtein={inputProtein} />
-                )}
+                <ViewButton inputProtein={inputProtein} />
               </div>
             )}
           </div>
@@ -287,7 +291,7 @@ export default function InputProtein({
         {/* Note for no query result */}
         {!isConclusion && onEdit && !hasQueryResult && (
           <div className="text-center text-label font-light">
-            Note: Blast Results can be manually filtered and selected only in{" "}
+            Note: Query Results can be manually filtered and selected only in{" "}
             <span className="text-pep-orange font-normal">'One-Step Run'</span>{" "}
             mode
           </div>

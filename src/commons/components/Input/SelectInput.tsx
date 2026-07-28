@@ -18,6 +18,7 @@ export type SelectInputProps = {
   additionalValidation?: Record<string, ValidationProps>;
   options: Option[];
   onEdit?: boolean;
+  formatInput?: number;
 };
 
 export default function SelectInput({
@@ -29,6 +30,7 @@ export default function SelectInput({
   additionalValidation,
   options,
   onEdit = true,
+  formatInput = 1,
 }: SelectInputProps) {
   const {
     register,
@@ -74,11 +76,15 @@ export default function SelectInput({
   }, []);
 
   return (
-    <div className="relative w-full custom-select">
+    <div className={`
+      ${formatInput === 2
+        ? "w-24 text-start"
+        : "w-full"}
+       relative custom-select`}>
       {!onEdit ? (
         <div>{currentValue}</div>
       ) : (
-        <div>
+        <div id={id}>
           <div
             id={id}
             className={clsx(
@@ -89,6 +95,7 @@ export default function SelectInput({
                 "border-pep-blue": isOpen,
                 "!cursor-not-allowed !bg-disabled !border-disabled !text-label":
                   disabled,
+                "h-10 pt-1.5 pr-1.5": formatInput === 2,
               },
               className
             )}
@@ -107,6 +114,7 @@ export default function SelectInput({
                 placeholder}
             </div>
             <Icon
+              data-testid={`${id}-dropdown`}
               icon="quill:chevron-down"
               className={`text-pep-dark-gray size-4 my-auto ${
                 disabled ? "text-gray-400" : "text-pep-dark-gray"
@@ -116,6 +124,7 @@ export default function SelectInput({
 
           {isOpen && !disabled && (
             <ul
+              data-testid={`${id}-list`}
               className={clsx(
                 "mt-2 absolute w-full bg-white rounded-md shadow-dropShadow z-10 py-2",
                 className

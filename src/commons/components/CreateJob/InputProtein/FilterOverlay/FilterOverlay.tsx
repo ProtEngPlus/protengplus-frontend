@@ -44,7 +44,7 @@ export function FilterOverlay({
 
   const proteinConfig = createJobConfig["Protein Input"]?.tool["Query Result"];
   const { getValues, setValue } = useFormContext();
-  const [search, setSearch] = useState<string>(organisms ?? "");
+  const [search, setSearch] = useState<string>("");
   const [isRead, setRead] = useState(false);
   const [isLoading, setLoading] = useState(true);
 
@@ -56,8 +56,7 @@ export function FilterOverlay({
       const modalOptions: ModalOptions = {
         placement: "bottom-right",
         backdrop: "dynamic",
-        backdropClasses:
-          "bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-10",
+        backdropClasses: "bg-gray-900/50 fixed inset-0 z-10",
         closable: true,
       };
 
@@ -81,8 +80,6 @@ export function FilterOverlay({
 
   // Preload form values when modal is opened
   useEffect(() => {
-    if (!isVisible) return;
-
     setLoading(true);
     setSearch(organisms ?? "");
     setValue("percent_identity_result_low", percentIdentityFrom);
@@ -141,6 +138,7 @@ export function FilterOverlay({
     isVisible &&
     !isLoading && (
       <div
+        data-testid="protein-filter-modal"
         id="protein-filter-modal"
         className="fixed top-0 right-0 left-0 z-[90] flex justify-center items-center w-full h-full mt-0"
       >

@@ -160,7 +160,10 @@ export default function JobDetailPage() {
       />
       {job && (
         <div className="space-y-8 py-5">
-          <div className="p-5 space-y-5 border border-pep-gray-border rounded-xl">
+          <div
+            data-testid="job-information"
+            className="p-5 space-y-5 border border-pep-gray-border rounded-xl"
+          >
             <div className="flex justify-between items-center space-x-8">
               <div className="flex space-x-8 items-center">
                 <JobRunTypeIcon
@@ -257,7 +260,7 @@ export default function JobDetailPage() {
               </div>
             </div>
           </div>
-          <div className="mb-8 border-b text-gray-500 border-gray-500 dark:border-gray-500">
+          <div className="mb-8 border-b text-gray-500 border-gray-500">
             <ul className="flex flex-wrap -mb-px text-center" id="tabs">
               <li className="me-2">
                 <button

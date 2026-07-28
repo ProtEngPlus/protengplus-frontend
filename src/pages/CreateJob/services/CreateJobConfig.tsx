@@ -12,18 +12,20 @@ import {
 
 export function generateInitialJob(): JobOption {
   const initialJob = {} as JobOption;
-  for (const pipeline of defaultPipeline) {
-    const { method, subMethod }: { method: string; subMethod: string } =
-      pipeline;
+  for (const pipeline of Pipelines) {
+    const { method, subMethod } = pipeline;
     initialJob[method] = {};
-    initialJob[method][subMethod] = {};
-    if (createJobConfig[method].tool[subMethod].parameters) {
-      for (const param of createJobConfig[method].tool[subMethod].parameters) {
-        if (param.type === "rangeNumber") {
-          initialJob[method][subMethod][`${param.id}_low`] = param.low;
-          initialJob[method][subMethod][`${param.id}_high`] = param.high;
-        } else {
-          initialJob[method][subMethod][param.id] = param.default;
+    for (const tool of subMethod) {
+      initialJob[method][tool] = {};
+      const toolConfig = createJobConfig[method]?.tool?.[tool];
+      if (toolConfig?.parameters) {
+        for (const param of toolConfig.parameters) {
+          if (param.type === "rangeNumber") {
+            initialJob[method][tool][`${param.id}_low`] = param.low;
+            initialJob[method][tool][`${param.id}_high`] = param.high;
+          } else {
+            initialJob[method][tool][param.id] = param.default;
+          }
         }
       }
     }
