@@ -135,6 +135,7 @@ export default function UploadLabInput({
 
           if (validation.isValidate) {
             setLabResultForm(fileData);
+            setValue("file_name", file.name);
             setValue("lab_result", fileData);
             setValue("file_name", file.name);
           }
@@ -222,7 +223,7 @@ export default function UploadLabInput({
             <hr />
             <div className="flex justify-between space-x-4">
               <Icon
-                data-testid="expand-template-table"
+                id="expand-example-table"
                 icon={isExpand ? "mingcute:up-line" : "mingcute:down-line"}
                 onClick={() => setIsExpand(!isExpand)}
                 className="cursor-pointer text-pep-gray size-[30px]"
