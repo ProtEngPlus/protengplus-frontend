@@ -18,7 +18,7 @@ export const inputProteinUniprotId = "P62593"
 // all pipelines
 export const Pipelines: PipelineItems[] = [
     { method: "Protein Query", subMethod: ["Blast", "MMseqs2"] },
-    { method: "Protein Representation", subMethod: ["Unirep"] },
+    { method: "Protein Representation", subMethod: ["Unirep", "ESM"] },
     { method: "Top Model", subMethod: ["RidgeCV"] },
     { method: "Mutation", subMethod: ["Mutation"] },
 ];
@@ -442,6 +442,36 @@ export const createJobConfig: CreateJobConfig = {
                         },
                     },
                 ],
+            },
+            ESM: {
+                formatInput:2,
+                description: "Transformer-based model that generates fixed-length protein embeddings by averaging residue-level features.",
+                parameters: [
+                    {
+                        name: "Weight Decay",
+                        id: "weight_decay",
+                        type: "number",
+                        description:
+                        "Regularization technique that penalizes large weights to improve generalization and prevent overfitting, promoting more consistent model behavior across training.",
+                        default: 2,
+                        additionalValidation: {
+                            required: { value: true, message: "Weight Decay is required." },
+                            min: { value: 0, message: "Weight Decay must be at least 0." },
+                        },
+                    },
+                    {
+                        name: "N Epochs Config",
+                        id: "n_epochs_config",
+                        type: "number",
+                        description:
+                        "The number of training cycles over the dataset, more epochs can improve performance but risk overfitting if too high.",
+                        default: 2,
+                        additionalValidation: {
+                            required: { value: true, message: "N Epochs Config is required." },
+                            min: { value: 0, message: "N Epochs Config must be at least 0." },
+                        },
+                    }
+                ]
             }
         },
     },
