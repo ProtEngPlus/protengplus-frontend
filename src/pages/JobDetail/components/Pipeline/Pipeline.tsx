@@ -47,6 +47,7 @@ import {
 } from "../../../../commons/interfaces/QueryResult.interface";
 import {
   getAllQueryResults,
+  getReportQueryResults,
   updateQueryResult,
 } from "../../../../commons/api/queryResult";
 import { ReportInterface } from "../../../../commons/interfaces/Report.interface";
@@ -55,6 +56,7 @@ import ReportPDF from "../../../../commons/components/ReportPDF/ReportPDF";
 import FitnessDistributionChartData from "../MutationResults/FitnessDistributionChart";
 import { getMutationHistogram } from "../../../../commons/api/mutation";
 import { createRoot } from "react-dom/client";
+import JSZip from "jszip";
 
 export default function Pipeline({
   job,
@@ -67,7 +69,7 @@ export default function Pipeline({
   setIsEditPipeline: (isEditPipeline: boolean) => void;
   fetchJob: () => void;
 }) {
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch, getValues } = useFormContext();
   const formData = watch();
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(job.stage_id);
@@ -153,6 +155,22 @@ export default function Pipeline({
 
             newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
               data[`${param.id}_high`] ?? jobOptions[`${param.id}_high`];
+          } else if (param.type == "percent") {
+            const num = Number(data[param.id]);
+            newJobOption[subMethod.toLowerCase()][param.id] = isNaN(num)
+              ? jobOptions[param.id]
+              : num;
+          } else if (param.type === "multiNumberDropdown") {
+            let array: number[] = [];
+
+            const value = data[param.id];
+            if (Array.isArray(value)) {
+              array = value
+                .filter((v): v is number => typeof v === "number")
+                .sort((n1, n2) => n1 - n2);
+            }
+            newJobOption[subMethod.toLowerCase()][param.id] =
+              array.length === 0 ? jobOptions[param.id] : array;
           } else {
             newJobOption[subMethod.toLowerCase()][param.id] =
               data[param.id] ?? jobOptions[param.id];
@@ -160,7 +178,12 @@ export default function Pipeline({
         });
       }
 
-      await updateJobDetail(job.id, { meta: meta, options: newJobOption });
+      await updateJobDetail(job.id, {
+        meta: meta,
+        options: newJobOption,
+        input_protein: getValues("input_protein") ?? job.input_protein,
+      });
+
       setIsConfirmVisible(false);
       setIsSuccessVisible(true);
     } catch (error) {
@@ -200,6 +223,13 @@ export default function Pipeline({
         is_notification_on: job.is_notification_on,
         user_id: job.user_id,
       };
+
+      if (jobConfig.options.mmseqs2) {
+        const covMode = jobConfig.options.mmseqs2.cov_mode;
+        if (typeof covMode === "string") {
+          jobConfig.options.mmseqs2.cov_mode = parseInt(covMode, 10);
+        }
+      }
 
       await createJobConfiguration(jobConfig);
     },
@@ -304,7 +334,10 @@ export default function Pipeline({
       }
 
       const hiddenDiv = document.createElement("div");
-      hiddenDiv.className = "hidden-chart-container";
+      hiddenDiv.style.position = "fixed";
+      hiddenDiv.style.left = "-9999px";
+      hiddenDiv.style.top = "0";
+
       document.body.appendChild(hiddenDiv);
 
       // Render the chart inside the hidden div
@@ -328,33 +361,44 @@ export default function Pipeline({
       root.unmount();
       document.body.removeChild(hiddenDiv);
 
-      let queryResults: Result[] = [];
-      const params: QueryResultSearchParams = {};
-      getAllQueryResults(params)
-        .then(async (response) => {
-          queryResults = (
-            response.data ? response.data[0].result : []
-          ) as Result[];
-          const blob = await pdf(
-            <ReportPDF
-              jobData={getReportData()}
-              chart={chartImage}
-              queryResultData={queryResults}
-            />
-          ).toBlob();
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          const today = new Date().toISOString().split("T")[0];
-          link.download = `Report_${formData["name"]}_${today}.pdf`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-        })
-        .catch((error) => {
-          console.error("Error fetching query results:", error);
-        });
+      const params: QueryResultSearchParams = {
+        job_id: job.id,
+      };
+
+      const today = new Date().toISOString().split("T")[0];
+
+      const response = await getAllQueryResults(params);
+      const queryResults: Result[] = response.data
+        ? response.data[0].result
+        : [];
+
+      const pdfBlob = await pdf(
+        <ReportPDF
+          jobData={getReportData()}
+          chart={chartImage}
+          queryResultData={queryResults}
+        />
+      ).toBlob();
+
+      const zip = new JSZip();
+      zip.file(`Report_${formData["name"]}_${today}.pdf`, pdfBlob);
+
+      if (response.data) {
+        const queryResultResponse = await getReportQueryResults(job.id); // CSV blob
+        const csvBlob = new Blob([queryResultResponse], { type: "text/csv" });
+        zip.file(`QueryResult_${formData["name"]}_${today}.csv`, csvBlob);
+      }
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(zipBlob);
+      const link = document.createElement("a");
+      link.href = url;
+
+      link.download = `Report_${formData["name"]}_${today}.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.log(error);
     }
@@ -378,19 +422,29 @@ export default function Pipeline({
         <div className="space-y-24">
           <div className="flex space-x-6 items-center justify-end">
             <Icon
+              data-testid={`isnotification-${isNotificationOn}`}
               icon={
                 isNotificationOn
                   ? "carbon:notification-filled"
                   : "carbon:notification-off-filled"
               }
-              className={` cursor-pointer size-[30px] ${
+              className={` ${
+                job.state === "COMPLETED"
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }  size-[30px] ${
                 isNotificationOn ? "text-pep-orange" : "text-error"
               }`}
-              onClick={() => setValue("is_notification_on", !isNotificationOn)}
+              onClick={() =>
+                job.state !== "COMPLETED" &&
+                setValue("is_notification_on", !isNotificationOn)
+              }
             />
             <div className="flex space-x-2 items-center">
               <Button
+                data-testid={`auto-run-${runType === "auto"}`}
                 id="auto-run"
+                disabled={job.state === "COMPLETED"}
                 type="button"
                 buttonType={runType === "auto" ? "next" : "cancel"}
                 text="Auto Run"
@@ -405,7 +459,9 @@ export default function Pipeline({
                 />
               </Button>
               <Button
+                data-testid={`one-step-run-${runType === "one-step"}`}
                 id="one-step-run"
+                disabled={job.state === "COMPLETED"}
                 type="button"
                 buttonType={runType === "one-step" ? "next" : "cancel"}
                 text="One-Step Run"

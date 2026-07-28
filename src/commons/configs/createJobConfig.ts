@@ -5,19 +5,19 @@ import { RunType } from "../interfaces/Job.interface";
 export const defaultCreateJobDetail: CreateJobDetail = {
     name: "",
     description: "",
-    input_protein: "SIQHFHW",
+    input_protein: "MSIQFFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRPEERFPMMSTFKVLLCGAVLSRVDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVRELCSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTMPAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGSRGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW",
     lab_result: [],
     run_type: "one-step",
     is_notification_on: true,
     artifact:null,
 }
 // default for inputProtein
-export const inputProteinProtSeq = "SIQHFHW"
-export const inputProteinUniprotId = "P69905"
+export const inputProteinProtSeq = "MSIQFFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRPEERFPMMSTFKVLLCGAVLSRVDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVRELCSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTMPAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGSRGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW"
+export const inputProteinUniprotId = "P62593"
 
 // all pipelines
 export const Pipelines: PipelineItems[] = [
-    { method: "Protein Query", subMethod: ["Blast"] },
+    { method: "Protein Query", subMethod: ["Blast", "MMseqs2"] },
     { method: "Protein Representation", subMethod: ["Unirep"] },
     { method: "Top Model", subMethod: ["RidgeCV"] },
     { method: "Mutation", subMethod: ["Mutation"] },
@@ -178,7 +178,7 @@ export const createJobConfig: CreateJobConfig = {
                         type: "percent",
                         description:
                         "The maximum number of protein sequences returned from the database that match the query sequence",
-                        default: 70,
+                        default: 50,
                         additionalValidation: {
                             required: { value: true, message: "Hit Size is required." },
                             min: { value: 0, message: "Hit Size must be at least 0." },
@@ -190,7 +190,7 @@ export const createJobConfig: CreateJobConfig = {
                         type: "percent",
                         description:
                         "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match.",
-                        default: 70,
+                        default: 10,
                         additionalValidation: {
                             required: { value: true, message: "Expect is required." },
                             min: { value: 0, message: "Expect must be at least 0." },
@@ -201,7 +201,7 @@ export const createJobConfig: CreateJobConfig = {
                         id: "seq_length",
                         type: "number",
                         description: "The expected length of protein sequences response from database",
-                        default: 70,
+                        default: 300,
                         additionalValidation: {
                             required: {
                                 value: true,
@@ -219,7 +219,7 @@ export const createJobConfig: CreateJobConfig = {
                         type: "percent",
                         description:
                         "The minimum percentage of sequence identity in the database required for a match to the query sequence to be considered significant",
-                        default: 70,
+                        default: 85,
                         additionalValidation: {
                             required: {
                                 value: true,
@@ -255,6 +255,128 @@ export const createJobConfig: CreateJobConfig = {
                             min: { value: 0, message: "HSP Coverage must be at least 0." },
                         },
                     },
+                ],
+            },
+            MMseqs2: {
+                formatInput:2,
+                description: "Tool used for comparing query sequences against a target database using local alignments to identify similar sequences, optimized for large-scale searches.",
+                parameters: [
+                    {
+                        name: "Maximum Sequences",
+                        id: "max_seqs",
+                        type: "number",
+                        description: "Maximum results allowed to pass the prefilter (affects sensitivity)",
+                        default: 70,
+                        additionalValidation: {
+                            required: { value: true, message: "Maximum Sequences is required." },
+                            min: { value: 0, message: "Maximum Sequences must be at least 0." },
+                        },
+                    },
+                    {
+                        name: "E Value",
+                        id: "e",
+                        type: "percent",
+                        description:
+                        "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match",
+                        default: 70,
+                        additionalValidation: {
+                            required: { value: true, message: "Expect is required." },
+                            min: { value: 0, message: "Expect must be at least 0." },
+                        },
+                    },
+                    {
+                        name: "Minimum Sequence Identity",
+                        id: "min_seq_id",
+                        type: "percent",
+                        description:
+                        "The minimum percentage of sequence identity in the database required for a match to the query sequence to be considered significant",
+                        default: 70,
+                        additionalValidation: {
+                            required: {
+                                value: true,
+                                message: "Minimum Sequence Identity is required.",
+                            },
+                            min: {
+                                value: 0,
+                                message: "Minimum Sequence Identity must be at least 0.",
+                            },
+                        },
+                    },
+                    {
+                        name: "Minimum Alignment Length",
+                        id: "min_aln_len",
+                        type: "number",
+                        description:
+                        "The shortest length of the aligned region between two sequences for the match to be considered valid",
+                        default: 0,
+                        additionalValidation: {
+                            required: { value: true, message: "Expect is required." },
+                            min: { value: 0, message: "Expect must be at least 0." },
+                        },
+                    },
+                    {
+                        name: "Coverage Mode",
+                        id: "cov_mode",
+                        type: "dropdown",
+                        description: "0: coverage of query and target\n1: coverage of target\n2: coverage of query\n3: target seq. length has to be at least x% of query length\n4: query seq. length has to be at least x% of target length\n5: short seq. needs to be at least x% of the other seq. length",
+                        dropdownItems: [0, 1, 2, 3, 4, 5],
+                        default: 0,
+                        additionalValidation: {
+                            required: {
+                                value: true,
+                                message: "Coverage Mode is required.",
+                            },
+                          
+                        },
+                    },
+                    {
+                        name: "Coverage Threshold",
+                        id: "c",
+                        type: "percent",
+                        description:
+                        "The minimum fraction of a sequence that must be covered by the alignment to keep the result",
+                        default: 70,
+                        additionalValidation: {
+                            required: {
+                                value: true,
+                                message: "Coverage Threshold is required.",
+                            },
+                            min: {
+                                value: 0,
+                                message: "Coverage Threshold must be at least 0.",
+                            },
+                        },
+                    },
+                    {
+                        name: "Sequence Length",
+                        id: "seq_length",
+                        type: "number",
+                        description: "The expected length of protein sequences response from database",
+                        default: 70,
+                        additionalValidation: {
+                            required: {
+                                value: true,
+                                message: "Sequence Length is required.",
+                            },
+                            min: {
+                                value: 0,
+                                message: "Sequence Length must be at least 0.",
+                            },
+                        },
+                    },
+                    {
+                        name: "Random State",
+                        id: "random_state",
+                        type: "number",
+                        description:
+                        "Seed of the random number used in the query algorithm",
+                        default: 50,
+                        additionalValidation: {
+                            required: { value: true, message: "Random State is required." },
+                            min: { value: 0, message: "Random State must be at least 0." },
+                        },
+                    },
+        
                 ],
             },
         },

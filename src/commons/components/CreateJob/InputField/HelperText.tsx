@@ -47,7 +47,11 @@ export default function HelperText({
               )}
             >
               <span className="text-nowrap">{value.name}:</span>
-              <span className="text-wrap">{value.description}</span>
+              <span>
+                {value.description.split('\n').map((line, idx) => (
+                  <div key={idx}>{line}</div>
+                ))}
+              </span>
             </div>
           );
         }) || undefined}
