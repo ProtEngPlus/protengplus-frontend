@@ -83,7 +83,7 @@ export default function RootLayout({
             {/* User Icon */}
             <div className="flex flex-row items-center min-w-fit h-full bg-gray-50 rounded-b-xl px-5 space-x-4 m-auto">
               <Icon
-                data-testid="go-to-account-management"
+                id="go-to-account-management"
                 icon="ph:user"
                 className="size-11 rounded-full p-2.5 text-white bg-pep-orange hover:cursor-pointer"
                 onClick={() => navigate("/account-management")}

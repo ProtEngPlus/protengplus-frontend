@@ -15,7 +15,7 @@ export function LabInputTable({
 }) {
   return (
     <div
-      data-testid={`${isExample ? "example-table" : "lab-input-table"}`}
+      id={`${isExample ? "table-example" : "lab-input-table"}`}
       className="w-full place-items-center"
     >
       <div className="max-w-[759px] max-h-[536px] w-[759px] h-[536px] overflow-y-auto relative rounded-xl border border-[#DFE4EA] shadow-table  bg-white">

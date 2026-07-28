@@ -121,7 +121,7 @@ export default function JobTable({
         <div className="space-y-5">
           {/* Job Table */}
           <div
-            data-testid="job-table"
+            id="job-table"
             className="relative overflow-auto rounded-xl border border-[#DFE4EA] shadow-table"
           >
             <table className="w-full text-xs text-left rtl:text-right">
@@ -175,9 +175,12 @@ export default function JobTable({
                         state={job.state}
                       />
                     </td>
-                    <td className="flex grow flex-col px-3 py-3">
+                    <td
+                      id="table-job-detail"
+                      className="flex grow flex-col px-3 py-3"
+                    >
                       <label
-                        data-testid="job-name"
+                        id="table-job-name"
                         className="truncate text-blue-500 font-normal text-sm leading-5 underline cursor-pointer"
                         onClick={() =>
                           navigate(`/dashboard/job-detail/${job.id}`)
@@ -185,16 +188,15 @@ export default function JobTable({
                       >
                         {job.name}
                       </label>
-                      <label className="truncate text-sm">
+                      <label
+                        id="table-job-description"
+                        className="truncate text-sm"
+                      >
                         {job.description}
                       </label>
                     </td>
-                    <td className="px-3 py-3 text-center">
-                      <JobState
-                        data-testid="job-status"
-                        state={job.state}
-                        className="mx-auto"
-                      />
+                    <td id="table-job-status" className="px-3 py-3 text-center">
+                      <JobState state={job.state} className="mx-auto" />
                       {job.state === "COMPLETED" && job.complete_at && (
                         <label>
                           Total Time:{" "}
@@ -205,7 +207,10 @@ export default function JobTable({
                     <td className="place-items-center px-3 py-3">
                       <Stepper stageId={job.stage_id} state={job.state} />
                     </td>
-                    <td className="text-label px-3 py-3 text-center">
+                    <td
+                      id="table-job-created-at"
+                      className="text-label px-3 py-3 text-center"
+                    >
                       {job.created_at ? formatDate(job.created_at) : ""}
                     </td>
                     <td className="text-label px-3 py-3 text-center">

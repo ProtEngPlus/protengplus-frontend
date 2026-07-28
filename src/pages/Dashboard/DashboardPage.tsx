@@ -94,7 +94,7 @@ export default function DashboardPage() {
           />
           <div className="grid grid-flow-row gap-5 min-w-conte w-full">
             <Card
-              id="ongoing-card"
+              id="on-going-card"
               icon={ongoing}
               bgColor="bg-[rgba(251,113,133,0.08)]"
               dropdownText="View Jobs"
