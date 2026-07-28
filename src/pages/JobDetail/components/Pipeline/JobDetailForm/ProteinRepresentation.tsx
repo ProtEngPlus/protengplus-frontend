@@ -42,6 +42,8 @@ export default function ProteinRepresentation({
   const currentSubMethod =
     watch(`tool_${Steps[currentStep]}`) ?? pipeline[currentStep].subMethod;
 
+  const jobValue = getValues(`options.${currentSubMethod.toLowerCase()}`) || getValues(`options.${currentSubMethod}`)
+
   // update pipeline
   useEffect(() => {
     const updatedPipeline = [...pipeline];
@@ -103,7 +105,7 @@ export default function ProteinRepresentation({
         <div className="space-y-2">
           <InputFields
             jobConfig={jobConfig}
-            jobValue={getValues(`options.${currentSubMethod.toLowerCase()}`)}
+            jobValue={jobValue}
             isEdit={isEdit}
             disable={disable}
           />

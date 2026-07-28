@@ -9,7 +9,7 @@ export default function DownloadCSVButton({
     <div className="flex items-center space-x-2 font-light" onClick={onClick}>
       <span className="text-nowrap">Download CSV</span>
       <div
-        data-testid="download-template"
+        id="download-file"
         className="bg-pep-orange rounded-full p-[5px] cursor-pointer"
       >
         <Icon
