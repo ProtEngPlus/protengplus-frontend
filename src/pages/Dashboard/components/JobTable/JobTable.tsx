@@ -169,7 +169,7 @@ export default function JobTable({
                     <td className="px-3 py-3">
                       <JobRunTypeIcon
                         onClick={() => {
-                          job.state !== "FAILED" && handleRunJob(job);
+                          if (job.state !== "FAILED") handleRunJob(job);
                         }}
                         runType={job.run_type}
                         state={job.state}
@@ -226,7 +226,7 @@ export default function JobTable({
                               : "text-pep-gray-border cursor-not-allowed"
                           }`}
                           onClick={() => {
-                            job.state === "FAILED" && handleRunJob(job);
+                            if (job.state === "FAILED") handleRunJob(job);
                           }}
                         />
                         <Icon

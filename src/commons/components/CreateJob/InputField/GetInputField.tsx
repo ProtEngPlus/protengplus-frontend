@@ -62,7 +62,7 @@ export default function GetInputField({
         <NumberInput
           id={id}
           label={label}
-          defaultValue={Number(value) ?? undefined}
+          defaultValue={Number.isNaN(Number(value)) ? undefined : Number(value)}
           additionalValidation={filteredValidation}
           disabled={disable}
           onEdit={onEdit}
@@ -75,7 +75,7 @@ export default function GetInputField({
         <PercentInput
           id={id}
           label={label}
-          defaultValue={Number(value) ?? undefined}
+          defaultValue={Number.isNaN(Number(value)) ? undefined : Number(value)}
           additionalValidation={filteredValidation}
           disabled={disable}
           onEdit={onEdit}
@@ -83,7 +83,7 @@ export default function GetInputField({
         />
       );
 
-    case "rangeNumber":
+    case "rangeNumber": {
       const low =
         value && typeof value === "object" && "low" in value
           ? value.low
@@ -104,6 +104,7 @@ export default function GetInputField({
           onEdit={onEdit}
         />
       );
+    }
 
     case "rangePercent": {
       const low =

@@ -1,10 +1,10 @@
-import { Text, View } from "@react-pdf/renderer";
+import { Style, Text, View } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "./ReportStyle";
 
 export type ColumnConfig = {
   title: string;
   dataKey: string;
-  styleCol?: Record<string, any>;
+  styleCol?: Style;
 };
 
 export default function Table({
@@ -13,10 +13,10 @@ export default function Table({
   countFrom,
 }: {
   columns: ColumnConfig[];
-  data: Record<string, any>[];
+  data: Record<string, string | number>[];
   countFrom?: number;
 }) {
-  var countRow = countFrom || 0;
+  const countRow = countFrom || 0;
   return (
     <View style={styles.table}>
       <View style={styles.tableRow}>

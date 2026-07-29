@@ -29,7 +29,7 @@ export default function ReportPDF({
     []
   );
   const [paginatedQueryResults, setPaginatedQueryResults] = useState<
-    Record<string, any>[]
+    { queryResult: Result[] }[]
   >([]);
 
   const username = jobData.username;
@@ -58,7 +58,7 @@ export default function ReportPDF({
       setPaginatedLabResults(paginatedLabResults);
     }
 
-    const paginatedQueryResults: Record<string, any>[] = [];
+    const paginatedQueryResults: { queryResult: Result[] }[] = [];
     if (queryResultData) {
       for (let i = 0; i < queryResultData.length; i += queryResultPerPage) {
         paginatedQueryResults.push({
@@ -82,7 +82,7 @@ export default function ReportPDF({
       setPaginatedQueryResults(paginatedQueryResults);
     }
 
-    var pageCount = 1;
+    let pageCount = 1;
     if (jobData.lab_result.scores && jobData.lab_result.scores.length > 0) {
       pageCount += paginatedLabResults.length;
     }

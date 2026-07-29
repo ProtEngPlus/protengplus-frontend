@@ -168,7 +168,7 @@ export default function JobDetailPage() {
               <div className="flex space-x-8 items-center">
                 <JobRunTypeIcon
                   onClick={() => {
-                    job.state !== "FAILED" && handleRunJob();
+                    if (job.state !== "FAILED") handleRunJob();
                   }}
                   runType={job.run_type}
                   state={job.state}
@@ -214,7 +214,7 @@ export default function JobDetailPage() {
                       : "text-pep-gray-border cursor-not-allowed"
                   }`}
                   onClick={() => {
-                    job.state === "FAILED" && handleRunJob();
+                    if (job.state === "FAILED") handleRunJob();
                   }}
                 />
                 <Icon
