@@ -26,8 +26,11 @@ export const get = async <T>(
     }
 
     return res;
-  } catch (error: any) {
-    return error.response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data;
+    }
+    throw error;
   }
 };
 
@@ -46,8 +49,11 @@ export const getRaw = async (
 
     const res = axios_response.data as Blob;
     return res;
-  } catch (error: any) {
-    return error.response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data;
+    }
+    throw error;
   }
 };
 

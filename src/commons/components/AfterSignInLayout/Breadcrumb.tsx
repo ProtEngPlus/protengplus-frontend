@@ -19,7 +19,7 @@ export default function Breadcrumb() {
     const jobDetailIndex = pathNameArray.indexOf("job-detail");
     if (jobDetailIndex !== -1 && pathNameArray[jobDetailIndex + 1]) {
       const jobId = pathNameArray[jobDetailIndex + 1];
-      getJob(jobId).then((data: any) => {
+      getJob(jobId).then((data) => {
         if (data?.data?.name) {
           setJobName(data.data.name);
         }
@@ -27,18 +27,21 @@ export default function Breadcrumb() {
     }
   }, [pathNameArray]);
 
-  const pathArray = pathNameArray.reduce((acc, path) => {
-    const newPath =
-      acc.length > 0 ? acc[acc.length - 1]?.path + "/" + path : "/" + path;
+  const pathArray = pathNameArray.reduce(
+    (acc, path) => {
+      const newPath =
+        acc.length > 0 ? acc[acc.length - 1]?.path + "/" + path : "/" + path;
 
-    if (path === "job-detail" && jobName) {
-      acc.push({ name: jobName, path: newPath });
-    } else if (nameMapping[path]) {
-      acc.push({ name: nameMapping[path] || path, path: newPath });
-    }
+      if (path === "job-detail" && jobName) {
+        acc.push({ name: jobName, path: newPath });
+      } else if (nameMapping[path]) {
+        acc.push({ name: nameMapping[path] || path, path: newPath });
+      }
 
-    return acc;
-  }, [] as { name: string; path: string }[]);
+      return acc;
+    },
+    [] as { name: string; path: string }[],
+  );
 
   return (
     <nav className="w-full  text-black whitespace-nowrap">

@@ -45,7 +45,7 @@ export default function CreateJobWithConfig({
           setJobConfigs(data.data);
         }
       } catch (err) {
-        console.log("Failed to load configurations.");
+        console.log("Failed to load configurations: ", err);
       } finally {
         setLoading(false);
       }

@@ -3,8 +3,9 @@ import {
   getReportQueryResults,
 } from "../../../commons/api/queryResult";
 import { QueryResultSearchParams } from "../../../commons/interfaces/QueryResult.interface";
+import { FieldValues } from "react-hook-form";
 
-export async function DownloadQueryResult(formData: any, job_id: string) {
+export async function DownloadQueryResult(formData: FieldValues, job_id: string) {
   try {
     const params: QueryResultSearchParams = { job_id };
     const today = new Date().toISOString().split("T")[0];
