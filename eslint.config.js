@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import globals from "globals";
+import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
@@ -10,9 +11,7 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
-      "plugin:@typescript-eslint/recommended-type-checked",
-      "plugin:@typescript-eslint/strict-type-checked",
-      "plugin:react/jsx-runtime",
+      react.configs.flat["jsx-runtime"],
     ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
@@ -29,12 +28,6 @@ export default tseslint.config(
         "warn",
         { allowConstantExport: true },
       ],
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        project: ["./tsconfig.json", "./tsconfig.node.json"],
-        tsconfigRootDir: __dirname,
-      },
     },
   }
 );
