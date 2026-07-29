@@ -37,3 +37,13 @@ Breaking changes: add `!` after type/scope (`feat!: ...`) or a `BREAKING CHANGE:
 ## Pull requests
 
 Use the PR template. Keep PRs scoped to one concern where possible. Squash-merge or use a clean merge commit — avoid merge-commit noise from repeatedly merging `dev` back into a long-lived feature branch.
+
+## Pre-commit hooks
+
+This repo uses [husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/okonet/lint-staged) (installed automatically by `npm install`, see [SETUP.md](./SETUP.md)):
+
+- **pre-commit**: `eslint --fix` on staged `.js/.jsx/.ts/.tsx` files
+- **pre-push**: `npm run build` (catches type errors before pushing)
+- **commit-msg**: `commitlint` rejects commits that don't follow the Conventional Commits format above
+
+Run lint manually against everything: `npm run lint:fix`
