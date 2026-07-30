@@ -33,3 +33,7 @@ Type errors are caught separately by `npm run build` (also what runs on `git pus
 ## Pre-commit hooks
 
 Installed automatically by `npm install` via [husky](https://typicode.github.io/husky/) + lint-staged. See [CONTRIBUTING.md](./CONTRIBUTING.md) for what runs on commit vs. push vs. commit-msg.
+
+## API docs
+
+This app only talks to proteng-bff (`VITE_BACKEND_BASE_URL`) — API docs live on bff's Swagger UI: `http://localhost:8080/swagger/index.html` (see `proteng-bff/SETUP.md`).
