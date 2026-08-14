@@ -117,7 +117,7 @@ export default function UploadLabInput({
             }
           );
 
-          const fileData = results.data.map((line: any) => {
+          const fileData = results.data.map((line) => {
             return { sequence: line[0].trim(), score: Number(line[1]) };
           });
 

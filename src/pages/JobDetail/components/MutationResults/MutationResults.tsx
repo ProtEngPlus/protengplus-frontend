@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CreateMutationInterface, MutationInterface, MutationHistogram, MutationSearchParams } from "../../../../commons/interfaces/Mutation.interface";
+import { OptionValue } from "../../../../commons/interfaces/Job.interface";
 import { createMutation, deleteMutation, getAllMutations, getMutationHistogram, runMutation } from "../../../../commons/api/mutation";
 import FitnessDistributionChartData from "./FitnessDistributionChart";
 import Button from "../../../../commons/components/Button/Button";
@@ -53,7 +54,7 @@ export default function MutationResults({
 
             try {
                 const data = watch();
-                const options = {} as Record<string, any>;
+                const options = {} as Record<string, OptionValue>;
 
                 const { method, subMethod }: { method: string; subMethod: string } =
                     pipeline[currentStep];
@@ -228,7 +229,7 @@ export default function MutationResults({
                                                 : "text-pep-gray-border cursor-not-allowed"
                                                 }`}
                                             onClick={() => {
-                                                currentMutation.state === "FAILED" && handleRunMutation(currentMutation);
+                                                if (currentMutation.state === "FAILED") handleRunMutation(currentMutation);
                                             }}
                                         />
                                         <Icon

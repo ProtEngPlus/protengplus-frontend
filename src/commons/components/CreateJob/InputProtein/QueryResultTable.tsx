@@ -88,7 +88,7 @@ export default function QueryResultTable({
   const watchedValues = searchParams.reduce((acc, param) => {
     acc[param] = watch(param) ?? undefined;
     return acc;
-  }, {} as Record<string, any>);
+  }, {} as Record<string, string | number | undefined>);
 
   // reset value to default (use in first time & click reset button from filter modal)
   const resetQueryOption = () => {
@@ -159,13 +159,13 @@ export default function QueryResultTable({
   const [isFilterVisible, setFilterVisible] = useState(false);
   const filterOverlayProps: FilterOverlayProps = {
     organismList,
-    organisms: watchedValues["organisms"],
-    percentIdentityFrom: watchedValues["percentIdentityFrom"],
-    percentIdentityTo: watchedValues["percentIdentityTo"],
-    eValuesFrom: watchedValues["eValuesFrom"],
-    eValuesTo: watchedValues["eValuesTo"],
-    queryCoverFrom: watchedValues["queryCoverFrom"],
-    queryCoverTo: watchedValues["queryCoverTo"],
+    organisms: watchedValues["organisms"] as string | undefined,
+    percentIdentityFrom: watchedValues["percentIdentityFrom"] as number | undefined,
+    percentIdentityTo: watchedValues["percentIdentityTo"] as number | undefined,
+    eValuesFrom: watchedValues["eValuesFrom"] as number | undefined,
+    eValuesTo: watchedValues["eValuesTo"] as number | undefined,
+    queryCoverFrom: watchedValues["queryCoverFrom"] as number | undefined,
+    queryCoverTo: watchedValues["queryCoverTo"] as number | undefined,
     onConfirm: () => setFilterVisible(false),
     onClose: () => setFilterVisible(false),
     onReset: () => {

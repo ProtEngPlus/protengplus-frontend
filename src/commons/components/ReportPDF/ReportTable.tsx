@@ -1,22 +1,23 @@
 import { Text, View } from "@react-pdf/renderer";
+import { Style } from "@react-pdf/types";
 import { ReportStyles as styles } from "./ReportStyle";
 
 export type ColumnConfig = {
   title: string;
   dataKey: string;
-  styleCol?: Record<string, any>;
+  styleCol?: Style;
 };
 
-export default function Table({
+export default function Table<T extends object>({
   columns,
   data,
   countFrom,
 }: {
   columns: ColumnConfig[];
-  data: Record<string, any>[];
+  data: T[];
   countFrom?: number;
 }) {
-  var countRow = countFrom || 0;
+  const countRow = countFrom || 0;
   return (
     <View style={styles.table}>
       <View style={styles.tableRow}>
@@ -34,22 +35,27 @@ export default function Table({
         ))}
       </View>
 
-      {data.map((row, index) => (
-        <View style={styles.tableRow} key={row.id || index}>
-          {columns.map((col) => (
-            <Text
-              key={col.dataKey}
-              style={
-                col.styleCol
-                  ? [styles.tableCell, col.styleCol]
-                  : styles.tableCell
-              }
-            >
-              {col.dataKey === "index" ? countRow + index + 1 : row[col.dataKey]}
-            </Text>
-          ))}
-        </View>
-      ))}
+      {data.map((row, index) => {
+        const rowValues = row as Record<string, string | number>;
+        return (
+          <View style={styles.tableRow} key={rowValues.id ?? index}>
+            {columns.map((col) => (
+              <Text
+                key={col.dataKey}
+                style={
+                  col.styleCol
+                    ? [styles.tableCell, col.styleCol]
+                    : styles.tableCell
+                }
+              >
+                {col.dataKey === "index"
+                  ? countRow + index + 1
+                  : rowValues[col.dataKey]}
+              </Text>
+            ))}
+          </View>
+        );
+      })}
     </View>
   );
 }

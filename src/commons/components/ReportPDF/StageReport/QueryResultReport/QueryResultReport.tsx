@@ -1,7 +1,8 @@
 import { Text, View } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "../../ReportStyle";
 import InfoBox from "../../ReportInfoBox";
-import Table from "../../ReportTable";
+import Table, { ColumnConfig } from "../../ReportTable";
+import { Result } from "../../../../interfaces/QueryResult.interface";
 
 export default function QueryResultReport({
   queryResult,
@@ -9,12 +10,12 @@ export default function QueryResultReport({
   totalCount,
   tool
 }: {
-  queryResult: Record<string, any>[];
+  queryResult: Result[];
   countFrom?: number;
   totalCount: number;
   tool: string;
 }) {
-  const queryResultColConfig = [
+  const queryResultColConfig: ColumnConfig[] = [
     {
       title: "",
       dataKey: "index",

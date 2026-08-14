@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           navigate("/sign-in");
           return;
         }
-        const { access_token, ...userData } = response.data;
+        const { access_token: _access_token, ...userData } = response.data;
         setUser(userData as User);
         sessionStorage.setItem("user", JSON.stringify(userData));
       })

@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "../../ReportStyle";
 import InfoBox from "../../ReportInfoBox";
-import Table from "../../ReportTable";
+import Table, { ColumnConfig } from "../../ReportTable";
 
 function convertLabResultToUploadData(labResult: {
   scores: number[];
@@ -29,7 +29,7 @@ export default function UploadLabResultReport({
 }) {
   const uploadLabResultData = convertLabResultToUploadData(labResult);
 
-  const uploadLabResultColConfig = [
+  const uploadLabResultColConfig: ColumnConfig[] = [
     {
       title: "",
       dataKey: "index",
