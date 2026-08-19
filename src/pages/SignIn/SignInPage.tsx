@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { useAuth } from "../../commons/hooks/useAuth";
 import { sendVerification } from "../../commons/api/auth";
+import { ENVIRONMENT } from "../../commons/configs/envConfig";
 import axios from "axios";
 
 type FormValues = {
@@ -105,6 +106,12 @@ export default function SignInPage() {
             </a>
           </label>
         </div>
+
+        {ENVIRONMENT !== "production" && (
+          <p className="text-center pt-6 text-lg text-gray-400">
+            Environment: {ENVIRONMENT}
+          </p>
+        )}
       </div>
     </div>
   );
