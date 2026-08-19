@@ -1,5 +1,13 @@
 import { Text, View } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "./ReportStyle";
+import { OptionValue } from "../../interfaces/Job.interface";
+
+export const renderOptionText = (value: OptionValue): string | number => {
+  if (value === undefined) return "-";
+  if (Array.isArray(value)) return value.join(", ");
+  if (typeof value === "boolean") return value ? "true" : "false";
+  return value;
+};
 
 export default function InfoBox({
   label,
@@ -8,7 +16,7 @@ export default function InfoBox({
   limit,
 }: {
   label: string;
-  text: string;
+  text: string | number;
   isSmall?: boolean;
   limit?: number;
 }) {

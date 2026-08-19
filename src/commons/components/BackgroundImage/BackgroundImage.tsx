@@ -1,6 +1,11 @@
+import { ReactNode } from "react";
 import defaultBg from "../../../assets/images/defaultBg.svg";
 
-export default function BackgroundImage({ children }: { children?: any }) {
+export default function BackgroundImage({
+  children,
+}: {
+  children?: ReactNode;
+}) {
   return (
     <div
       className="relative w-full min-h-screen bg-cover bg-black bg-center bg-no-repeat overflow-x-hidden"

@@ -25,9 +25,11 @@ export default function InputFields({
 }) {
   const { watch } = useFormContext();
 
-  if (!jobConfig || !Array.isArray(jobConfig.parameters)) return null;
+  const isValidConfig = !!jobConfig && Array.isArray(jobConfig.parameters);
 
   useEffect(() => {
+    if (!isValidConfig) return;
+
     let isChange = false;
     jobConfig.parameters.forEach((param) => {
       const currentValue = watch(param.id);
@@ -39,7 +41,9 @@ export default function InputFields({
     });
 
     setIsChange(isChange);
-  }, [watch, jobConfig.parameters]);
+  }, [watch, isValidConfig, jobConfig.parameters]);
+
+  if (!isValidConfig) return null;
 
   const getFieldValue = (value: MethodParameter) => {
     if (value.type === "rangeNumber") {

@@ -19,7 +19,7 @@ import {
   generateInitialJob,
   generateInitialJobConfig,
 } from "./services/CreateJobConfig";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import CreateJobWithConfig from "./component/CreateJobOption/CreateJobWithConfig";
 import CreateJob from "./component/CreateJobOption/CreateJob";
 import Stepper from "../../commons/components/CreateJob/Stepper/Stepper";
@@ -136,7 +136,7 @@ export default function CreateJobPage() {
       const meta = [] as string[];
 
       handleSubmit(
-        (data: any) => {
+        (data: FieldValues) => {
           try {
             // Update jobDetail
             const newJobDetail: CreateJobDetail = {

@@ -100,8 +100,10 @@ export function ManualInput({
     const lines = inputManual.trim().split("\n");
 
     // Map each line into an object with sequence and score
-    const newData = lines.map((line: any) => {
-      const [sequence, score] = line.split(",").map((item: any) => item.trim());
+    const newData = lines.map((line: string) => {
+      const [sequence, score] = line
+        .split(",")
+        .map((item: string) => item.trim());
       return { sequence, score: parseFloat(score) };
     });
 

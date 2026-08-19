@@ -1,7 +1,7 @@
 import Button from "../Button/Button";
 import { Modal } from "flowbite";
 import type { ModalOptions, ModalInterface } from "flowbite";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import deleteIcon from "../../../assets/images/ModalOverlay/deleteIcon.png";
 
 export type DeleteOverlayProps = {
@@ -9,7 +9,7 @@ export type DeleteOverlayProps = {
   onClose: () => void;
   onDelete: () => void;
   title: string;
-  children?: any;
+  children?: ReactNode;
 };
 
 export function DeleteOverlay({

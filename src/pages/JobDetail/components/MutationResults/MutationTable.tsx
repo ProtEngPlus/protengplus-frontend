@@ -152,7 +152,7 @@ export default function MutationTable({
                                                         : "text-pep-gray-border cursor-not-allowed"
                                                         }`}
                                                     onClick={() => {
-                                                        mutation.state === "FAILED" && handleRunMutation(mutation);
+                                                        if (mutation.state === "FAILED") handleRunMutation(mutation);
                                                     }}
                                                 />
                                                 <Icon

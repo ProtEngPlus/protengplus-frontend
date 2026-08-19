@@ -1,6 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "../../ReportStyle";
-import InfoBox from "../../ReportInfoBox";
+import InfoBox, { renderOptionText } from "../../ReportInfoBox";
+import { OptionValue } from "../../../../interfaces/Job.interface";
 
 export default function MutationReport({
   tool,
@@ -8,15 +9,15 @@ export default function MutationReport({
   runTime,
 }: {
   tool: string;
-  option: Record<string, any>;
+  option: Record<string, OptionValue>;
   runTime: string;
 }) {
   const Mcmc = () => (
     <View>
-      <InfoBox label={"Number Of Trajectories"} text={option.num_trajectories || "-" } />
-      <InfoBox label={"Number Of Iteration"} text={option.num_iterations || "-" } />
-      <InfoBox label={"Mutation Position Range"} text={option.mutate_pos_range || "-" } />
-      <InfoBox label={"Temperature"} text={option.temperature || "-" } />
+      <InfoBox label={"Number Of Trajectories"} text={renderOptionText(option.num_trajectories)} />
+      <InfoBox label={"Number Of Iteration"} text={renderOptionText(option.num_iterations)} />
+      <InfoBox label={"Mutation Position Range"} text={renderOptionText(option.mutate_pos_range)} />
+      <InfoBox label={"Temperature"} text={renderOptionText(option.temperature)} />
     </View>
   );
 

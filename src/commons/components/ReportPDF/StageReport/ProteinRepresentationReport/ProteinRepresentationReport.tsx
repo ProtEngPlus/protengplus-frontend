@@ -1,6 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "../../ReportStyle";
-import InfoBox from "../../ReportInfoBox";
+import InfoBox, { renderOptionText } from "../../ReportInfoBox";
+import { OptionValue } from "../../../../interfaces/Job.interface";
 
 export default function ProteinRepresentationReport({
   tool,
@@ -8,22 +9,22 @@ export default function ProteinRepresentationReport({
   runTime,
 }: {
   tool: string;
-  option: Record<string, any>;
+  option: Record<string, OptionValue>;
   runTime: string;
 }) {
   const Unirep = () => (
     <View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"N Trial"} text={option.n_trials || "-" } limit={185} />
-        <InfoBox label={"N Split"} text={option.n_splits || "-" } limit={185} />
+        <InfoBox label={"N Trial"} text={renderOptionText(option.n_trials)} limit={185} />
+        <InfoBox label={"N Split"} text={renderOptionText(option.n_splits)} limit={185} />
       </View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"N Epoch - low"} text={option.n_epochs_config_low || "-" } limit={185} />
-        <InfoBox label={"N Epoch - high"} text={option.n_epochs_config_high || "-" } limit={185} />
+        <InfoBox label={"N Epoch - low"} text={renderOptionText(option.n_epochs_config_low)} limit={185} />
+        <InfoBox label={"N Epoch - high"} text={renderOptionText(option.n_epochs_config_high)} limit={185} />
       </View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"Learning Rate - low"} text={option.learning_rate_config_low || "-" } limit={185} />
-        <InfoBox label={"Learning Rate - high"} text={option.learning_rate_config_high || "-" } limit={185} />
+        <InfoBox label={"Learning Rate - low"} text={renderOptionText(option.learning_rate_config_low)} limit={185} />
+        <InfoBox label={"Learning Rate - high"} text={renderOptionText(option.learning_rate_config_high)} limit={185} />
       </View>
     </View>
   );
@@ -31,10 +32,10 @@ export default function ProteinRepresentationReport({
   const ESM = () => (
     <View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"Weight Decay"} text={option.weight_decay || "-" } limit={185} />
+        <InfoBox label={"Weight Decay"} text={renderOptionText(option.weight_decay)} limit={185} />
       </View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"N Epoch Config"} text={option.n_epochs_config || "-" } limit={185} />
+        <InfoBox label={"N Epoch Config"} text={renderOptionText(option.n_epochs_config)} limit={185} />
       </View>
     </View>
   );

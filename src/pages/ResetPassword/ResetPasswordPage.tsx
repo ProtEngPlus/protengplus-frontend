@@ -19,7 +19,6 @@ export default function ResetPasswordPage() {
   const token = params.get("token");
 
   const onSubmit = handleSubmit(async (data) => {
-    data.new_password;
     try {
       await resetPassword(data.new_password, token!);
       navigate("/sign-in");

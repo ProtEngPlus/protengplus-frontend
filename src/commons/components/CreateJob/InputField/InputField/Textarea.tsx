@@ -60,7 +60,7 @@ export default function Textarea({
               </span>
             )}
             {maxLength && (
-              <span className={`text-${!!errors[id] ? "error" : "black"}`}>
+              <span className={`text-${errors[id] ? "error" : "black"}`}>
                 {textareaValue.length}/{maxLength}
               </span>
             )}

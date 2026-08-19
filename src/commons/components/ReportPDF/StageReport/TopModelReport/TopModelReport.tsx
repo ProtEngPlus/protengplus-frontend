@@ -1,6 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { ReportStyles as styles } from "../../ReportStyle";
-import InfoBox from "../../ReportInfoBox";
+import InfoBox, { renderOptionText } from "../../ReportInfoBox";
+import { OptionValue } from "../../../../interfaces/Job.interface";
 
 export default function TopModelReport({
   tool,
@@ -8,14 +9,14 @@ export default function TopModelReport({
   runTime,
 }: {
   tool: string;
-  option: Record<string, any>;
+  option: Record<string, OptionValue>;
   runTime: string;
 }) {
   const Ridgecv = () => (
     <View>
-      <InfoBox label={"Training Batch Size"} text={option.train_batch_sizes ? option.train_batch_sizes.join(", ") : "-" } />
-      <InfoBox label={"N Batch"} text={option.n_batch || "-" } />
-      <InfoBox label={"Alpha"} text={option.alpha || "-" } />
+      <InfoBox label={"Training Batch Size"} text={renderOptionText(option.train_batch_sizes)} />
+      <InfoBox label={"N Batch"} text={renderOptionText(option.n_batch)} />
+      <InfoBox label={"Alpha"} text={renderOptionText(option.alpha)} />
     </View>
   );
 
