@@ -5,7 +5,7 @@ import InfoBox from "../../ReportInfoBox";
 export default function GeneralInfo({
   jobName,
   jobDescription,
-  totalTime
+  totalTime,
 }: {
   jobName: string;
   jobDescription: string;

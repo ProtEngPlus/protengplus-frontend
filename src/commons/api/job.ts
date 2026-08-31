@@ -43,7 +43,7 @@ export const getUniProtId = async (uniProtId: string) => {
 
 export const updateJobDetail = async (
   id: string,
-  updateData: Partial<JobInterface>
+  updateData: Partial<JobInterface>,
 ) => {
   const path = JOB_PATH + `/${id}`;
   return await put<JobInterface>(path, updateData, true);

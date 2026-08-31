@@ -35,7 +35,7 @@ export function generateInitialJob(): JobOption {
 
 export function generateInitialJobConfig(
   jobConfig: JobConfiguration,
-  stepConfig: number
+  stepConfig: number,
 ): {
   initialJobOption: JobOption;
   initialJobDetail: CreateJobDetail;

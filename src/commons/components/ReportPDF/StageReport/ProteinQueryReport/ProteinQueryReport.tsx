@@ -17,7 +17,12 @@ export default function ProteinQueryReport({
   const Blast = () => (
     <View>
       <View style={styles.inlineInfoBox}>
-        <InfoBox label={"Program"} text={renderOptionText(option.program)} isSmall limit={145} />
+        <InfoBox
+          label={"Program"}
+          text={renderOptionText(option.program)}
+          isSmall
+          limit={145}
+        />
         <InfoBox
           label={"Database"}
           text={renderOptionText(option.database)}
@@ -32,7 +37,12 @@ export default function ProteinQueryReport({
           isSmall
           limit={145}
         />
-        <InfoBox label={"E Value"} text={renderOptionText(option.expect)} isSmall limit={145} />
+        <InfoBox
+          label={"E Value"}
+          text={renderOptionText(option.expect)}
+          isSmall
+          limit={145}
+        />
         <InfoBox
           label={"Sequence Length"}
           text={renderOptionText(option.seq_length)}
@@ -138,9 +148,13 @@ export default function ProteinQueryReport({
         </View>
       </View>
       <View>
-        <InfoBox label={"Tool"} text={tool || "-"} isSmall={tool === 'blast'} />
+        <InfoBox label={"Tool"} text={tool || "-"} isSmall={tool === "blast"} />
         <ToolSelection />
-        <InfoBox label={"Input Protein"} text={inputProtein || "-"} isSmall={tool === 'blast'} />
+        <InfoBox
+          label={"Input Protein"}
+          text={inputProtein || "-"}
+          isSmall={tool === "blast"}
+        />
       </View>
     </View>
   );

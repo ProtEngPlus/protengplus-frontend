@@ -80,7 +80,7 @@ export default function Mutation({
             label="Tool"
             defaultValue={currentSubMethod}
             options={Object.keys(
-              createJobConfig[Steps[currentStep]]?.tool ?? {}
+              createJobConfig[Steps[currentStep]]?.tool ?? {},
             )}
             onEdit={isEdit}
             disabled={disable}

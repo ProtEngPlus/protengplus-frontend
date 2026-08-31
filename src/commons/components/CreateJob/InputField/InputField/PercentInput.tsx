@@ -44,7 +44,7 @@ export default function PercentInput({
   })();
 
   const [localValue, setLocalValue] = useState<string>(
-    `${currentValue.toFixed(2)}%`
+    `${currentValue.toFixed(2)}%`,
   );
 
   // format value
@@ -134,11 +134,12 @@ export default function PercentInput({
   return (
     <div
       className={`
-        ${formatInput === 1
-          ? "grid grid-cols-2 w-[22%] place-items-start"
-          : formatInput === 2
-            ? "flex flex-row justify-between max-w-[1000px]"
-            : "grid grid-cols-[1fr,4fr] max-w-[1000px]"
+        ${
+          formatInput === 1
+            ? "grid grid-cols-2 w-[22%] place-items-start"
+            : formatInput === 2
+              ? "flex flex-row justify-between max-w-[1000px]"
+              : "grid grid-cols-[1fr,4fr] max-w-[1000px]"
         }
          min-w-fit space-x-3 items-center`}
     >
@@ -166,7 +167,7 @@ export default function PercentInput({
                 "border-error": !!errors[id],
                 "border-gray-border": !errors[id],
               },
-              className
+              className,
             )}
             disabled={disabled}
             autoComplete="off"

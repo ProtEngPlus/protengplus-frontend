@@ -43,7 +43,6 @@ export default function ResetPasswordPage() {
             className="space-y-5"
             noValidate
           >
-           
             <PasswordInput
               id="new_password"
               placeholder="New Password"

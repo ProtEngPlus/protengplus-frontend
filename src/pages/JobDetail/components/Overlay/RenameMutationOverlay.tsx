@@ -40,9 +40,7 @@ export function RenameMutationOverlay({
                 alt="edit"
                 className="text-pep-gray size-8 min-w-8"
               />
-              <span className="text-2xl text-pep-dark-gray">
-                Rename
-              </span>
+              <span className="text-2xl text-pep-dark-gray">Rename</span>
             </div>
 
             <div className="bg-white rounded-lg p-8 gap-x-3 gap-y-4 font-light text-start">

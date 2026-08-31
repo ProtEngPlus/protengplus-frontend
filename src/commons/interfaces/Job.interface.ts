@@ -18,12 +18,7 @@ export type LabResult = {
 };
 
 export type OptionValue =
-  | string
-  | string[]
-  | number
-  | number[]
-  | boolean
-  | undefined;
+  string | string[] | number | number[] | boolean | undefined;
 
 export interface JobInterface {
   id: string;

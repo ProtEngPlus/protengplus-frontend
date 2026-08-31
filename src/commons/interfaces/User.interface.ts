@@ -2,10 +2,7 @@
 export type Role = "admin" | "user" | "staff";
 
 export type UserRole =
-  | "researcher"
-  | "researcher_assistant"
-  | "lab_manager"
-  | "lab_technician";
+  "researcher" | "researcher_assistant" | "lab_manager" | "lab_technician";
 
 export const userRoleMapper: Record<UserRole, string> = {
   researcher: "Researcher",

@@ -123,7 +123,7 @@ export default function UploadLabInput({
                 complete: resolve,
                 error: reject,
               });
-            }
+            },
           );
 
           const fileData = results.data.map((line) => {

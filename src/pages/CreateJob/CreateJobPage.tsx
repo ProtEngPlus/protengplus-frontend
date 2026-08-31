@@ -51,7 +51,7 @@ export default function CreateJobPage() {
   const [step, setStep] = useState(0);
   const [pipeline, setPipeline] = useState<PipelineItem[]>(defaultPipeline);
   const [jobDetail, setJobDetail] = useState<CreateJobDetail>(
-    defaultCreateJobDetail
+    defaultCreateJobDetail,
   );
   const [jobOption, setJobOption] = useState<JobOption>(generateInitialJob());
   const [queryResult, setQueryResult] = useState<QueryResult>(); // for adding query result in create job request body
@@ -168,8 +168,9 @@ export default function CreateJobPage() {
                   newJobOption[subMethod.toLowerCase()][`${param.id}_high`] =
                     Number(data[`${param.id}_high`]);
                 } else if (param.id === "cov_mode") {
-                  newJobOption[subMethod.toLowerCase()][param.id] =
-                    Number(data[param.id]);
+                  newJobOption[subMethod.toLowerCase()][param.id] = Number(
+                    data[param.id],
+                  );
                 } else {
                   newJobOption[subMethod.toLowerCase()][param.id] =
                     data[param.id];
@@ -184,7 +185,7 @@ export default function CreateJobPage() {
         },
         (errors) => {
           reject(errors);
-        }
+        },
       )();
     });
   };
@@ -207,7 +208,7 @@ export default function CreateJobPage() {
           acc.total++;
           return acc;
         },
-        { total: 0, sequences: [] as string[], scores: [] as number[] }
+        { total: 0, sequences: [] as string[], scores: [] as number[] },
       );
 
       const newJob: CreateJobInterface = {

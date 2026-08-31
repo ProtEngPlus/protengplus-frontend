@@ -76,11 +76,11 @@ export default function SelectInput({
   }, []);
 
   return (
-    <div className={`
-      ${formatInput === 2
-        ? "w-24 text-start"
-        : "w-full"}
-       relative custom-select`}>
+    <div
+      className={`
+      ${formatInput === 2 ? "w-24 text-start" : "w-full"}
+       relative custom-select`}
+    >
       {!onEdit ? (
         <div>{currentValue}</div>
       ) : (
@@ -97,7 +97,7 @@ export default function SelectInput({
                   disabled,
                 "h-10 pt-1.5 pr-1.5": formatInput === 2,
               },
-              className
+              className,
             )}
             onClick={() => !disabled && setIsOpen((prev) => !prev)}
           >
@@ -106,8 +106,8 @@ export default function SelectInput({
                 disabled
                   ? "text-label"
                   : options.find((option) => option.value === currentValue)
-                  ? "text-black"
-                  : "text-placeholder"
+                    ? "text-black"
+                    : "text-placeholder"
               }`}
             >
               {options.find((option) => option.value === currentValue)?.label ||
@@ -127,7 +127,7 @@ export default function SelectInput({
               data-testid={`${id}-list`}
               className={clsx(
                 "mt-2 absolute w-full bg-white rounded-md shadow-dropShadow z-10 py-2",
-                className
+                className,
               )}
             >
               {options.map((option) => (
@@ -135,7 +135,7 @@ export default function SelectInput({
                   key={option.value}
                   className={clsx(
                     "px-5 py-2 font-light text-label hover:text-pep-blue hover:bg-blue-50 focus:bg-blue-100 cursor-pointer",
-                    className
+                    className,
                   )}
                   onClick={() => handleOptionClick(option.value)}
                 >

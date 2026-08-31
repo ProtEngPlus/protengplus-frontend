@@ -145,7 +145,7 @@ export default function ProteinQuery({
             label="Tool"
             defaultValue={currentSubMethod}
             options={Object.keys(
-              createJobConfig[stepsForCreateJob[step - 1]]?.tool ?? {}
+              createJobConfig[stepsForCreateJob[step - 1]]?.tool ?? {},
             )}
             onEdit={isEditOption}
             disabled={initialStep > step}
@@ -174,7 +174,7 @@ export default function ProteinQuery({
           <InputFields
             jobConfig={jobConfig}
             jobValue={getValues(
-              `${stepsForCreateJob[step - 1]}.${currentSubMethod}`
+              `${stepsForCreateJob[step - 1]}.${currentSubMethod}`,
             )}
             isEdit={isEditOption}
             disable={initialStep > step}

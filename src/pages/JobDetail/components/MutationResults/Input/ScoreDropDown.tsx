@@ -14,7 +14,7 @@ export default function ScoreDropDown({
     e.preventDefault();
     const newValue = Math.max(
       -2,
-      Math.min(2, Math.round((value + delta) * 10) / 10)
+      Math.min(2, Math.round((value + delta) * 10) / 10),
     );
     setValue(newValue);
     setInputValue(String(newValue));

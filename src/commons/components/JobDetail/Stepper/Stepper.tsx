@@ -60,13 +60,15 @@ export default function Stepper({
         {Steps.map((step, index) => (
           <li
             key={index}
-            className={`${index < Steps.length - 1
-              ? "flex w-full relative text-black after:content-[''] after:w-full after:h-0.5 after:inline-block after:absolute lg:after:top-5 after:top-3 after:left-10"
-              : "flex relative text-gray-900"
-              } ${index < currentStep
+            className={`${
+              index < Steps.length - 1
+                ? "flex w-full relative text-black after:content-[''] after:w-full after:h-0.5 after:inline-block after:absolute lg:after:top-5 after:top-3 after:left-10"
+                : "flex relative text-gray-900"
+            } ${
+              index < currentStep
                 ? "after:bg-pep-blue"
                 : "after:bg-pep-gray-border"
-              }`}
+            }`}
           >
             <div className="block whitespace-nowrap z-10">
               <span

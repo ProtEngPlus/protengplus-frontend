@@ -21,7 +21,7 @@ export default function AccountManagementPage() {
           targetEl: document.querySelector("#subscription-content"),
         },
       ].filter(
-        (item) => item.triggerEl !== null && item.targetEl !== null
+        (item) => item.triggerEl !== null && item.targetEl !== null,
       ) as TabItem[];
 
       const options: TabsOptions = {

@@ -27,8 +27,8 @@ export default function Stepper({
                   i < step - 1
                     ? "bg-pep-blue text-white border-transparent cursor-pointer"
                     : i === step - 1
-                    ? "bg-white border-pep-blue text-pep-blue"
-                    : "bg-white border-pep-gray-border text-black"
+                      ? "bg-white border-pep-blue text-pep-blue"
+                      : "bg-white border-pep-gray-border text-black"
                 }`}
                 onClick={() => step > i && changeStep(i + 1)}
               >

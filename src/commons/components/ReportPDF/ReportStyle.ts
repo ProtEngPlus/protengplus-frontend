@@ -44,7 +44,7 @@ export const ReportStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     gap: "16px",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   labelText: {
     width: "130px",
@@ -89,7 +89,7 @@ export const ReportStyles = StyleSheet.create({
     width: "100%",
     border: "1px solid black",
     fontSize: "12px",
-    marginTop: "20px"
+    marginTop: "20px",
   },
   tableRow: {
     flexDirection: "row",

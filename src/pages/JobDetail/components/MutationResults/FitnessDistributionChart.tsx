@@ -4,16 +4,16 @@ import ReactApexChart from "react-apexcharts";
 import { MutationHistogram } from "../../../../commons/interfaces/Mutation.interface";
 
 export default function FitnessDistributionChartData({
-    chartLabels,
-    chartSeries,
-    isShowLegend = true,
+  chartLabels,
+  chartSeries,
+  isShowLegend = true,
 }: {
-    chartLabels: string[];
-    chartSeries: MutationHistogram[];
-    isShowLegend?: boolean;
+  chartLabels: string[];
+  chartSeries: MutationHistogram[];
+  isShowLegend?: boolean;
 }) {
-    const style = document.createElement("style");
-    style.innerHTML = `
+  const style = document.createElement("style");
+  style.innerHTML = `
         .apexcharts-xaxis-label {
         display: none;
         }
@@ -21,110 +21,117 @@ export default function FitnessDistributionChartData({
         display: revert;
         }
     `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
 
-    const [series, setSeries] = useState<MutationHistogram[]>([]);
-    const numberOfDataPoints = chartSeries.reduce((acc, series) => acc + series.data.reduce((sum, value) => sum + value, 0), 0);
+  const [series, setSeries] = useState<MutationHistogram[]>([]);
+  const numberOfDataPoints = chartSeries.reduce(
+    (acc, series) => acc + series.data.reduce((sum, value) => sum + value, 0),
+    0,
+  );
 
-    const [options, setOptions] = useState<ApexOptions>({
-        chart: {
-            type: "bar",
-            stacked: true,
-            toolbar: {
-                show: false,
-            },
-            zoom: {
-                enabled: false,
-            },
+  const [options, setOptions] = useState<ApexOptions>({
+    chart: {
+      type: "bar",
+      stacked: true,
+      toolbar: {
+        show: false,
+      },
+      zoom: {
+        enabled: false,
+      },
+    },
+    colors: ["#2578D3", "#76C280", "#F58634"],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        borderRadius: 0,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    grid: {
+      borderColor: "#F1F1F1",
+      strokeDashArray: 3,
+      xaxis: {
+        lines: {
+          show: false,
         },
-        colors: ["#2578D3", "#76C280", "#F58634"],
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                borderRadius: 0,
-            },
+      },
+      yaxis: {
+        lines: {
+          show: true,
         },
-        dataLabels: {
-            enabled: false,
-        },
-        grid: {
-            borderColor: '#F1F1F1',
-            strokeDashArray: 3,
-            xaxis: {
-                lines: {
-                    show: false,
+      },
+    },
+    legend: {
+      show: isShowLegend,
+      position: "bottom",
+      fontSize: "12px",
+      fontWeight: 600,
+      horizontalAlign: "left",
+      markers: {
+        size: 5,
+        shape: "circle",
+        strokeWidth: 1,
+      },
+    },
+    fill: {
+      opacity: 1,
+    },
+    yaxis: {
+      axisBorder: {
+        show: true,
+      },
+      title: {
+        text: "Count",
+      },
+    },
+  });
 
-                }
-            },
-            yaxis: {
-                lines: {
-                    show: true,
-                }
-            },
+  useEffect(() => {
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      xaxis: {
+        type: "category",
+        categories: chartLabels,
+        stepSize: 0.5,
+        axisTicks: {
+          show: false,
         },
-        legend: {
-            show: isShowLegend,
-            position: "bottom",
-            fontSize: "12px",
-            fontWeight: 600,
-            horizontalAlign: "left",
-            markers: {
-                size: 5,
-                shape: "circle",
-                strokeWidth: 1,
-            },
+        title: {
+          text: "Fitness",
         },
-        fill: {
-            opacity: 1,
-        },
-        yaxis: {
-            axisBorder: {
-                show: true,
-            },
-            title: {
-                text: "Count",
-            },
-        },
-    });
+        offsetX: -15,
+      },
+    }));
+    setSeries(chartSeries);
+  }, [chartLabels, chartSeries]);
 
-    useEffect(() => {
-        setOptions((prevOptions) => ({
-            ...prevOptions,
-            xaxis: {
-                type: "category",
-                categories: chartLabels,
-                stepSize: 0.5,
-                axisTicks: {
-                    show: false,
-                },
-                title: {
-                    text: "Fitness",
-                },
-                offsetX: -15,
-            },
-        }));
-        setSeries(chartSeries);
-    }, [chartLabels, chartSeries]);
-
-    return (
-        <div className="p-4 border border-pep-light-gray rounded-md font-light">
-            <div className="flex flex-col gap-2">
-                <div className="text-pep-blue text-2xl font-medium">Result Characteristics</div>
-                <div className="text-pep-dark-blue text-xl">Position Scan {numberOfDataPoints}</div>
-                <div>
-                    Fitness distribution of {numberOfDataPoints} sequences from Position_scan step
-                    {isShowLegend === true ? ` in ${series.length} collections` : ""}
-                </div>
-            </div>
-            <div id="chart">
-                <ReactApexChart
-                    options={options}
-                    series={series}
-                    type="bar"
-                    height={350}
-                />
-            </div>
-            <div id="html-dist"></div>
+  return (
+    <div className="p-4 border border-pep-light-gray rounded-md font-light">
+      <div className="flex flex-col gap-2">
+        <div className="text-pep-blue text-2xl font-medium">
+          Result Characteristics
         </div>
-    );
+        <div className="text-pep-dark-blue text-xl">
+          Position Scan {numberOfDataPoints}
+        </div>
+        <div>
+          Fitness distribution of {numberOfDataPoints} sequences from
+          Position_scan step
+          {isShowLegend === true ? ` in ${series.length} collections` : ""}
+        </div>
+      </div>
+      <div id="chart">
+        <ReactApexChart
+          options={options}
+          series={series}
+          type="bar"
+          height={350}
+        />
+      </div>
+      <div id="html-dist"></div>
+    </div>
+  );
 }

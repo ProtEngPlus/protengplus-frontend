@@ -147,7 +147,7 @@ export default function InputProtein({
                           inputMode === "prot_seq"
                             ? (value) => {
                                 const invalidAminoAcids = /[BJOUXZ]/i.test(
-                                  value
+                                  value,
                                 );
                                 const containsExactATGC = /ATGC/i.test(value);
 
@@ -158,8 +158,8 @@ export default function InputProtein({
                                 return true;
                               }
                             : !isError.isValidate
-                            ? () => isError.errorMessage
-                            : undefined,
+                              ? () => isError.errorMessage
+                              : undefined,
                       })}
                       onBlur={() => {
                         if (inputMode === "prot_seq") {

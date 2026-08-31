@@ -114,7 +114,7 @@ export default function UploadLabInput({
                 complete: resolve,
                 error: reject,
               });
-            }
+            },
           );
 
           const fileData = results.data.map((line) => {
@@ -132,7 +132,7 @@ export default function UploadLabInput({
                 acc.total++;
                 return acc;
               },
-              { total: 0, sequences: [] as string[], scores: [] as number[] }
+              { total: 0, sequences: [] as string[], scores: [] as number[] },
             );
             await updateJobDetail(id, { lab_result: data });
             setLabResultForm(fileData);
@@ -173,7 +173,7 @@ export default function UploadLabInput({
             acc.total++;
             return acc;
           },
-          { total: 0, sequences: [] as string[], scores: [] as number[] }
+          { total: 0, sequences: [] as string[], scores: [] as number[] },
         );
         await updateJobDetail(id, { lab_result: labResultData });
         setLabResultForm(data);

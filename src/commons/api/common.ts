@@ -9,7 +9,7 @@ import { getHeaderWithToken, isResponseOk } from "./utils";
 export const get = async <T>(
   path: string,
   withHeader: boolean = false,
-  params?: Params
+  params?: Params,
 ) => {
   try {
     const headers = withHeader ? getHeaderWithToken() : {};
@@ -37,7 +37,7 @@ export const get = async <T>(
 export const getRaw = async (
   path: string,
   withHeader: boolean = false,
-  params?: Params
+  params?: Params,
 ) => {
   try {
     const headers = withHeader ? getHeaderWithToken() : {};
@@ -60,7 +60,7 @@ export const getRaw = async (
 export const post = async <T>(
   path: string,
   data: T,
-  withHeader: boolean = false
+  withHeader: boolean = false,
 ) => {
   const headers = withHeader ? getHeaderWithToken() : {};
   const axios_response = await axios.post(path, data, { headers });
@@ -74,7 +74,7 @@ export const post = async <T>(
 export const put = async <T>(
   path: string,
   data: Partial<T>,
-  withHeader: boolean = false
+  withHeader: boolean = false,
 ) => {
   const headers = withHeader ? getHeaderWithToken() : {};
   const axios_response = await axios.put(path, data, { headers });
@@ -88,7 +88,7 @@ export const put = async <T>(
 export const patch = async <T>(
   path: string,
   data: Partial<T>,
-  withHeader: boolean = false
+  withHeader: boolean = false,
 ) => {
   const headers = withHeader ? getHeaderWithToken() : {};
   const axios_response = await axios.patch(path, data, { headers });

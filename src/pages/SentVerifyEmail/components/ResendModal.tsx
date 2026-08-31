@@ -1,7 +1,7 @@
 import Button from "../../../commons/components/Button/Button";
 
 interface ResendModalProps {
-  onClick: () => Promise<void>; 
+  onClick: () => Promise<void>;
 }
 
 export default function ResendModal({ onClick }: ResendModalProps) {

@@ -114,7 +114,7 @@ export default function RangeNumberInput({
                     "border-error": !!errors[`${id}_low`],
                     "border-gray-border": !errors[`${id}_low`],
                   },
-                  className
+                  className,
                 )}
                 disabled={disabled}
                 autoComplete="off"
@@ -186,7 +186,7 @@ export default function RangeNumberInput({
                     "border-error": !!errors[`${id}_high`],
                     "border-gray-border": !errors[`${id}_high`],
                   },
-                  className
+                  className,
                 )}
                 disabled={disabled}
                 autoComplete="off"

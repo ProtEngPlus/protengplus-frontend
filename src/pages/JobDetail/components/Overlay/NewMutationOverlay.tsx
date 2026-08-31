@@ -62,9 +62,7 @@ export function NewMutationOverlay({
                 alt="edit"
                 className="text-pep-gray size-8 min-w-8"
               />
-              <span className="text-2xl text-pep-dark-gray">
-                New Mutation
-              </span>
+              <span className="text-2xl text-pep-dark-gray">New Mutation</span>
             </div>
 
             <div className="bg-white rounded-lg p-8 gap-x-3 gap-y-4 font-light text-start">
@@ -94,7 +92,7 @@ export function NewMutationOverlay({
                     id={`tool_${Steps[currentStep]}`}
                     defaultValue={pipeline[currentStep].subMethod}
                     options={Object.keys(
-                      createJobConfig[Steps[currentStep]]?.tool ?? {}
+                      createJobConfig[Steps[currentStep]]?.tool ?? {},
                     ).map((option) => ({
                       label: option,
                       value: option,
@@ -107,11 +105,16 @@ export function NewMutationOverlay({
 
                 {/* SubMethod description */}
                 <div className="space-y-4 text-pep-dark-gray pb-4">
-                  <h1 className="text-2xl font-normal ">{pipeline[currentStep].subMethod}</h1>
+                  <h1 className="text-2xl font-normal ">
+                    {pipeline[currentStep].subMethod}
+                  </h1>
                   <span className="text-sm font-light ">
-                    {createJobConfig[Steps[currentStep]]?.tool[pipeline[currentStep].subMethod]
-                      ? createJobConfig[Steps[currentStep]]?.tool[pipeline[currentStep].subMethod]
-                        .description
+                    {createJobConfig[Steps[currentStep]]?.tool[
+                      pipeline[currentStep].subMethod
+                    ]
+                      ? createJobConfig[Steps[currentStep]]?.tool[
+                          pipeline[currentStep].subMethod
+                        ].description
                       : ""}
                   </span>
                   <hr />
@@ -122,7 +125,9 @@ export function NewMutationOverlay({
               <div className="space-y-2">
                 <InputFields
                   jobConfig={jobConfig}
-                  jobValue={getValues(`options.${pipeline[currentStep].subMethod.toLowerCase()}`)}
+                  jobValue={getValues(
+                    `options.${pipeline[currentStep].subMethod.toLowerCase()}`,
+                  )}
                   isEdit={true}
                   disable={false}
                 />

@@ -53,7 +53,7 @@ export interface ReportJobDetail {
   name: string;
   description: string;
   input_protein: string;
-  lab_result: LabResult; 
+  lab_result: LabResult;
   run_type: RunType;
   run_time?: Record<string, RunTime> | null;
   is_notification_on: boolean;

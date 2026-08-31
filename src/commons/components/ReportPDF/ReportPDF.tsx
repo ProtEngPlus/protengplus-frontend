@@ -26,7 +26,7 @@ export default function ReportPDF({
 }) {
   const [pageIndex, setPageIndex] = useState(1);
   const [paginatedLabResults, setPaginatedLabResults] = useState<labResult[]>(
-    []
+    [],
   );
   const [paginatedQueryResults, setPaginatedQueryResults] = useState<
     { queryResult: Result[] }[]
@@ -51,7 +51,7 @@ export default function ReportPDF({
             .map((score) => Number(score.toFixed(3))),
           sequences: jobData.lab_result.sequences.slice(
             i,
-            i + labResultPerPage
+            i + labResultPerPage,
           ),
         });
       }
@@ -126,9 +126,9 @@ export default function ReportPDF({
           totalTime={
             jobData.run_time
               ? formatTime({
-                start_time: jobData.run_time.query?.end_time,
-                end_time: jobData.run_time.mutation?.end_time,
-              })
+                  start_time: jobData.run_time.query?.end_time,
+                  end_time: jobData.run_time.mutation?.end_time,
+                })
               : ""
           }
         />
@@ -175,7 +175,7 @@ export default function ReportPDF({
         />
         <Footer index={1} total={pageIndex} />
       </Page>
-      {jobData.lab_result.scores ?
+      {jobData.lab_result.scores ? (
         paginatedLabResults.map((chunk, index) => (
           <Page key={index} size="A4" style={styles.page}>
             <Header />
@@ -186,22 +186,29 @@ export default function ReportPDF({
             />
             <Footer index={index + 2} total={pageIndex} />
           </Page>
-        )) : <></>}
-      {queryResultData ? paginatedQueryResults.map((chunk, index) => (
-        <Page key={index} size="A4" style={styles.page}>
-          <Header />
-          <QueryResultReport
-            queryResult={chunk.queryResult}
-            countFrom={index * queryResultPerPage}
-            totalCount={queryResultData.length}
-            tool={jobData.meta[0]}
-          />
-          <Footer
-            index={paginatedLabResults.length + index + 2}
-            total={pageIndex}
-          />
-        </Page>
-      )) : <></>}
+        ))
+      ) : (
+        <></>
+      )}
+      {queryResultData ? (
+        paginatedQueryResults.map((chunk, index) => (
+          <Page key={index} size="A4" style={styles.page}>
+            <Header />
+            <QueryResultReport
+              queryResult={chunk.queryResult}
+              countFrom={index * queryResultPerPage}
+              totalCount={queryResultData.length}
+              tool={jobData.meta[0]}
+            />
+            <Footer
+              index={paginatedLabResults.length + index + 2}
+              total={pageIndex}
+            />
+          </Page>
+        ))
+      ) : (
+        <></>
+      )}
       {jobData.run_time?.mutation ? (
         <Page size="A4" style={styles.page}>
           <Header />

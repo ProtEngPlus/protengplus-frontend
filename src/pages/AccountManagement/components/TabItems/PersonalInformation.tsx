@@ -41,7 +41,7 @@ export default function PersonalInformation() {
   const [userData, setUserData] = useState<FormValues | null>(null);
   useEffect(() => {
     if (user) {
-      setValue("email", user.email); 
+      setValue("email", user.email);
     }
   }, [user, setValue]);
 
@@ -84,7 +84,7 @@ export default function PersonalInformation() {
       user_role: data.user_role,
       role: ["user"],
     });
-    setConfirmVisible(true); 
+    setConfirmVisible(true);
   });
 
   return (
@@ -161,13 +161,13 @@ export default function PersonalInformation() {
             id="cancel-update-user"
             buttonType="cancel"
             text="Cancel"
-            type="button" 
+            type="button"
             onClick={() => {
               form.reset({
-                name: user?.name || "", 
-                surname: user?.surname || "", 
-                email: user?.email || "", 
-                user_role: user?.user_role || "", 
+                name: user?.name || "",
+                surname: user?.surname || "",
+                email: user?.email || "",
+                user_role: user?.user_role || "",
               });
             }}
           />

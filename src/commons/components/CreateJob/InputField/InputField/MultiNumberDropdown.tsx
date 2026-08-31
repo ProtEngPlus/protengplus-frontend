@@ -51,7 +51,7 @@ export default function MultiNumberDropdown({
       setValue(id, updated);
       onChange?.(updated);
     },
-    [currentValue, id, onChange, setValue]
+    [currentValue, id, onChange, setValue],
   );
 
   useEffect(() => {
@@ -82,12 +82,12 @@ export default function MultiNumberDropdown({
               <div
                 className={`flex flex-row bg-white border font-light rounded-md py-3 px-4 cursor-pointer gap-1 disabled:cursor-not-allowed disabled:bg-disabled disabled:border-disabled disabled:text-label
                  ${errors[id] ? "border-error" : "border-pep-gray-border"} ${
-                  isOpen ? "border-pep-blue" : ""
-                } ${
-                  disabled
-                    ? "!cursor-not-allowed !bg-disabled !border-disabled !text-label"
-                    : ""
-                }`}
+                   isOpen ? "border-pep-blue" : ""
+                 } ${
+                   disabled
+                     ? "!cursor-not-allowed !bg-disabled !border-disabled !text-label"
+                     : ""
+                 }`}
                 onClick={() => !disabled && setIsOpen((prev) => !prev)}
               >
                 <div

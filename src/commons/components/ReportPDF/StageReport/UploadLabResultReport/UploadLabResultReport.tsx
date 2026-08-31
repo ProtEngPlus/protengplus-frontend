@@ -55,7 +55,11 @@ export default function UploadLabResultReport({
         </View>
       </View>
       <InfoBox label={"Total"} text={`${totalCount}`} />
-      <Table columns={uploadLabResultColConfig} data={uploadLabResultData} countFrom={countFrom}/>
+      <Table
+        columns={uploadLabResultColConfig}
+        data={uploadLabResultData}
+        countFrom={countFrom}
+      />
     </View>
   );
 }

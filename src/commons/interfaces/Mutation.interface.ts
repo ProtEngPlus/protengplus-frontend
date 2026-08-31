@@ -22,7 +22,7 @@ export interface MutationInterface {
   created_at: string;
   complete_at: string;
   job_description?: string;
-  job_name?: string
+  job_name?: string;
 }
 
 export interface MutationSearchParams {

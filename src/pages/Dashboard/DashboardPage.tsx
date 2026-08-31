@@ -114,7 +114,7 @@ export default function DashboardPage() {
               onClick={() => {
                 if (content.best_assay_score) {
                   navigate(
-                    `/dashboard/job-detail/${content.best_assay_score.id}`
+                    `/dashboard/job-detail/${content.best_assay_score.id}`,
                   );
                 }
               }}

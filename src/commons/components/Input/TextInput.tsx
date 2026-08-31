@@ -42,7 +42,7 @@ export default function TextInput({
                 "border-error": !!errors[id],
                 "border-gray-border": !errors[id],
               },
-              className
+              className,
             )}
             disabled={disabled}
             {...register(id, { ...additionalValidation })}

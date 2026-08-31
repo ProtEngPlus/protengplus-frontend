@@ -26,7 +26,7 @@ export function ExportMutationResultOverlay({
     try {
       const response = await downloadMutationResults(
         mutationId,
-        isBookmarkOnly ? { is_bookmark: true } : {}
+        isBookmarkOnly ? { is_bookmark: true } : {},
       );
 
       // Create a Blob from the CSV response

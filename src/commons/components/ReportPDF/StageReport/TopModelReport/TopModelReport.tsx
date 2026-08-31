@@ -14,7 +14,10 @@ export default function TopModelReport({
 }) {
   const Ridgecv = () => (
     <View>
-      <InfoBox label={"Training Batch Size"} text={renderOptionText(option.train_batch_sizes)} />
+      <InfoBox
+        label={"Training Batch Size"}
+        text={renderOptionText(option.train_batch_sizes)}
+      />
       <InfoBox label={"N Batch"} text={renderOptionText(option.n_batch)} />
       <InfoBox label={"Alpha"} text={renderOptionText(option.alpha)} />
     </View>
@@ -41,7 +44,7 @@ export default function TopModelReport({
         </View>
       </View>
       <View>
-        <InfoBox label={"Tool"} text={tool || "-" } />
+        <InfoBox label={"Tool"} text={tool || "-"} />
         <ToolSelection />
       </View>
     </View>

@@ -43,12 +43,12 @@ export default function HelperText({
             <div
               key={value.id}
               className={formatInput[jobConfig.formatInput].insideHelperText(
-                value
+                value,
               )}
             >
               <span className="text-nowrap">{value.name}:</span>
               <span>
-                {value.description.split('\n').map((line, idx) => (
+                {value.description.split("\n").map((line, idx) => (
                   <div key={idx}>{line}</div>
                 ))}
               </span>

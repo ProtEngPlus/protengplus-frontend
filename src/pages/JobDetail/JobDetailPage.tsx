@@ -93,7 +93,7 @@ export default function JobDetailPage() {
           targetEl: document.querySelector("#mutaion-results-content"),
         },
       ].filter(
-        (item) => item.triggerEl !== null && item.targetEl !== null
+        (item) => item.triggerEl !== null && item.targetEl !== null,
       ) as TabItem[];
 
       const options: TabsOptions = {

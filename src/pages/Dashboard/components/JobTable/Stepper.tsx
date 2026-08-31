@@ -44,16 +44,16 @@ export default function Stepper({
                   index < stageId // previous step
                     ? "bg-pep-green"
                     : index === stageId // current step
-                    ? state === "COMPLETED"
-                      ? "bg-pep-green"
-                      : state === "FAILED"
-                      ? "border-2 border-error text-xl leading-6 text-error"
-                      : state === "PENDING"
-                      ? "border-2 border-pep-green"
-                      : state === "ONGOING"
-                      ? "border-2 border-pep-green"
-                      : "bg-pep-gray-light border-2 border-pep-gray-border"
-                    : "bg-pep-gray-light border-2 border-pep-gray-border" // incoming step
+                      ? state === "COMPLETED"
+                        ? "bg-pep-green"
+                        : state === "FAILED"
+                          ? "border-2 border-error text-xl leading-6 text-error"
+                          : state === "PENDING"
+                            ? "border-2 border-pep-green"
+                            : state === "ONGOING"
+                              ? "border-2 border-pep-green"
+                              : "bg-pep-gray-light border-2 border-pep-gray-border"
+                      : "bg-pep-gray-light border-2 border-pep-gray-border" // incoming step
                 }`}
               >
                 {index === stageId && state === "FAILED" ? (

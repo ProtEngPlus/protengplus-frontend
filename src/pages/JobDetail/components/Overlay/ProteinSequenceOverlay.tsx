@@ -17,9 +17,13 @@ export function ProteinSequenceOverlay({
   mutationPositions: string[];
 }) {
   const { onClose } = proteinSequenceProps;
-  const [currentMutationPosition, setCurrentMutationPosition] = useState<number | null>(null);
+  const [currentMutationPosition, setCurrentMutationPosition] = useState<
+    number | null
+  >(null);
 
-  const allMutationPositions = mutationPositions.map((position) => parseInt(position.replace(/\D/g, ''), 10));
+  const allMutationPositions = mutationPositions.map((position) =>
+    parseInt(position.replace(/\D/g, ""), 10),
+  );
 
   return (
     isVisible && (
@@ -37,7 +41,12 @@ export function ProteinSequenceOverlay({
               />
             </div>
             <div className="flex space-x-3 place-self-center items-center">
-              <Icon icon="hugeicons:dna" className="text-gray-400" width="30" height="30" />
+              <Icon
+                icon="hugeicons:dna"
+                className="text-gray-400"
+                width="30"
+                height="30"
+              />
               <span className="text-2xl text-pep-dark-gray font-normal">
                 Protein Sequence
               </span>
@@ -47,32 +56,39 @@ export function ProteinSequenceOverlay({
               <div className="space-y-4 flex flex-col items-center">
                 {mutationPositions.length > 0 && (
                   <div className="cursor-pointer text-gray-500">
-                    {'['}
+                    {"["}
                     {mutationPositions.map((position, index) => (
-                      <div key={'position_' + index} className="inline">
+                      <div key={"position_" + index} className="inline">
                         <span
                           className="text-pep-orange cursor-pointer hover:text-pep-blue"
-                          onMouseEnter={() => setCurrentMutationPosition(parseInt(position.replace(/\D/g, ''), 10))}
+                          onMouseEnter={() =>
+                            setCurrentMutationPosition(
+                              parseInt(position.replace(/\D/g, ""), 10),
+                            )
+                          }
                           onMouseLeave={() => setCurrentMutationPosition(null)}
                         >
                           {position}
                         </span>
-                        <span>{index < mutationPositions.length - 1 ? ", " : ""}</span>
+                        <span>
+                          {index < mutationPositions.length - 1 ? ", " : ""}
+                        </span>
                       </div>
                     ))}
-                    {']'}
+                    {"]"}
                   </div>
                 )}
                 <div className="items-left w-[90%] border border-pep-gray-border rounded-lg p-4 break-all leading-7 tracking-wide">
-                  {proteinSequence.split('').map((char, index) => (
+                  {proteinSequence.split("").map((char, index) => (
                     <span
-                      key={'prot+' + index}
+                      key={"prot+" + index}
                       className={
-                        (index + 1) === currentMutationPosition
-                          ? 'text-pep-blue'
+                        index + 1 === currentMutationPosition
+                          ? "text-pep-blue"
                           : allMutationPositions.includes(index + 1)
-                            ? 'text-pep-orange'
-                            : ''}
+                            ? "text-pep-orange"
+                            : ""
+                      }
                     >
                       {char}
                     </span>

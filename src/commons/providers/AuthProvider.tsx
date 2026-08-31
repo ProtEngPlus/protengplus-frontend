@@ -26,20 +26,20 @@ type AuthContextType = {
   login: (
     email: string,
     password: string,
-    role: string
+    role: string,
   ) => Promise<User | null>;
   logout: () => void;
 };
 
 export const AuthContext = createContext<AuthContextType>(
-  {} as AuthContextType
+  {} as AuthContextType,
 );
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(
     sessionStorage.getItem("user")
       ? JSON.parse(sessionStorage.getItem("user") as string)
-      : null
+      : null,
   );
   const [loading, setLoading] = useState<boolean>(false);
   const location = useLocation();

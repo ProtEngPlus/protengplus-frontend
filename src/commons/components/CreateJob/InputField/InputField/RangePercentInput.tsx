@@ -43,10 +43,10 @@ export default function RangePercentInput({
 
   // Local state for formatted values
   const [localLow, setLocalLow] = useState<string>(
-    currentValueLow ? `${currentValueLow.toFixed(2)}%` : ""
+    currentValueLow ? `${currentValueLow.toFixed(2)}%` : "",
   );
   const [localHigh, setLocalHigh] = useState<string>(
-    currentValueHigh ? `${currentValueHigh.toFixed(2)}%` : ""
+    currentValueHigh ? `${currentValueHigh.toFixed(2)}%` : "",
   );
 
   // format value
@@ -64,7 +64,7 @@ export default function RangePercentInput({
   // handle change from typing
   const handleInputChange = (
     field: string,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const cursorPosition = e.target.selectionStart
       ? e.target.selectionStart + 1
@@ -124,7 +124,7 @@ export default function RangePercentInput({
 
   const handleKeyDown = (
     field: string,
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Enter") {
       const value = field === `${id}_low` ? localLow : localHigh;
@@ -199,7 +199,7 @@ export default function RangePercentInput({
                     "border-error": !!errors[`${id}_high`],
                     "border-gray-border": !errors[`${id}_high`],
                   },
-                  className
+                  className,
                 )}
                 disabled={disabled}
                 autoComplete="off"
@@ -251,7 +251,7 @@ export default function RangePercentInput({
                     "border-error": !!errors[`${id}_high`],
                     "border-gray-border": !errors[`${id}_high`],
                   },
-                  className
+                  className,
                 )}
                 disabled={disabled}
                 autoComplete="off"

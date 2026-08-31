@@ -16,7 +16,7 @@ export default function SearchBar({
   const handleSearch = (searchValue: string) => {
     setSearch(searchValue);
     const filtered = organismList.filter((organism) =>
-      organism.toLowerCase().includes(searchValue.toLowerCase())
+      organism.toLowerCase().includes(searchValue.toLowerCase()),
     );
     setFilteredList(filtered);
   };

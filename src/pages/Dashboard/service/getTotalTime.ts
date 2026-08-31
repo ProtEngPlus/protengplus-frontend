@@ -3,7 +3,7 @@ export function getTotalTime(startTime: string, endTime: string): number {
   const end = new Date(endTime);
 
   const totalTime = parseFloat(
-    ((end.getTime() - start.getTime()) / 60000).toFixed(3)
+    ((end.getTime() - start.getTime()) / 60000).toFixed(3),
   );
 
   return totalTime;

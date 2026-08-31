@@ -28,25 +28,26 @@ export default function DropdownInput({
   }));
 
   return (
-    <div className={`
-      ${formatInput === 2
-        ? "w-full"
-        : "w-[40%]"} 
-        min-w-fit`}>
-      <div className={`
-        ${formatInput === 2
-          ? "flex flex-row justify-between max-w-[1000px] min-w-fit space-x-3 items-center"
-          : "min-w-fit justify-between items-center space-x-3 grid grid-cols-[1fr,4fr] max-w-[1000px]"}`}>
+    <div
+      className={`
+      ${formatInput === 2 ? "w-full" : "w-[40%]"} 
+        min-w-fit`}
+    >
+      <div
+        className={`
+        ${
+          formatInput === 2
+            ? "flex flex-row justify-between max-w-[1000px] min-w-fit space-x-3 items-center"
+            : "min-w-fit justify-between items-center space-x-3 grid grid-cols-[1fr,4fr] max-w-[1000px]"
+        }`}
+      >
         <label className="font-light w-[40%]">{label}:</label>
         <SelectInput
           id={id}
           defaultValue={defaultValue}
           options={optionsValue}
           className={`
-            ${formatInput === 2
-              ? "w-24"
-              : "!w-[336px]"
-            }`}
+            ${formatInput === 2 ? "w-24" : "!w-[336px]"}`}
           disabled={disabled}
           additionalValidation={additionalValidation}
           onEdit={onEdit}

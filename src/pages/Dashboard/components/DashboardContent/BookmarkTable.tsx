@@ -169,7 +169,7 @@ export default function BookmarkTable() {
                           <MutationResultTable
                             mutationResult={mutationResult}
                             handleViewSequence={(
-                              sequence: MutationResultInterface
+                              sequence: MutationResultInterface,
                             ) => {
                               setCurrentSequence(sequence);
                               setProteinVisible(true);

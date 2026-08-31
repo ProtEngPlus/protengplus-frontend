@@ -65,10 +65,10 @@ export default function NumberInput({
             formatInput === 1
               ? "grid grid-cols-2 w-[22%] place-items-start"
               : formatInput === 2
-              ? "flex flex-row justify-between max-w-[1000px]"
-              : formatInput === 3
-              ? "grid grid-cols-[1fr,4fr] max-w-[1000px]"
-              : "grid grid-cols-[1fr,2fr] max-w-[1000px]"
+                ? "flex flex-row justify-between max-w-[1000px]"
+                : formatInput === 3
+                  ? "grid grid-cols-[1fr,4fr] max-w-[1000px]"
+                  : "grid grid-cols-[1fr,2fr] max-w-[1000px]"
           }
          min-w-fit space-x-3 items-center`}
     >
@@ -119,7 +119,7 @@ export default function NumberInput({
                   "border-error": !!errors[id],
                   "border-gray-border": !errors[id],
                 },
-                className
+                className,
               )}
               disabled={disabled}
               autoComplete="off"

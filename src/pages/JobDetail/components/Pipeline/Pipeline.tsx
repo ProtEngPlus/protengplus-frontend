@@ -350,7 +350,7 @@ export default function Pipeline({
         <FitnessDistributionChartData
           chartLabels={chartLabels}
           chartSeries={chartSeries}
-        />
+        />,
       );
 
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -377,7 +377,7 @@ export default function Pipeline({
           jobData={getReportData()}
           chart={chartImage}
           queryResultData={queryResults}
-        />
+        />,
       ).toBlob();
 
       const zip = new JSZip();

@@ -11,7 +11,8 @@ import {
 import { Params } from "../interfaces/ApiResponse.interface";
 
 const MUTATION_PATH = BACKEND_BASE_URL + "/proteng-conductor/mutations";
-const MUTATION_RESULT_PATH = BACKEND_BASE_URL + "/proteng-conductor/mutations/results";
+const MUTATION_RESULT_PATH =
+  BACKEND_BASE_URL + "/proteng-conductor/mutations/results";
 
 export const getMutationHistogram = async (jobId: string) => {
   const path = MUTATION_PATH + `/histograms?job_id=${jobId}`;
@@ -28,9 +29,13 @@ export const getAllMutations = async (params: MutationSearchParams) => {
 };
 
 export const getAllMutationResult = async (
-  params: MutationResultSearchParams
+  params: MutationResultSearchParams,
 ) => {
-  return await get<MutationResultInterface[]>(MUTATION_RESULT_PATH, true, params as Params);
+  return await get<MutationResultInterface[]>(
+    MUTATION_RESULT_PATH,
+    true,
+    params as Params,
+  );
 };
 
 export const createMutation = async (mutation: CreateMutationInterface) => {
@@ -49,18 +54,24 @@ export const runMutation = async (mutationId: string) => {
 
 export const updateMutationDetail = async (
   mutationId: string,
-  updateData: Partial<MutationInterface>
+  updateData: Partial<MutationInterface>,
 ) => {
   const path = MUTATION_PATH + `/${mutationId}`;
   return await put<MutationInterface>(path, updateData, true);
 };
 
-export const updateMutationResultDetail = async (mutationResultId: string, updateData: Partial<MutationResultInterface>) => {
+export const updateMutationResultDetail = async (
+  mutationResultId: string,
+  updateData: Partial<MutationResultInterface>,
+) => {
   const path = MUTATION_RESULT_PATH + `/${mutationResultId}`;
   return await put<MutationResultInterface>(path, updateData, true);
-}
+};
 
-export const downloadMutationResults = async (mutationId: string, params: MutationResultSearchParams) => {
+export const downloadMutationResults = async (
+  mutationId: string,
+  params: MutationResultSearchParams,
+) => {
   const path = MUTATION_PATH + `/${mutationId}/download`;
   return await getRaw(path, true, params as Params);
-}
+};

@@ -85,10 +85,13 @@ export default function QueryResultTable({
     "queryCoverTo",
   ];
 
-  const watchedValues = searchParams.reduce((acc, param) => {
-    acc[param] = watch(param) ?? undefined;
-    return acc;
-  }, {} as Record<string, string | number | undefined>);
+  const watchedValues = searchParams.reduce(
+    (acc, param) => {
+      acc[param] = watch(param) ?? undefined;
+      return acc;
+    },
+    {} as Record<string, string | number | undefined>,
+  );
 
   // reset value to default (use in first time & click reset button from filter modal)
   const resetQueryOption = () => {
@@ -106,8 +109,8 @@ export default function QueryResultTable({
       setValue(
         searchParams[index],
         queryResultOption
-          ? getValues(`${queryResultOption}.${param}`) ?? undefined
-          : undefined
+          ? (getValues(`${queryResultOption}.${param}`) ?? undefined)
+          : undefined,
       );
     });
   };
@@ -128,7 +131,7 @@ export default function QueryResultTable({
       job_id: jobId,
       is_selected: disable ? true : undefined,
       ...Object.fromEntries(
-        Object.entries(watchedValues).map(([key, value]) => [key, value])
+        Object.entries(watchedValues).map(([key, value]) => [key, value]),
       ),
       sort,
       order,
@@ -160,7 +163,8 @@ export default function QueryResultTable({
   const filterOverlayProps: FilterOverlayProps = {
     organismList,
     organisms: watchedValues["organisms"] as string | undefined,
-    percentIdentityFrom: watchedValues["percentIdentityFrom"] as number | undefined,
+    percentIdentityFrom: watchedValues["percentIdentityFrom"] as
+      number | undefined,
     percentIdentityTo: watchedValues["percentIdentityTo"] as number | undefined,
     eValuesFrom: watchedValues["eValuesFrom"] as number | undefined,
     eValuesTo: watchedValues["eValuesTo"] as number | undefined,
@@ -194,7 +198,7 @@ export default function QueryResultTable({
   useEffect(() => {
     if (isSelected) {
       setQueryResults((prevResults) =>
-        prevResults.map((item) => ({ ...item, is_selected: true }))
+        prevResults.map((item) => ({ ...item, is_selected: true })),
       );
     }
   }, [isSelected]);
@@ -205,8 +209,8 @@ export default function QueryResultTable({
       prevResults.map((protein) =>
         id === protein.id
           ? { ...protein, is_selected: !protein.is_selected }
-          : protein
-      )
+          : protein,
+      ),
     );
   };
 

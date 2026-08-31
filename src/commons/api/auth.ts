@@ -26,7 +26,7 @@ export const login = async (email: string, password: string, role: string) => {
     sessionStorage.setItem("accessToken", res.data.access_token);
     sessionStorage.setItem(
       "token_expires",
-      addHoursToDate(new Date(), 1 / (60 * 20)).toString()
+      addHoursToDate(new Date(), 1 / (60 * 20)).toString(),
     );
   }
 
@@ -83,7 +83,7 @@ export const resetPassword = async (password: string, token: string) => {
 
 export const changePassword = async (
   current_password: string,
-  new_password: string
+  new_password: string,
 ) => {
   const path = BACKEND_BASE_URL + "/proteng-user-mgmt/auth/changepassword";
 
@@ -94,7 +94,7 @@ export const changePassword = async (
       current_password,
       new_password,
     },
-    true
+    true,
   );
 
   // Check if the response is ok
@@ -136,7 +136,7 @@ export const successVerification = async (token: string) => {
     sessionStorage.setItem("accessToken", res.data.access_token);
     sessionStorage.setItem(
       "token_expires",
-      addHoursToDate(new Date(), 1 / (60 * 20)).toString()
+      addHoursToDate(new Date(), 1 / (60 * 20)).toString(),
     );
   }
 

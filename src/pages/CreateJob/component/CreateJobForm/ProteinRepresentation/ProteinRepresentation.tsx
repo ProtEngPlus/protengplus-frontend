@@ -71,7 +71,7 @@ export default function ProteinRepresentation({
             label="Tool"
             defaultValue={currentSubMethod}
             options={Object.keys(
-              createJobConfig[stepsForCreateJob[step - 1]]?.tool ?? {}
+              createJobConfig[stepsForCreateJob[step - 1]]?.tool ?? {},
             )}
             onEdit={isEdit}
             disabled={initialStep > step}
@@ -100,7 +100,7 @@ export default function ProteinRepresentation({
           <InputFields
             jobConfig={jobConfig}
             jobValue={getValues(
-              `${stepsForCreateJob[step - 1]}.${currentSubMethod}`
+              `${stepsForCreateJob[step - 1]}.${currentSubMethod}`,
             )}
             isEdit={isEdit}
             disable={initialStep > step}

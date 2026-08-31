@@ -18,10 +18,10 @@ export default function JobRunTypeIcon({
       state === "COMPLETED"
         ? "Completed running"
         : state === "PENDING" || state === "CREATED"
-        ? "Press to run"
-        : state === "ONGOING"
-        ? "Running"
-        : "Failed running";
+          ? "Press to run"
+          : state === "ONGOING"
+            ? "Running"
+            : "Failed running";
     return `${state_text} ${run_mode}`;
   };
 

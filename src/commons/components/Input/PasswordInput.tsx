@@ -35,7 +35,7 @@ export default function PasswordInput({
               "border-error": !!errors[id],
               "border-pep-gray-border": !errors[id],
             },
-            className
+            className,
           )}
           disabled={disabled}
           {...register(id, { ...additionalValidation })}

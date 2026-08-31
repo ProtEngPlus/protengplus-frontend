@@ -54,7 +54,7 @@ export default function JobState({
         className={clsx(
           "font-normal px-[10px] py-[3px] rounded-[30px] w-[94px] h-[26px] min-w-fit text-xs leading-5 text-center cursor-default",
           status.className,
-          className
+          className,
         )}
         onClick={onClick}
         {...props}

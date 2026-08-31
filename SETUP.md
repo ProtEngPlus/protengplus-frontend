@@ -26,13 +26,17 @@
 
 ## Format & lint
 
-ESLint handles both, autofixing on commit via lint-staged. Run manually against the whole repo:
+Prettier formats, ESLint lints. lint-staged autofixes both on commit. Run manually
+against the whole repo:
 
 ```sh
-npm run lint:fix
+npm run format      # prettier --write
+npm run lint:fix    # eslint --fix
 ```
 
-Type errors are caught separately by `npm run build` (also what runs on `git push`).
+`npm run format:check` + `npm run lint` (no autofix) also run on `git push` and in CI
+(`.github/workflows/test-build.yaml`). Type errors are caught separately by
+`npm run build` (also on `git push`).
 
 ## Pre-commit hooks
 
