@@ -390,7 +390,7 @@ export const createJobConfig: CreateJobConfig = {
             type: "number",
             description:
               "The expected length of protein sequences response from database",
-            default: 70,
+            default: 300,
             additionalValidation: {
               required: {
                 value: true,
