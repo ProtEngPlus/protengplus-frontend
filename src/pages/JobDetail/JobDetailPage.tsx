@@ -43,8 +43,11 @@ export default function JobDetailPage() {
   const description = watch("description") ?? "";
 
   const fetchJob = async () => {
-    if (jobid) {
+    if (!jobid) return;
+    try {
       const data = await getJob(jobid);
+      if (!data) return;
+
       if (data.data) {
         setJob(data.data);
         form.reset({
@@ -55,6 +58,8 @@ export default function JobDetailPage() {
       } else {
         navigate("/dashboard");
       }
+    } catch (error) {
+      console.error(error);
     }
   };
 

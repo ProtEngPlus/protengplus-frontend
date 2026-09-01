@@ -51,10 +51,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
+    if (!getToken()) {
+      navigate("/sign-in");
+      return;
+    }
+
     setLoading(true);
     getMe()
       .then((response) => {
         setLoading(false);
+        if (!response) {
+          return;
+        }
         if (response.code !== 200 || !response.data) {
           navigate("/sign-in");
           return;
