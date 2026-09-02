@@ -55,6 +55,11 @@ import { useAuth } from "../../../../commons/hooks/useAuth";
 import ReportPDF from "../../../../commons/components/ReportPDF/ReportPDF";
 import FitnessDistributionChartData from "../MutationResults/FitnessDistributionChart";
 import { getMutationHistogram } from "../../../../commons/api/mutation";
+import { MutationHistogram } from "../../../../commons/interfaces/Mutation.interface";
+import {
+  buildChartLabels,
+  DEFAULT_SCORE_RANGE,
+} from "../../../../commons/utils/histogram";
 import { createRoot } from "react-dom/client";
 import JSZip from "jszip";
 
@@ -282,54 +287,21 @@ export default function Pipeline({
 
   const onPDFDownload = async () => {
     try {
-      const chartLabels = [
-        "-2.0",
-        "-1.9",
-        "-1.8",
-        "-1.7",
-        "-1.6",
-        "-1.5",
-        "-1.4",
-        "-1.3",
-        "-1.2",
-        "-1.1",
-        "-1.0",
-        "-0.9",
-        "-0.8",
-        "-0.7",
-        "-0.6",
-        "-0.5",
-        "-0.4",
-        "-0.3",
-        "-0.2",
-        "-0.1",
-        "0.0",
-        "0.1",
-        "0.2",
-        "0.3",
-        "0.4",
-        "0.5",
-        "0.6",
-        "0.7",
-        "0.8",
-        "0.9",
-        "1.0",
-        "1.1",
-        "1.2",
-        "1.3",
-        "1.4",
-        "1.5",
-        "1.6",
-        "1.7",
-        "1.8",
-        "1.9",
-      ];
-      let chartSeries = [];
+      let chartSeries: { name: string; data: number[] }[] = [];
+      let chartLabels = buildChartLabels(
+        DEFAULT_SCORE_RANGE[0],
+        DEFAULT_SCORE_RANGE[1],
+      );
 
       if (formData) {
         const { data } = await getMutationHistogram(formData["id"]);
-        if (data) {
-          chartSeries = data;
+        const hist: MutationHistogram[] = data || [];
+        if (hist.length > 0) {
+          chartSeries = hist.map(({ name, data: d }) => ({ name, data: d }));
+          chartLabels = buildChartLabels(
+            hist[0].min ?? DEFAULT_SCORE_RANGE[0],
+            hist[0].max ?? DEFAULT_SCORE_RANGE[1],
+          );
         }
       }
 

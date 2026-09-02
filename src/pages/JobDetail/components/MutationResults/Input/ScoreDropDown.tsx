@@ -5,17 +5,21 @@ export default function ScoreDropDown({
   label,
   value,
   setValue,
+  min,
+  max,
 }: {
   label: string;
   value: number;
   setValue: (value: number) => void;
+  min?: number;
+  max?: number;
 }) {
+  const clamp = (n: number) =>
+    Math.max(min ?? -Infinity, Math.min(max ?? Infinity, n));
+
   const updateValue = (delta: number, e: React.MouseEvent) => {
     e.preventDefault();
-    const newValue = Math.max(
-      -2,
-      Math.min(2, Math.round((value + delta) * 10) / 10),
-    );
+    const newValue = clamp(Math.round((value + delta) * 10) / 10);
     setValue(newValue);
     setInputValue(String(newValue));
   };
@@ -49,7 +53,7 @@ export default function ScoreDropDown({
         onBlur={() => {
           const parsed = parseFloat(inputValue);
           if (!isNaN(parsed)) {
-            const number = Math.max(-2, Math.min(2, parsed));
+            const number = clamp(parsed);
             setInputValue(number.toString());
             setValue(number);
           }

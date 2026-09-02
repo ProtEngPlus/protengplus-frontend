@@ -3,8 +3,11 @@ import { OptionValue, Order } from "./Job.interface";
 export type MutationStateType = "PENDING" | "ONGOING" | "FAILED" | "COMPLETED";
 
 export interface MutationHistogram {
+  mutation_id?: string;
   name: string;
   data: number[];
+  min?: number;
+  max?: number;
 }
 
 export interface MutationInterface {

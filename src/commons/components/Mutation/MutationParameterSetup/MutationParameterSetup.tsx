@@ -1,5 +1,8 @@
 import { Icon } from "@iconify/react";
-import { MutationInterface } from "../../../interfaces/Mutation.interface";
+import {
+  MutationHistogram,
+  MutationInterface,
+} from "../../../interfaces/Mutation.interface";
 import FitnessDistributionChartData from "../../../../pages/JobDetail/components/MutationResults/FitnessDistributionChart";
 import { useState } from "react";
 import HelperText from "../../CreateJob/InputField/HelperText";
@@ -16,12 +19,14 @@ export default function MutationParameterSetup({
   mutation,
   isShowChart = false,
   chartLabels,
+  chartSeries,
   currentStep = 3,
   pipeline = defaultPipeline,
 }: {
   mutation: MutationInterface;
   isShowChart?: boolean;
   chartLabels?: string[];
+  chartSeries?: MutationHistogram[];
   currentStep?: number;
   pipeline?: PipelineItem[];
 }) {
@@ -76,17 +81,18 @@ export default function MutationParameterSetup({
             </div>
           ))}
         </div>
-        {isShowChart && chartLabels && (
-          <div className="!mt-0 bg-white rounded-sm">
-            <FitnessDistributionChartData
-              chartLabels={chartLabels}
-              chartSeries={[
-                { name: mutation.name, data: mutation.histogram_data },
-              ]}
-              isShowLegend={false}
-            />
-          </div>
-        )}
+        {isShowChart &&
+          chartLabels &&
+          chartSeries &&
+          chartSeries.length > 0 && (
+            <div className="!mt-0 bg-white rounded-sm">
+              <FitnessDistributionChartData
+                chartLabels={chartLabels}
+                chartSeries={chartSeries}
+                isShowLegend={false}
+              />
+            </div>
+          )}
       </div>
       {mutation.state === "FAILED" && (
         <div className="flex justify-center items-center p-5 text-red-500 bg-red-50 w-full font-normal">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MutationResultInterface,
   MutationResultSearchParams,
@@ -37,8 +37,13 @@ export default function MutationProteinSequenceSection({
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("assay_score");
-  const [valuemin, setValueMin] = useState(-2);
-  const [valuemax, setValueMax] = useState(2);
+  const [valuemin, setValueMin] = useState<number | undefined>(undefined);
+  const [valuemax, setValueMax] = useState<number | undefined>(undefined);
+  const [dataRange, setDataRange] = useState<{
+    min: number;
+    max: number;
+  } | null>(null);
+  const rangeSeeded = useRef(false);
   const [isOrDescending, setIsOrDescending] = useState(true);
   const [isExportMutationResultVisible, setIsExportMutationResultVisible] =
     useState(false);
@@ -66,14 +71,25 @@ export default function MutationProteinSequenceSection({
     const params: MutationResultSearchParams = {
       mutation_id: mutationId,
       sort: sortBy,
-      min_value: valuemin,
-      max_value: valuemax,
       order: isOrDescending ? "desc" : "asc",
+      ...(valuemin !== undefined ? { min_value: valuemin } : {}),
+      ...(valuemax !== undefined ? { max_value: valuemax } : {}),
       ...(isBookmarkOnly ? { is_bookmark: true } : {}),
     };
 
     getAllMutationResult(params)
-      .then((response) => setMutationResults(response.data || []))
+      .then((response) => {
+        const rows: MutationResultInterface[] = response.data || [];
+        setMutationResults(rows);
+        if (!rangeSeeded.current && !isBookmarkOnly && rows.length > 0) {
+          rangeSeeded.current = true;
+          const scores = rows.map((r) => r.assay_score);
+          setDataRange({
+            min: Math.min(...scores),
+            max: Math.max(...scores),
+          });
+        }
+      })
       .catch(console.error);
 
     setFetchMutationResults(false);
@@ -88,7 +104,11 @@ export default function MutationProteinSequenceSection({
   ]);
 
   useEffect(() => {
-    if (valuemin > valuemax) {
+    if (
+      valuemin !== undefined &&
+      valuemax !== undefined &&
+      valuemin > valuemax
+    ) {
       const temp = valuemax;
       setValueMax(valuemin);
       setValueMin(temp);
@@ -174,10 +194,18 @@ export default function MutationProteinSequenceSection({
                 dropdownItems.find((item) => item.value === sortBy)?.text +
                   ":" || "Score:"
               }
-              value={valuemin}
+              value={valuemin ?? dataRange?.min ?? 0}
               setValue={setValueMin}
+              min={dataRange?.min}
+              max={dataRange?.max}
             />
-            <ScoreDropDown label="to" value={valuemax} setValue={setValueMax} />
+            <ScoreDropDown
+              label="to"
+              value={valuemax ?? dataRange?.max ?? 0}
+              setValue={setValueMax}
+              min={dataRange?.min}
+              max={dataRange?.max}
+            />
           </div>
           <div className="flex flex-col gap-2 items-start">
             <div className="font-normal flex gap-1 items-center">
