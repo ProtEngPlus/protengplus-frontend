@@ -284,6 +284,10 @@ export const createJobConfig: CreateJobConfig = {
             additionalValidation: {
               required: { value: true, message: "HSP Coverage is required." },
               min: { value: 0, message: "HSP Coverage must be at least 0." },
+              max: {
+                value: 100,
+                message: "HSP Coverage must be at most 100.",
+              },
             },
           },
         ],
@@ -453,7 +457,7 @@ export const createJobConfig: CreateJobConfig = {
             default: 2,
             additionalValidation: {
               required: { value: true, message: "N Splits is required." },
-              min: { value: 0, message: "N Splits must be at least 0." },
+              min: { value: 2, message: "N Splits must be at least 2." },
             },
           },
           {
@@ -654,7 +658,10 @@ export const createJobConfig: CreateJobConfig = {
             default: 0.01,
             additionalValidation: {
               required: { value: true, message: "Temperature is required." },
-              min: { value: 0, message: "Temperature must be at least 0." },
+              min: {
+                value: 0.0001,
+                message: "Temperature must be greater than 0.",
+              },
             },
           },
         ],
