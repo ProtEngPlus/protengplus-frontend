@@ -143,7 +143,14 @@ export default function PercentInput({
         }
          min-w-fit space-x-3 items-center`}
     >
-      <label className="font-light">{label}:</label>
+      <label className="font-light">
+        {label}
+        {typeof additionalValidation?.required === "object" &&
+          additionalValidation.required.value && (
+            <span className="text-red-500">* </span>
+          )}
+        :
+      </label>
       {!onEdit ? (
         <div className="w-24 text-start">{localValue}</div>
       ) : (
@@ -188,7 +195,7 @@ export default function PercentInput({
             />
           </div>
           {errors[id]?.message && (
-            <span className="font-light text-error text-xs">
+            <span className="block mt-1 font-light text-error text-xs">
               {errors[id]?.message as string}
             </span>
           )}

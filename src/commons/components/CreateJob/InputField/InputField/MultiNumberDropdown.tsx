@@ -72,7 +72,14 @@ export default function MultiNumberDropdown({
     <div
       className={`min-w-fit justify-between items-center space-x-3 grid grid-cols-[1fr,4fr] max-w-[1000px]`}
     >
-      <label className="font-light">{label}:</label>
+      <label className="font-light">
+        {label}
+        {typeof additionalValidation?.required === "object" &&
+          additionalValidation.required.value && (
+            <span className="text-red-500">* </span>
+          )}
+        :
+      </label>
       <div className="relative custom-select w-[336px]">
         {!onEdit ? (
           <div>{currentValue.join(", ")}</div>

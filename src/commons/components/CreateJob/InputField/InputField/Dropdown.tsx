@@ -41,7 +41,14 @@ export default function DropdownInput({
             : "min-w-fit justify-between items-center space-x-3 grid grid-cols-[1fr,4fr] max-w-[1000px]"
         }`}
       >
-        <label className="font-light w-[40%]">{label}:</label>
+        <label className="font-light w-[40%]">
+          {label}
+          {typeof additionalValidation?.required === "object" &&
+            additionalValidation.required.value && (
+              <span className="text-red-500">* </span>
+            )}
+          :
+        </label>
         <SelectInput
           id={id}
           defaultValue={defaultValue}

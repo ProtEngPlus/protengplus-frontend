@@ -69,7 +69,13 @@ export default function RangeNumberInput({
         </div>
       ) : (
         <div className="space-y-2 w-fit">
-          <label className="font-light leading-loose">{label}</label>
+          <label className="font-light leading-loose">
+            {label}
+            {typeof additionalValidation?.required === "object" &&
+              additionalValidation.required.value && (
+                <span className="text-red-500">* </span>
+              )}
+          </label>
           <div className="flex gap-3 items-center">
             {/*----------------------------------- Min Input ------------------------------------------*/}
 

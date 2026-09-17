@@ -72,7 +72,14 @@ export default function NumberInput({
           }
          min-w-fit space-x-3 items-center`}
     >
-      <label className="font-light ">{label}:</label>
+      <label className="font-light ">
+        {label}
+        {typeof additionalValidation?.required === "object" &&
+          additionalValidation.required.value && (
+            <span className="text-red-500">* </span>
+          )}
+        :
+      </label>
       <div className="relative w-fit min-w-fit">
         {!onEdit ? (
           <div className="w-24 text-start">{currentValue}</div>
@@ -141,7 +148,7 @@ export default function NumberInput({
             </div>
 
             {errors[id]?.message && (
-              <span className="font-light text-error text-xs">
+              <span className="block mt-1 font-light text-error text-xs">
                 {errors[id]?.message as string}
               </span>
             )}
