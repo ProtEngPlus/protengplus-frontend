@@ -177,7 +177,7 @@ export const createJobConfig: CreateJobConfig = {
       "Protein Query Tool to gather similar proteins from a global database",
     tool: {
       Blast: {
-        formatInput: 1,
+        formatInput: 2,
         description:
           "Tool used to compare a query protein sequence against a database of sequences by aligning sequences based on local matches.",
         parameters: [
@@ -215,13 +215,15 @@ export const createJobConfig: CreateJobConfig = {
           {
             name: "E Value",
             id: "expect",
-            type: "number",
+            type: "dropdown",
             description:
               "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match.",
+            dropdownItems: [
+              1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 0.00001,
+            ],
             default: 10,
             additionalValidation: {
               required: { value: true, message: "Expect is required." },
-              min: { value: 0, message: "Expect must be at least 0." },
             },
           },
           {
@@ -286,6 +288,7 @@ export const createJobConfig: CreateJobConfig = {
           },
         ],
       },
+
       MMseqs2: {
         formatInput: 2,
         description:
@@ -312,13 +315,15 @@ export const createJobConfig: CreateJobConfig = {
           {
             name: "E Value",
             id: "e",
-            type: "number",
+            type: "dropdown",
             description:
               "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match",
+            dropdownItems: [
+              1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 0.00001,
+            ],
             default: 0.001,
             additionalValidation: {
               required: { value: true, message: "Expect is required." },
-              min: { value: 0, message: "Expect must be at least 0." },
             },
           },
           {
