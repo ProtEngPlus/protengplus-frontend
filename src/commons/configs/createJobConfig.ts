@@ -203,7 +203,7 @@ export const createJobConfig: CreateJobConfig = {
           {
             name: "Hit Size",
             id: "hitlist_size",
-            type: "percent",
+            type: "number",
             description:
               "The maximum number of protein sequences returned from the database that match the query sequence",
             default: 50,
@@ -215,7 +215,7 @@ export const createJobConfig: CreateJobConfig = {
           {
             name: "E Value",
             id: "expect",
-            type: "percent",
+            type: "number",
             description:
               "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match.",
             default: 10,
@@ -312,10 +312,10 @@ export const createJobConfig: CreateJobConfig = {
           {
             name: "E Value",
             id: "e",
-            type: "percent",
+            type: "number",
             description:
               "The number of expected hits of similar quality (score) that could be found by chance. The smaller the E-value, the better the match",
-            default: 70,
+            default: 0.001,
             additionalValidation: {
               required: { value: true, message: "Expect is required." },
               min: { value: 0, message: "Expect must be at least 0." },
