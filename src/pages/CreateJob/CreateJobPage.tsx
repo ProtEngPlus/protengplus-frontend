@@ -77,6 +77,7 @@ export default function CreateJobPage() {
   }, [isWithConfig, initialStep, jobDetail]);
 
   const form = useForm({
+    mode: "onChange",
     defaultValues: {
       file_name: "",
       input_protein_field: jobDetail.input_protein,

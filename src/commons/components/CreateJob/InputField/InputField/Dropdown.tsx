@@ -37,15 +37,15 @@ export default function DropdownInput({
         className={`
         ${
           formatInput === 2
-            ? "flex flex-row justify-between max-w-[1000px] min-w-fit space-x-3 items-center"
-            : "min-w-fit justify-between items-center space-x-3 grid grid-cols-[1fr,4fr] max-w-[1000px]"
+            ? "flex flex-row justify-between max-w-[1000px] min-w-fit space-x-3 items-start"
+            : "min-w-fit justify-between items-start space-x-3 grid grid-cols-[1fr,4fr] max-w-[1000px]"
         }`}
       >
         <label className="font-light w-[40%]">
           {label}
           {typeof additionalValidation?.required === "object" &&
             additionalValidation.required.value && (
-              <span className="text-red-500">* </span>
+              <span className="text-red-500">*</span>
             )}
           :
         </label>
