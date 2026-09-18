@@ -113,11 +113,15 @@ export interface ValidationRule {
   minLength?: { value: number; message: string };
   maxLength?: { value: number; message: string };
   pattern?: { value: RegExp; message: string };
-  isInteger?: { value: boolean; message: string };
   validate?(
     value: string | number | number[] | boolean | RunType,
   ): boolean | string;
 }
+
+const wholeNumber =
+  (label: string): NonNullable<ValidationRule["validate"]> =>
+  (value) =>
+    Number.isInteger(Number(value)) || `${label} must be a whole number.`;
 
 export const createJobConfig: CreateJobConfig = {
   "Protein Input": {
@@ -209,7 +213,8 @@ export const createJobConfig: CreateJobConfig = {
             default: 50,
             additionalValidation: {
               required: { value: true, message: "Hit Size is required." },
-              min: { value: 0, message: "Hit Size must be at least 0." },
+              min: { value: 1, message: "Hit Size must be at least 1." },
+              validate: wholeNumber("Hit Size"),
             },
           },
           {
@@ -239,9 +244,10 @@ export const createJobConfig: CreateJobConfig = {
                 message: "Sequence Length is required.",
               },
               min: {
-                value: 0,
-                message: "Sequence Length must be at least 0.",
+                value: 1,
+                message: "Sequence Length must be at least 1.",
               },
+              validate: wholeNumber("Sequence Length"),
             },
           },
           {
@@ -272,6 +278,7 @@ export const createJobConfig: CreateJobConfig = {
             additionalValidation: {
               required: { value: true, message: "Random State is required." },
               min: { value: 0, message: "Random State must be at least 0." },
+              validate: wholeNumber("Random State"),
             },
           },
           {
@@ -288,6 +295,7 @@ export const createJobConfig: CreateJobConfig = {
                 value: 100,
                 message: "HSP Coverage must be at most 100.",
               },
+              validate: wholeNumber("HSP Coverage"),
             },
           },
         ],
@@ -311,9 +319,10 @@ export const createJobConfig: CreateJobConfig = {
                 message: "Maximum Sequences is required.",
               },
               min: {
-                value: 0,
-                message: "Maximum Sequences must be at least 0.",
+                value: 1,
+                message: "Maximum Sequences must be at least 1.",
               },
+              validate: wholeNumber("Maximum Sequences"),
             },
           },
           {
@@ -356,8 +365,15 @@ export const createJobConfig: CreateJobConfig = {
               "The shortest length of the aligned region between two sequences for the match to be considered valid",
             default: 0,
             additionalValidation: {
-              required: { value: true, message: "Expect is required." },
-              min: { value: 0, message: "Expect must be at least 0." },
+              required: {
+                value: true,
+                message: "Minimum Alignment Length is required.",
+              },
+              min: {
+                value: 0,
+                message: "Minimum Alignment Length must be at least 0.",
+              },
+              validate: wholeNumber("Minimum Alignment Length"),
             },
           },
           {
@@ -406,9 +422,10 @@ export const createJobConfig: CreateJobConfig = {
                 message: "Sequence Length is required.",
               },
               min: {
-                value: 0,
-                message: "Sequence Length must be at least 0.",
+                value: 1,
+                message: "Sequence Length must be at least 1.",
               },
+              validate: wholeNumber("Sequence Length"),
             },
           },
           {
@@ -421,6 +438,7 @@ export const createJobConfig: CreateJobConfig = {
             additionalValidation: {
               required: { value: true, message: "Random State is required." },
               min: { value: 0, message: "Random State must be at least 0." },
+              validate: wholeNumber("Random State"),
             },
           },
         ],
@@ -445,7 +463,8 @@ export const createJobConfig: CreateJobConfig = {
             default: 2,
             additionalValidation: {
               required: { value: true, message: "N Trial is required." },
-              min: { value: 0, message: "N Trial must be at least 0." },
+              min: { value: 1, message: "N Trial must be at least 1." },
+              validate: wholeNumber("N Trial"),
             },
           },
           {
@@ -458,6 +477,7 @@ export const createJobConfig: CreateJobConfig = {
             additionalValidation: {
               required: { value: true, message: "N Splits is required." },
               min: { value: 2, message: "N Splits must be at least 2." },
+              validate: wholeNumber("N Splits"),
             },
           },
           {
@@ -470,7 +490,8 @@ export const createJobConfig: CreateJobConfig = {
             high: 2,
             additionalValidation: {
               required: { value: true, message: "N Epoch is required." },
-              min: { value: 0, message: "N Epoch must be at least 0." },
+              min: { value: 1, message: "N Epoch must be at least 1." },
+              validate: wholeNumber("N Epoch"),
             },
           },
           {
@@ -505,10 +526,11 @@ export const createJobConfig: CreateJobConfig = {
             type: "number",
             description:
               "Regularization technique that penalizes large weights to improve generalization and prevent overfitting, promoting more consistent model behavior across training.",
-            default: 2,
+            default: 0.01,
             additionalValidation: {
               required: { value: true, message: "Weight Decay is required." },
               min: { value: 0, message: "Weight Decay must be at least 0." },
+              max: { value: 1, message: "Weight Decay must be at most 1." },
             },
           },
           {
@@ -523,7 +545,8 @@ export const createJobConfig: CreateJobConfig = {
                 value: true,
                 message: "N Epochs Config is required.",
               },
-              min: { value: 0, message: "N Epochs Config must be at least 0." },
+              min: { value: 1, message: "N Epochs Config must be at least 1." },
+              validate: wholeNumber("N Epochs Config"),
             },
           },
         ],
@@ -564,19 +587,20 @@ export const createJobConfig: CreateJobConfig = {
             default: 56,
             additionalValidation: {
               required: { value: true, message: "N Batch is required." },
-              min: { value: 0, message: "N Batch must be at least 0." },
+              min: { value: 1, message: "N Batch must be at least 1." },
+              validate: wholeNumber("N Batch"),
             },
           },
           {
             name: "Alpha",
             id: "alpha",
-            type: "number",
+            type: "dropdown",
             description:
               "A measure of how much the model is overfitting, Regularization Strength As alpha increases, strength increases, leading to more variance from the regular model",
+            dropdownItems: [100, 10, 1, 0.1, 0.01, 0.001],
             default: 0.1,
             additionalValidation: {
               required: { value: true, message: "Alpha is required." },
-              min: { value: 0, message: "Alpha must be at least 0." },
             },
           },
         ],
@@ -604,13 +628,10 @@ export const createJobConfig: CreateJobConfig = {
                 message: "Number of trajectories is required.",
               },
               min: {
-                value: 0,
-                message: "Number of trajectories must be at least 0.",
+                value: 1,
+                message: "Number of trajectories must be at least 1.",
               },
-              isInteger: {
-                value: true,
-                message: "Number of trajectories must be an integer.",
-              },
+              validate: wholeNumber("Number of trajectories"),
             },
           },
           {
@@ -626,9 +647,10 @@ export const createJobConfig: CreateJobConfig = {
                 message: "Number of iterations is required.",
               },
               min: {
-                value: 0,
-                message: "Number of iterations must be at least 0.",
+                value: 1,
+                message: "Number of iterations must be at least 1.",
               },
+              validate: wholeNumber("Number of iterations"),
             },
           },
           {
@@ -641,27 +663,25 @@ export const createJobConfig: CreateJobConfig = {
             additionalValidation: {
               required: {
                 value: true,
-                message: "Number of iterations is required.",
+                message: "Mutated Position Range is required.",
               },
               min: {
-                value: 0,
-                message: "Number of iterations must be at least 0.",
+                value: 1,
+                message: "Mutated Position Range must be at least 1.",
               },
+              validate: wholeNumber("Mutated Position Range"),
             },
           },
           {
             name: "Temperature",
             id: "temperature",
-            type: "number",
+            type: "dropdown",
             description:
               "Determining whether the output is more random and creative (high temperature) or more predictable (low temperature)",
+            dropdownItems: [10, 1, 0.1, 0.01, 0.001, 0.0001],
             default: 0.01,
             additionalValidation: {
               required: { value: true, message: "Temperature is required." },
-              min: {
-                value: 0.0001,
-                message: "Temperature must be greater than 0.",
-              },
             },
           },
         ],

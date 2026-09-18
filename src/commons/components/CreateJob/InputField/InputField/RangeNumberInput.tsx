@@ -157,6 +157,11 @@ export default function RangeNumberInput({
                 {...register(`${id}_high`, {
                   ...(additionalValidation || {}),
                   validate: (value: string) => {
+                    const extra = additionalValidation?.validate;
+                    if (typeof extra === "function") {
+                      const result = extra(value);
+                      if (result !== true) return result;
+                    }
                     const min = parseFloat(watch(`${id}_low`)) || 0;
                     const max = parseFloat(value) || 0;
                     if (min > max) {
