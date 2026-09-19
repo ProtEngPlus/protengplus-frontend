@@ -8,7 +8,7 @@ import { useAuth } from "../../commons/hooks/useAuth";
 import { sendVerification } from "../../commons/api/auth";
 import { ENVIRONMENT } from "../../commons/configs/envConfig";
 import axios from "axios";
-import { normalizeEmail } from "../../commons/utils/ืnormalizeEmail";
+import { normalizeEmail } from "../../commons/utils/normalizeEmail";
 
 type FormValues = {
   email: string;

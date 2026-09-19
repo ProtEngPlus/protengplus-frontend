@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { forgotPassword } from "../../commons/api/auth";
-import { normalizeEmail } from "../../commons/utils/ืnormalizeEmail";
+import { normalizeEmail } from "../../commons/utils/normalizeEmail";
 
 type FormValues = {
   email: string;

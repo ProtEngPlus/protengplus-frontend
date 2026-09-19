@@ -9,7 +9,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Role, UserRole } from "../../commons/interfaces/User.interface";
 import { createUser } from "../../commons/api/user";
 import { sendVerification } from "../../commons/api/auth";
-import { normalizeEmail } from "../../commons/utils/ืnormalizeEmail";
+import { normalizeEmail } from "../../commons/utils/normalizeEmail";
 
 type FormValues = {
   email: string;

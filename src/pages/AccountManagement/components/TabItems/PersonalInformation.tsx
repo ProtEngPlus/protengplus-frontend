@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../../../commons/hooks/useAuth";
 import { updateMe } from "../../../../commons/api/user";
 import { Role } from "../../../../commons/interfaces/User.interface";
-import { normalizeEmail } from "../../../../commons/utils/ืnormalizeEmail";
+import { normalizeEmail } from "../../../../commons/utils/normalizeEmail";
 
 type FormValues = {
   name: string;
