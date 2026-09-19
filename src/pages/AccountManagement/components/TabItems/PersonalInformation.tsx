@@ -138,6 +138,7 @@ export default function PersonalInformation() {
             </div>
             <TextInput
               id="email"
+              autoLowercase
               placeholder="Email*"
               disabled
               className="w-full"

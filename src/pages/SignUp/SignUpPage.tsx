@@ -74,6 +74,7 @@ export default function SignUpPage() {
               </div>
               <TextInput
                 id="email"
+                autoLowercase
                 placeholder="Email*"
                 additionalValidation={{
                   required: { value: true },

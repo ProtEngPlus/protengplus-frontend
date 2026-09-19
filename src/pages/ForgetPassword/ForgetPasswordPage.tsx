@@ -51,6 +51,7 @@ export default function ForgetPasswordPage() {
             <TextInput
               id="email"
               placeholder="Email"
+              autoLowercase
               additionalValidation={{
                 required: { value: true },
                 pattern: {
