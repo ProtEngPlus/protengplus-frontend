@@ -9,7 +9,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Role, UserRole } from "../../commons/interfaces/User.interface";
 import { register } from "../../commons/api/auth";
 import { normalizeEmail } from "../../commons/utils/normalizeEmail";
-import { ApiErrorResponse } from "../../commons/interfaces/ApiResponse.interface";
+import axios from "axios";
 
 type FormValues = {
   email: string;
@@ -41,7 +41,7 @@ export default function SignUpPage() {
       navigate("/sent-verification-email", { state: { email } });
     } catch (error: unknown) {
       console.error(error);
-      if (error instanceof ApiErrorResponse && error.code === 409) {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
         setError("email", {
           type: "manual",
           message: "Email is already registered.",
