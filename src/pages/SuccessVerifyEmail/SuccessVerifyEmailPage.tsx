@@ -33,7 +33,7 @@ export default function SuccessVerifyEmailPage() {
 
   return (
     <div className="flex h-screen min-h-fit items-center justify-center py-8 px-4">
-      <div className="w-[80%] min-w-fit h-[80%] min-h-fit bg-white rounded-xl py-6 px-8 shadow-dropShadow text-center">
+      <div className="w-[60%] min-w-fit h-[80%] min-h-fit bg-white rounded-xl py-6 px-8 shadow-dropShadow text-center">
         <div className="m-auto text-center space-y-12">
           <img src={successVerified} className="mx-auto mt-[76px]" />
           <div className="space-y-12">
