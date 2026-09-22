@@ -12,7 +12,7 @@ type FormValues = {
 
 export default function ResetPasswordPage() {
   const form = useForm<FormValues>();
-  const { handleSubmit, watch } = form;
+  const { handleSubmit, watch, setError } = form;
   const navigate = useNavigate();
 
   const params = new URLSearchParams(window.location.search);
@@ -28,6 +28,11 @@ export default function ResetPasswordPage() {
       navigate("/sign-in");
     } catch (error: unknown) {
       console.error(error);
+      setError("new_password", {
+        type: "manual",
+        message:
+          "This reset link is invalid or has expired. Please request a new one.",
+      });
     }
   });
 
