@@ -17,7 +17,11 @@ type FormValues = {
 export default function SignInPage() {
   const form = useForm<FormValues>();
   const { login } = useAuth();
-  const { handleSubmit, setError } = form;
+  const {
+    handleSubmit,
+    setError,
+    formState: { isSubmitting },
+  } = form;
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -92,7 +96,8 @@ export default function SignInPage() {
             <Button
               buttonType="submit"
               id="submit-button"
-              text="Sign In"
+              text={isSubmitting ? "Please wait..." : "Sign In"}
+              disabled={isSubmitting}
               type="submit"
               className="w-full"
             />

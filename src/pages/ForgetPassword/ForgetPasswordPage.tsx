@@ -12,7 +12,10 @@ type FormValues = {
 
 export default function ForgetPasswordPage() {
   const form = useForm<FormValues>();
-  const { handleSubmit } = form;
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -63,8 +66,9 @@ export default function ForgetPasswordPage() {
               id="reset-password"
               buttonType="submit"
               type="submit"
-              text="Reset Password"
+              text={isSubmitting ? "Please wait..." : "Reset Password"}
               className="w-full"
+              disabled={isSubmitting}
             />
           </form>
         </FormProvider>
