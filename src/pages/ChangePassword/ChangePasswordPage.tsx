@@ -95,7 +95,7 @@ export default function ChangePasswordPage() {
           label="Current Password"
           placeholder="Current Password*"
           additionalValidation={{
-            required: { value: true },
+            required: { value: true, message: "Current Password is required." },
           }}
         />
 

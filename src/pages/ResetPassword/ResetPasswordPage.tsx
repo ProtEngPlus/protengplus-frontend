@@ -1,7 +1,7 @@
 import logoWithText from "../../assets/images/LogoWithText/logoWithText.svg";
 import PasswordInput from "../../commons/components/Input/PasswordInput";
 import Button from "../../commons/components/Button/Button";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { resetPassword } from "../../commons/api/auth";
 
@@ -15,6 +15,7 @@ export default function ResetPasswordPage() {
   const {
     handleSubmit,
     watch,
+    setError,
     formState: { isSubmitting },
   } = form;
   const navigate = useNavigate();
@@ -22,12 +23,21 @@ export default function ResetPasswordPage() {
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
 
+  if (!token) {
+    return <Navigate to="/forget-password" replace />;
+  }
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       await resetPassword(data.new_password, token!);
       navigate("/sign-in");
     } catch (error: unknown) {
       console.error(error);
+      setError("new_password", {
+        type: "manual",
+        message:
+          "This reset link is invalid or has expired. Please request a new one.",
+      });
     }
   });
 
@@ -69,11 +79,9 @@ export default function ResetPasswordPage() {
             <Button
               id="reset-password"
               type="submit"
-              buttonType="submit"
               text={isSubmitting ? "Please wait..." : "Reset Password"}
               className="w-full"
               disabled={isSubmitting}
-              onClick={onSubmit}
             />
           </form>
         </FormProvider>
