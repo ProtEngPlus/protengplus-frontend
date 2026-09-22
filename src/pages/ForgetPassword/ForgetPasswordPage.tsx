@@ -38,7 +38,7 @@ export default function ForgetPasswordPage() {
           <img src={logoWithText} alt="logo-with-text" className="mx-auto" />
         </div>
         <div className="leading-6 mb-9 text-center">
-          <h1>Forget Password ?</h1>
+          <h1>Forget Password</h1>
           <label className="font-light">Enter your registered email</label>
         </div>
         <FormProvider {...form}>
