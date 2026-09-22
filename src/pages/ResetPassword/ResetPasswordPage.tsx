@@ -77,7 +77,6 @@ export default function ResetPasswordPage() {
               buttonType="submit"
               text="Reset Password"
               className="w-full"
-              onClick={onSubmit}
             />
           </form>
         </FormProvider>
