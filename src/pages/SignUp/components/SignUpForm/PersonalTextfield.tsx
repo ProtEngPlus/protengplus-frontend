@@ -39,6 +39,7 @@ export default function PersonalField({
             additionalValidation={{
               required: {
                 value: true,
+                message: `${label} is required.`,
               },
             }}
           />
