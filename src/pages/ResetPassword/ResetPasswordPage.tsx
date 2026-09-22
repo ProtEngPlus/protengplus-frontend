@@ -78,6 +78,7 @@ export default function ResetPasswordPage() {
             />
             <Button
               id="reset-password"
+              buttonType="submit"
               type="submit"
               text={isSubmitting ? "Please wait..." : "Reset Password"}
               className="w-full"
