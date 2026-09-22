@@ -88,6 +88,7 @@ export default function SignInPage() {
               buttonType="submit"
               id="submit-button"
               text={isSubmitting ? "Please wait..." : "Sign In"}
+              disabled={isSubmitting}
               type="submit"
               className="w-full"
             />
