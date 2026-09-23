@@ -6,14 +6,11 @@ import { useLocation } from "react-router-dom";
 export default function SentVerificationPage() {
   const location = useLocation();
   const { email } = location.state || {};
+
   const resendEmail = async () => {
-    try {
-      console.log(`resend email ${email}`);
-      await sendVerification(email);
-    } catch (error: unknown) {
-      console.error(error);
-    }
+    await sendVerification(email);
   };
+
   return (
     <div className="flex h-screen min-h-fit items-end justify-center">
       <div className="w-[75%] min-w-fit h-[85%] min-h-fit mt-[15%] bg-white rounded-t-xl py-6 px-4 shadow-dropShadow text-center">
