@@ -103,8 +103,18 @@ export default function ChangePasswordPage() {
           id="new_password"
           label="New Password"
           placeholder="New Password*"
+          hint="At least 8 characters, with uppercase, lowercase, and a number."
           additionalValidation={{
             required: { value: true },
+            minLength: {
+              value: 8,
+              message: "Password must be at least 8 characters.",
+            },
+            pattern: {
+              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+              message:
+                "Password must include uppercase, lowercase, and a number.",
+            },
           }}
         />
 
