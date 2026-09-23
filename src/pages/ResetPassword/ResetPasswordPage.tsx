@@ -4,6 +4,10 @@ import Button from "../../commons/components/Button/Button";
 import { Navigate, useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
 import { resetPassword } from "../../commons/api/auth";
+import {
+  passwordPolicyHint,
+  passwordPolicyValidation,
+} from "../../commons/configs/passwordConfig";
 
 type FormValues = {
   new_password: string;
@@ -60,18 +64,10 @@ export default function ResetPasswordPage() {
             <PasswordInput
               id="new_password"
               placeholder="New Password"
-              hint="At least 8 characters, with uppercase, lowercase, and a number."
+              hint={passwordPolicyHint}
               additionalValidation={{
                 required: { value: true },
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters.",
-                },
-                pattern: {
-                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-                  message:
-                    "Password must include uppercase, lowercase, and a number.",
-                },
+                ...passwordPolicyValidation,
                 validate: (value: string) =>
                   value === watch("confirm_new_password"),
               }}

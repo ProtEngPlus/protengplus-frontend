@@ -9,6 +9,10 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Role, UserRole } from "../../commons/interfaces/User.interface";
 import { createUser } from "../../commons/api/user";
 import { sendVerification } from "../../commons/api/auth";
+import {
+  passwordPolicyHint,
+  passwordPolicyValidation,
+} from "../../commons/configs/passwordConfig";
 
 type FormValues = {
   email: string;
@@ -95,18 +99,10 @@ export default function SignUpPage() {
               <PasswordInput
                 id="password"
                 placeholder="Password*"
-                hint="At least 8 characters, with uppercase, lowercase, and a number."
+                hint={passwordPolicyHint}
                 additionalValidation={{
                   required: { value: true },
-                  minLength: {
-                    value: 8,
-                    message: "Password must be at least 8 characters.",
-                  },
-                  pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-                    message:
-                      "Password must include uppercase, lowercase, and a number.",
-                  },
+                  ...passwordPolicyValidation,
                   validate: (value: string) => value === watch("re_password"),
                 }}
               />
