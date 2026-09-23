@@ -91,11 +91,22 @@ export default function SignUpPage() {
                 <Icon icon="ph:key" className="text-gray-400 size-6" />
                 <label className="font-light">Password:</label>
               </div>
+
               <PasswordInput
                 id="password"
                 placeholder="Password*"
+                hint="At least 8 characters, with uppercase, lowercase, and a number."
                 additionalValidation={{
                   required: { value: true },
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters.",
+                  },
+                  pattern: {
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                    message:
+                      "Password must include uppercase, lowercase, and a number.",
+                  },
                   validate: (value: string) => value === watch("re_password"),
                 }}
               />
