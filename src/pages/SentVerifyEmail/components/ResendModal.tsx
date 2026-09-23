@@ -55,7 +55,7 @@ export default function ResendModal({ onClick }: ResendModalProps) {
       />
 
       {/* Feedback Response */}
-      {feedback === "success" && (
+      {feedback === "success" && secondsLeft > 0 && (
         <p className="font-normal text-pep-green text-sm">
           Verification email sent.
         </p>
