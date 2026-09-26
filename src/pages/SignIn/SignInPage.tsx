@@ -67,6 +67,7 @@ export default function SignInPage() {
               additionalValidation={{
                 required: {
                   value: true,
+                  message: "Email is required.",
                 },
               }}
             />
@@ -76,6 +77,7 @@ export default function SignInPage() {
               additionalValidation={{
                 required: {
                   value: true,
+                  message: "Password is required.",
                 },
               }}
             />
